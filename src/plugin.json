@@ -1,0 +1,22 @@
+{
+  "type": "panel",
+  "name": "Html Template",
+  "id": "ebertech-grafana-progress-list",
+  "info": {
+    "description": "Progress list panel",
+    "author": {
+      "name": "ebertech",
+      "url": "ebertech.ca"
+    },
+    "keywords": [ ],
+    "logos": { },
+    "links": [ ],
+    "screenshots": [ ],
+    "version": "0.0.1",
+    "updated": "2017-04-05"
+  },
+  "dependencies": {
+    "grafanaVersion": "3.x.x",
+    "plugins": [ ]
+  }
+}
