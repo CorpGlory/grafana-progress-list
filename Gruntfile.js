@@ -3,6 +3,7 @@ module.exports = (grunt) => {
 
   grunt.loadNpmTasks('grunt-execute');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks("grunt-ts");
 
   grunt.initConfig({
 
@@ -12,7 +13,7 @@ module.exports = (grunt) => {
       src_to_dist: {
         cwd: 'src',
         expand: true,
-        src: ['**/*', '!**/*.js', '!**/*.scss', '!img/**/*'],
+        src: ['**/*', '!**/*.js', '!**/*.ts', '!**/*.scss', '!img/**/*'],
         dest: 'dist'
       },
       externals: {
@@ -31,14 +32,6 @@ module.exports = (grunt) => {
         expand: true,
         src: ['img/**/*'],
         dest: 'dist/src/'
-      },
-    },
-
-    watch: {
-      rebuild_all: {
-        files: ['src/**/*', 'plugin.json'],
-        tasks: ['default'],
-        options: {spawn: false}
       },
     },
 
@@ -62,6 +55,20 @@ module.exports = (grunt) => {
       },
     },
 
+    ts: {
+      default : {
+        tsconfig: true
+      }
+    },
+
+    watch: {
+      rebuild_all: {
+        files: ['src/**/*', 'plugin.json', 'tsconfig.json'],
+        tasks: ['default'],
+        options: { spawn: false }
+      },
+    }
+
   });
 
   grunt.registerTask(
@@ -69,10 +76,11 @@ module.exports = (grunt) => {
     [
       'clean',
       'copy:src_to_dist',
-      "copy:externals",
+      'copy:externals',
       'copy:pluginDef',
       'copy:img_to_dist',
-      'babel'
+      'babel',
+      'ts'
     ]
   );
 };

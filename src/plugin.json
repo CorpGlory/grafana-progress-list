@@ -1,6 +1,6 @@
 {
   "type": "panel",
-  "name": "Html Template",
+  "name": "Progress List",
   "id": "ebertech-grafana-progress-list",
   "info": {
     "description": "Progress list panel",

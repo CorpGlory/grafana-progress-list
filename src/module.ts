@@ -1,8 +1,9 @@
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 
 class Ctrl extends MetricsPanelCtrl {
+  static template = "template.html";
   constructor($scope, $injector) {
     super($scope, $injector);
   }
@@ -24,6 +25,5 @@ class Ctrl extends MetricsPanelCtrl {
 
 }
 
-Ctrl.template = '<div/>';
 
 export { Ctrl as PanelCtrl }
