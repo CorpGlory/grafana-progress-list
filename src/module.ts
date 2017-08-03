@@ -21,7 +21,6 @@ class Ctrl extends MetricsPanelCtrl {
     super($scope, $injector);
     ModuleConfig.init(this.panel);
     this._initStyles();
-
     this.mapper = new Mapper();
     
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
