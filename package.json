@@ -4,7 +4,8 @@
   "description": "Show list of progress items by mapping your data.",
   "main": "src/module.js",
   "scripts": {
-    "traceTsc": "tsc --traceResolution"
+    "traceTsc": "tsc --traceResolution",
+    "postinstall": "scripts/install.sh"
   },
   "keywords": [],
   "author": "av",

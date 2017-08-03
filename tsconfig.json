@@ -6,12 +6,9 @@
     "module": "system",
     "target": "es5",
     "allowJs": true,
-    "rootDir": "./src",
-    "typeRoots": [
-      "./node_modules/@types/grafana"
-    ]
+    "rootDir": "./src"
   },
   "include": [
-    "./src/*.ts"
+    "./src/**/*.ts"
   ]
 }
