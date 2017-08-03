@@ -1,6 +1,9 @@
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
 import * as _ from 'lodash';
 
+import { ItemState } from './models/item-state';
+
+
 
 class Ctrl extends MetricsPanelCtrl {
   static template = "template.html";
@@ -22,7 +25,6 @@ class Ctrl extends MetricsPanelCtrl {
     this.$scope.data = [];
     this.$scope.dataError = err;
   }
-
 }
 
 

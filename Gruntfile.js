@@ -63,8 +63,13 @@ module.exports = (grunt) => {
 
     watch: {
       rebuild_all: {
-        files: ['src/**/*', 'plugin.json', 'tsconfig.json'],
+        files: ['src/**/*', '!src/**/*.ts', 'plugin.json', 'tsconfig.json'],
         tasks: ['default'],
+        options: { spawn: false }
+      },
+      rebuild_ts: {
+        files: ['src/**/*.ts'],
+        tasks: ['ts'],
         options: { spawn: false }
       },
     }
