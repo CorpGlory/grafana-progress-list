@@ -10,28 +10,16 @@ module.exports = (grunt) => {
     clean: ['dist/*'],
 
     copy: {
-      src_to_dist: {
+      resources: {
         cwd: 'src',
         expand: true,
-        src: ['**/*', '!**/*.js', '!**/*.ts', '!**/*.scss', '!img/**/*'],
-        dest: 'dist'
-      },
-      externals: {
-        cwd: 'src',
-        expand: true,
-        src: ['**/external/*'],
+        src: ['**/*', '!**/*.js', '!**/*.ts'],
         dest: 'dist'
       },
       pluginDef: {
         expand: true,
         src: ['plugin.json', 'README.md'],
         dest: 'dist',
-      },
-      img_to_dist: {
-        cwd: 'src',
-        expand: true,
-        src: ['img/**/*'],
-        dest: 'dist/src/'
       },
     },
 
@@ -40,8 +28,7 @@ module.exports = (grunt) => {
         sourceMap: true,
         presets: ['es2015'],
         plugins: [
-          'transform-es2015-modules-systemjs',
-          'transform-es2015-for-of'
+          'transform-es2015-modules-systemjs'
         ],
       },
       dist: {
@@ -62,16 +49,21 @@ module.exports = (grunt) => {
     },
 
     watch: {
-      rebuild_all: {
-        files: ['src/**/*', '!src/**/*.ts', 'plugin.json', 'tsconfig.json'],
-        tasks: ['default'],
-        options: { spawn: false }
-      },
       rebuild_ts: {
-        files: ['src/**/*.ts'],
+        files: ['src/**/*.ts', 'tsconfig.json'],
         tasks: ['ts'],
         options: { spawn: false }
       },
+      rebuild_babel: {
+        files: ['src/**/*.js'],
+        tasks: ['babel'],
+        options: { spawn: false }
+      },
+      fetch_resources: {
+        files: ['src/**/*', '!src/**/*.js', '!src/*/*.ts'],
+        tasks: ['copy:resources'],
+        options: { spawn: false }
+      }
     }
 
   });
@@ -80,10 +72,7 @@ module.exports = (grunt) => {
     'default',
     [
       'clean',
-      'copy:src_to_dist',
-      'copy:externals',
-      'copy:pluginDef',
-      'copy:img_to_dist',
+      'copy',
       'babel',
       'ts'
     ]
