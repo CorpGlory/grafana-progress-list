@@ -1,27 +1,32 @@
 /// <reference path="./module-config.ts" />
 /// <reference path="./mapper.ts" />
+/// <reference path="./items-set.ts" />
 
 
 import { ModuleConfig } from './module-config';
 import { Mapper } from './mapper';
+import { ItemsSet } from './items-set';
 
 
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
-declare var System: any; // app/headers/common can be imported 
-
+declare var System: any; // app/headers/common can`t be imported
 
 
 class Ctrl extends MetricsPanelCtrl {
   static templateUrl = "partials/template.html";
   
   public mapper: Mapper;
-  private _panelPath? :string;
+  public itemSet: ItemsSet;
+  
+  private _panelPath?: string;
+  
   
   constructor($scope, $injector) {
     super($scope, $injector);
     ModuleConfig.init(this.panel);
     this._initStyles();
     this.mapper = new Mapper();
+    this.itemSet = new ItemsSet();
     
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
@@ -39,9 +44,11 @@ class Ctrl extends MetricsPanelCtrl {
     }
   }
 
-  _onDataReceived(seriesList) {
+  _onDataReceived(seriesList: any) {
+    var items = this.itemSet.setItemStates(this.mapper.mapMetricData(seriesList));
+    this.$scope.items = items;
   }
-  
+
   _onInitEditMode() {
     var thisPartialPath = this.panelPath + 'partials/';
     this.addEditorTab(
@@ -53,7 +60,7 @@ class Ctrl extends MetricsPanelCtrl {
     this.$scope.data = [];
     this.$scope.dataError = err;
   }
-  
+
   get panelPath() {
     if(!this._panelPath) {
       var panels = window['grafanaBootData'].settings.panels;

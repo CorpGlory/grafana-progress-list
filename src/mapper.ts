@@ -2,9 +2,8 @@
 /// <reference path="./module-config.ts" />
 
 
-import { ItemModel } from './item-model';
+import { ItemModel, ItemState } from './item-model';
 import { ModuleConfig } from './module-config';
-
 
 
 export class Mapper {
@@ -16,7 +15,7 @@ export class Mapper {
     var configValue = ModuleConfig.getInstance().getValue('mappingFunctionSource');
     this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
   }
-  
+
   get mappingFunctionSource(): string {
     return this._mappingFunctionSource;
   }
@@ -24,6 +23,10 @@ export class Mapper {
   set mappingFunctionSource(text: string) {
     ModuleConfig.getInstance().setValue('mappingFunctionSource', text);
     this._mappingFunctionSource = text;
+  }
+  
+  mapMetricData(seriesList: any): [ItemModel] {
+    return [new ItemModel(1, ItemState.PROGRESS)];
   }
 
 }
@@ -56,4 +59,7 @@ const DEFAULT_MAPPING_FUN = function(seriesListItem) {
   ];
 }
 
-const DEFAULT_MAPPING_SOURCE = 'asd';
+const DEFAULT_MAPPING_SOURCE = (DEFAULT_MAPPING_FUN + '$')
+  .replace('function DEFAULT_MAPPING(', 'function(')
+  .replace(new RegExp('        ', 'g'), '  ')
+  .replace('      }$', '}');
