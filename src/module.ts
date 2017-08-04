@@ -1,11 +1,13 @@
 /// <reference path="./module-config.ts" />
 /// <reference path="./mapper.ts" />
 /// <reference path="./items-set.ts" />
+/// <reference path="./item-model.ts" />
 
 
 import { ModuleConfig } from './module-config';
 import { Mapper } from './mapper';
 import { ItemsSet } from './items-set';
+import { ItemState } from './item-model';
 
 
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
@@ -20,13 +22,14 @@ class Ctrl extends MetricsPanelCtrl {
   
   private _panelPath?: string;
   
-  
   constructor($scope, $injector) {
     super($scope, $injector);
     ModuleConfig.init(this.panel);
     this._initStyles();
     this.mapper = new Mapper();
     this.itemSet = new ItemsSet();
+    
+    this.$scope.ItemState = ItemState;
     
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));

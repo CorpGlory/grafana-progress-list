@@ -1,7 +1,16 @@
 <div>
   <div ng-repeat="item in items">
-    <div>
-      {{ item.id }} - {{ item.state }}
+    <div class="progress" ng-if="item.state === ItemState.PROGRESS">
+      <div 
+        class="progress-bar progress-bar-info" role="progressbar" 
+        aria-valuenow="50"
+        aria-valuemin="0" aria-valuemax="100" style="width:50%"
+      >
+        {{ item.progress }}% Complete (info)
+      </div>
+    </div>
+    <div class="progress" ng-if="item.state === ItemState.WAITING">
+      ... waiting ...
     </div>
   </div>
 </div>

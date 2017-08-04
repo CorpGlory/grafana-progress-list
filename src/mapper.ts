@@ -5,6 +5,8 @@
 import { ItemModel, ItemState } from './item-model';
 import { ModuleConfig } from './module-config';
 
+import _ from 'lodash';
+
 
 export class Mapper {
   
@@ -14,6 +16,7 @@ export class Mapper {
   constructor() {
     var configValue = ModuleConfig.getInstance().getValue('mappingFunctionSource');
     this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
+    this.recompileMappingFunction();
   }
 
   get mappingFunctionSource(): string {
@@ -23,10 +26,19 @@ export class Mapper {
   set mappingFunctionSource(text: string) {
     ModuleConfig.getInstance().setValue('mappingFunctionSource', text);
     this._mappingFunctionSource = text;
+    this.recompileMappingFunction();
   }
   
-  mapMetricData(seriesList: any): [ItemModel] {
-    return [new ItemModel(1, ItemState.PROGRESS)];
+  mapMetricData(seriesList: any): ItemModel[] {
+    if(!this._mappingFunction) {
+      throw new Error('Mapping function doesn`t exist');
+    }
+    var rawRes = this._mappingFunction(seriesList) as any[];
+    return _.map(rawRes, ItemModel.buildFromObject);
+  }
+  
+  private recompileMappingFunction() {
+    this._mappingFunction = eval(`(${this._mappingFunctionSource})`);
   }
 
 }
@@ -44,16 +56,16 @@ const DEFAULT_MAPPING_FUN = function(seriesListItem) {
   return [
     {
       id: 1,
-      status: "waiting"
+      state: "waiting"
     },
     {
       id: 2,
-      status: "progress",
+      state: "progress",
       progress: 23.23
     },
     {
       id: 3,
-      status: "progress",
+      state: "progress",
       progress: 67.8
     }
   ];

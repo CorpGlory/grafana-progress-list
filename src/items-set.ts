@@ -14,7 +14,7 @@ export class ItemsSet {
 
   }
   
-  setItemStates(models: [ItemModel]): [ItemModel] {
+  setItemStates(models: ItemModel[]): ItemModel[] {
     // It's because I want to find killed items and track changes betwwen states
     var keys = _(this._map).keys().map(k => ((+k) as ItemId)).value();
     _.each(models, m => {
