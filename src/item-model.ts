@@ -43,12 +43,12 @@ export abstract class ItemModel {
       throw new Error(e.message + ' [' + id + ']');
     }
   }
-  
+
   private _id: ItemId;
   private _state: ItemState;
   private _name: string;
   private _options: any;
-  
+
   constructor(id: ItemId, state: ItemState, name: string, options: any) {
     if(id === undefined) {
       throw new Error('Id is undefined');
@@ -69,12 +69,11 @@ export abstract class ItemModel {
   get state(): ItemState {
     return this._state;
   }
-  
+
   get name(): string {
-    console.log('naananamanan');
     return this._name;
   }
-  
+
   get options(): any {
     if(this._state === undefined) {
       throw new Error('State is undefined');
