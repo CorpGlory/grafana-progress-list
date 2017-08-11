@@ -9,8 +9,10 @@ import { Mapper } from './mapper';
 import { ItemsSet } from './items-set';
 import { ItemState } from './item-model';
 
-
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
+import { initProgress } from './directives/progress';
+import { initWaiting } from './directives/waiting';
+
 declare var System: any; // app/headers/common can`t be imported
 
 
@@ -22,10 +24,15 @@ class Ctrl extends MetricsPanelCtrl {
   
   private _panelPath?: string;
   
+
   constructor($scope, $injector) {
     super($scope, $injector);
     ModuleConfig.init(this.panel);
     this._initStyles();
+    
+    initProgress(this.panelPath, 'progressListPluginProgress');
+    initWaiting(this.panelPath, 'progressListPluginWaiting');
+    
     this.mapper = new Mapper();
     this.itemSet = new ItemsSet();
     

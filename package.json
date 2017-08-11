@@ -11,6 +11,7 @@
   "author": "av",
   "license": "MIT",
   "devDependencies": {
+    "@types/angular": "^1.5.8",
     "@types/lodash": "^4.14.71",
     "babel": "~6.5.1",
     "babel-eslint": "^6.0.0",

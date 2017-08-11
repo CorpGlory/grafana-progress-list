@@ -1,3 +1,43 @@
 .editor-mapping .gf-form-group-code {
   width: 100%;
 }
+
+.list-item {
+  position: relative;
+  height: 30px;
+}
+
+.list-item-content {
+  position: relative;
+  display: block;
+  height: 20px;
+  width: 100%;
+}
+
+.list-item-content .list-item-value {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  top: -9px;
+}
+
+.list-item-content .progress-item {
+  position: relative;
+}
+
+.list-item-content .progress-bar-line {
+  position: absolute;
+  z-index: 1;
+  top: 0px;
+  height: 8px;
+  background: darkgreen;
+}
+
+.list-item-content .waiting-bar-line {
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  height: 8px; 
+  background: gray;
+  z-index: 1;
+}

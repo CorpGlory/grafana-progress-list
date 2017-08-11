@@ -11,7 +11,6 @@ export class ItemsSet {
   private _map = {};
 
   constructor() {
-
   }
   
   setItemStates(models: ItemModel[]): ItemModel[] {

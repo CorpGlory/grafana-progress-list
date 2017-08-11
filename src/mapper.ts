@@ -9,10 +9,10 @@ import _ from 'lodash';
 
 
 export class Mapper {
-  
+
   private _mappingFunctionSource: string;
   private _mappingFunction: any;
-  
+
   constructor() {
     var configValue = ModuleConfig.getInstance().getValue('mappingFunctionSource');
     this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
