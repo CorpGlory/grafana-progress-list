@@ -56,17 +56,20 @@ const DEFAULT_MAPPING_FUN = function(seriesListItem) {
   return [
     {
       id: 1,
-      state: "waiting"
+      state: "waiting",
+      name: "Stage 1"
     },
     {
       id: 2,
       state: "progress",
-      progress: 23.23
+      progress: 23.23,
+      name: "Stage 2"
     },
     {
       id: 3,
       state: "progress",
-      progress: 67.8
+      progress: 67.8,
+      name: "Stage 3"
     }
   ];
 }
