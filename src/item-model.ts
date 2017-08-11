@@ -71,6 +71,7 @@ export abstract class ItemModel {
   }
   
   get name(): string {
+    console.log('naananamanan');
     return this._name;
   }
   

@@ -6,7 +6,10 @@ export function initWaiting(panelPath: string, directiveName: string = "waiting"
     .directive(directiveName, function() {
       return {
         templateUrl: panelPath + '/directives/waiting.html',
-        restrict: 'E'
+        restrict: 'E',
+        scope: {
+          item: "="
+        }
       };
     });
 }

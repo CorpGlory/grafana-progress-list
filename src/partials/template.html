@@ -1,11 +1,12 @@
 <div>
    <div ng-repeat="item in items">
     <progress-list-plugin-progress
-      ng-if="item.state === ItemState.PROGRESS"
-      value="item.progress" 
+      ng-if="item.state === ItemState.PROGRESS"   
+      item="item" 
     />
     <progress-list-plugin-waiting
       ng-if="item.state === ItemState.WAITING"
+      item="item" 
     />
   </div>
 </div>

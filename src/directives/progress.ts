@@ -8,7 +8,7 @@ export function initProgress(panelPath: string, directiveName: string = "progres
         templateUrl: panelPath + '/directives/progress.html',
         restrict: 'E',
         scope: {
-          value: "="
+          item: "="
         }
       };
     });
