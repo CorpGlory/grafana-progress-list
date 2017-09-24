@@ -9,7 +9,10 @@
       "url": ""
     },
     "keywords": [ ],
-    "logos": { },
+    "logos": {
+      "small": "assets/logo.svg",
+      "large": "assets/logo.svg"
+    },
     "links": [{
       "name": "Project site",
       "url": "https://github.com/CorpGlory/grafana-progress-list"
