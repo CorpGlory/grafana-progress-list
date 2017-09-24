@@ -1,6 +1,6 @@
 # Progress List Panel
 
-![Main screenshot](https://github.com/CorpGlory/grafana-ico-line-plugin/blob/master/src/assets/screenshot_main.png)
+![Main screenshot](https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png)
 
 # Usage
 

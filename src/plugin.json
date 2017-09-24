@@ -16,7 +16,7 @@
     }],
     "screenshots": [{
       "name": "Main",
-      "path": "assets/screenshot_main.png"
+      "path": "./assets/screenshot_main.png"
     }],
     "version": "0.1.1",
     "updated": "2017-09-24"
