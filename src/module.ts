@@ -1,19 +1,11 @@
-/// <reference path="./module-config.ts" />
-/// <reference path="./mapper.ts" />
-/// <reference path="./items-set.ts" />
-/// <reference path="./item-model.ts" />
-
-
 import { ModuleConfig } from './module-config';
 import { Mapper } from './mapper';
 import { ItemsSet } from './items-set';
 import { ItemState } from './item-model';
 
-import { MetricsPanelCtrl } from 'app/plugins/sdk';
+import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 import { initProgress } from './directives/progress';
 import { initWaiting } from './directives/waiting';
-
-declare var System: any; // app/headers/common can`t be imported
 
 
 class Ctrl extends MetricsPanelCtrl {
@@ -30,8 +22,8 @@ class Ctrl extends MetricsPanelCtrl {
     ModuleConfig.init(this.panel);
     this._initStyles();
     
-    initProgress(this.panelPath, 'progressListPluginProgress');
-    initWaiting(this.panelPath, 'progressListPluginWaiting');
+    initProgress('progressListPluginProgress');
+    initWaiting('progressListPluginWaiting');
     
     this.mapper = new Mapper();
     this.itemSet = new ItemsSet();
@@ -46,12 +38,15 @@ class Ctrl extends MetricsPanelCtrl {
   }
   
   _initStyles() {
-    System.import(this.panelPath + 'css/panel.base.css!');
-    if (window['grafanaBootData'].user.lightTheme) {
-      System.import(this.panelPath + 'css/panel.light.css!');
-    } else {
-      System.import(this.panelPath + 'css/panel.dark.css!');
-    }
+    // small hack to load base styles
+    loadPluginCss({
+      light: ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css',
+      dark: ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css'
+    });
+    loadPluginCss({
+      light: ModuleConfig.getInstance().pluginDirName + 'css/panel.light.css',
+      dark: ModuleConfig.getInstance().pluginDirName + 'css/panel.dark.css'
+    });
   }
 
   _onDataReceived(seriesList: any) {
@@ -60,7 +55,7 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _onInitEditMode() {
-    var thisPartialPath = this.panelPath + 'partials/';
+    var thisPartialPath = ModuleConfig.getInstance().pluginDirName + 'partials/';
     this.addEditorTab(
       'Data Mapping', thisPartialPath + 'editor.mapping.html', 2
     );
@@ -71,16 +66,6 @@ class Ctrl extends MetricsPanelCtrl {
     this.$scope.dataError = err;
   }
 
-  get panelPath() {
-    if(!this._panelPath) {
-      var panels = window['grafanaBootData'].settings.panels;
-      var thisPanel = panels[this.pluginId];
-      // the system loader preprends publib to the url,
-      // add a .. to go back one level
-      this._panelPath = '../' + thisPanel.baseUrl + '/';
-    }
-    return this._panelPath;
-  }
 }
 
 

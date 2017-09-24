@@ -1,4 +1,3 @@
-
 export type ItemId = number;
 
 export enum ItemState {

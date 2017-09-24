@@ -1,11 +1,13 @@
-import coreModule from 'app/core/core_module';
+import { ModuleConfig } from '../module-config';
+
+import coreModule from 'grafana/app/core/core_module';
 
 
-export function initWaiting(panelPath: string, directiveName: string = "waiting") {
+export function initWaiting(directiveName: string = "waiting") {
   coreModule
     .directive(directiveName, function() {
       return {
-        templateUrl: panelPath + '/directives/waiting.html',
+        templateUrl: ModuleConfig.getInstance().pluginDirName + '/directives/waiting.html',
         restrict: 'E',
         scope: {
           item: "="

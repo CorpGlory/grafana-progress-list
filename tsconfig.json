@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
-    "sourceMap": true,
     "strictNullChecks": true,
-    "module": "system",
-    "target": "es5",
-    "allowJs": true,
+    "module": "none",
+    "target": "es6",
     "rootDir": "./src"
   },
   "include": [

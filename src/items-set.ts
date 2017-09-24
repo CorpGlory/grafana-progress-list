@@ -1,9 +1,6 @@
-/// <reference path="./item-model.ts" />
-
-
 import { ItemModel, ItemState, ItemId } from './item-model';
 
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 
 export class ItemsSet {

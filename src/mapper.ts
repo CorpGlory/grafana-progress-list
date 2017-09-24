@@ -1,11 +1,7 @@
-/// <reference path="./item-model.ts" />
-/// <reference path="./module-config.ts" />
-
-
 import { ItemModel, ItemState } from './item-model';
 import { ModuleConfig } from './module-config';
 
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 
 export class Mapper {
@@ -28,7 +24,7 @@ export class Mapper {
     this._mappingFunctionSource = text;
     this.recompileMappingFunction();
   }
-  
+
   mapMetricData(seriesList: any): ItemModel[] {
     if(!this._mappingFunction) {
       throw new Error('Mapping function doesn`t exist');
@@ -36,7 +32,7 @@ export class Mapper {
     var rawRes = this._mappingFunction(seriesList) as any[];
     return _.map(rawRes, ItemModel.buildFromObject);
   }
-  
+
   private recompileMappingFunction() {
     this._mappingFunction = eval(`(${this._mappingFunctionSource})`);
   }
@@ -48,20 +44,25 @@ const DEFAULT_MAPPING_FUN = function(seriesListItem) {
   Should return:
   [{
     id: (number),
-    status: (string),
+    state: (string),
     ... other options ...
   }]
   */
 
+  // use
+  // console.log(seriesListItem)
+  // to see your query data
+
   return [
     {
       id: 1,
-      state: "waiting",
-      name: "Stage 1"
+      state: "progress",
+      name: "Stage 1",
+      progress: 87.44
     },
     {
       id: 2,
-      state: "progress",
+      state: "waiting",
       progress: 23.23,
       name: "Stage 2"
     },
@@ -70,11 +71,17 @@ const DEFAULT_MAPPING_FUN = function(seriesListItem) {
       state: "progress",
       progress: 67.8,
       name: "Stage 3"
+    },
+    {
+      id: 4,
+      state: "progress",
+      progress: 11.8,
+      name: "Stage 4"
     }
   ];
 }
 
 const DEFAULT_MAPPING_SOURCE = (DEFAULT_MAPPING_FUN + '$')
   .replace('function DEFAULT_MAPPING(', 'function(')
-  .replace(new RegExp('        ', 'g'), '  ')
-  .replace('      }$', '}');
+  .replace(new RegExp('    ', 'g'), '  ')
+  .replace('}$', '}');
