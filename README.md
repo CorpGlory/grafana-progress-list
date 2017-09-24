@@ -1,5 +1,7 @@
 # Progress List Panel
 
+![Main screenshot](https://github.com/CorpGlory/grafana-ico-line-plugin/blob/master/src/assets/screenshot_main.png)
+
 # Usage
 
 Show list of progress items by mapping your data.

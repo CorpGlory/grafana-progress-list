@@ -14,8 +14,11 @@
       "name": "Project site",
       "url": "https://github.com/CorpGlory/grafana-progress-list"
     }],
-    "screenshots": [ ],
-    "version": "0.0.1",
+    "screenshots": [{
+      "name": "Main",
+      "path": "assets/screenshot_main.png"
+    }],
+    "version": "0.1.1",
     "updated": "2017-09-24"
   },
   "dependencies": {

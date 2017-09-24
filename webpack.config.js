@@ -28,6 +28,7 @@ module.exports = {
       { from: 'partials/*' },
       { from: 'css/*' },
       { from: 'directives/*.html' },
+      { from: 'assets/*' },
     ])
   ],
   resolve: {
