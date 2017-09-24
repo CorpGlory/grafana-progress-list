@@ -1,6 +1,6 @@
 # Progress List Panel
 
-![Main screenshot](https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png)
+<img src="https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png" width="400">
 
 # Usage
 
