@@ -22,7 +22,7 @@ export abstract class ItemModel {
     if(ItemState[stateStr] === undefined) {
       throw new Error('Can`t find state ' + obj.state);
     }
-    
+
     var state = ItemState[stateStr];
     var id: ItemId = +obj.id;
     var name = "NO_NAME";

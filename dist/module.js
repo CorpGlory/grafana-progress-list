@@ -1,4 +1,4 @@
-define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_8__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_8__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -60,77 +60,11 @@ define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_M
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-var ModuleConfig = function () {
-    function ModuleConfig(panel) {
-        _classCallCheck(this, ModuleConfig);
-
-        this._panel = panel;
-    }
-
-    _createClass(ModuleConfig, [{
-        key: "getValue",
-        value: function getValue(key) {
-            return this._panel[key];
-        }
-    }, {
-        key: "setValue",
-        value: function setValue(key, value) {
-            this._panel[key] = value;
-        }
-    }, {
-        key: "pluginDirName",
-        get: function get() {
-            if (!this._pluginDirName) {
-                var panels = window['grafanaBootData'].settings.panels;
-                var thisPanel = panels[this._panel.type];
-                // the system loader preprends publib to the url,
-                // add a .. to go back one level
-                this._pluginDirName = '../' + thisPanel.baseUrl + '/';
-            }
-            return this._pluginDirName;
-        }
-    }], [{
-        key: "init",
-        value: function init(panel) {
-            if (ModuleConfig._instance) {
-                throw new Error("Error: Instantiation failed: Use ModuleConfig.getInstance() instead of new.");
-            }
-            ModuleConfig._instance = new ModuleConfig(panel);
-        }
-    }, {
-        key: "getInstance",
-        value: function getInstance() {
-            if (!ModuleConfig._instance) {
-                throw new Error("Error: ModuleConfig isn't created yet.");
-            }
-            return ModuleConfig._instance;
-        }
-    }]);
-
-    return ModuleConfig;
-}();
-
-ModuleConfig._instance = undefined;
-exports.ModuleConfig = ModuleConfig;
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -278,7 +212,7 @@ var ItemWaitingModel = function (_ItemModel2) {
 exports.ItemWaitingModel = ItemWaitingModel;
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17370,13 +17304,13 @@ exports.ItemWaitingModel = ItemWaitingModel;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17391,10 +17325,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_config_1 = __webpack_require__(0);
+var panel_config_1 = __webpack_require__(4);
 var mapper_1 = __webpack_require__(5);
 var items_set_1 = __webpack_require__(7);
-var item_model_1 = __webpack_require__(1);
+var item_model_1 = __webpack_require__(0);
 var sdk_1 = __webpack_require__(8);
 var progress_1 = __webpack_require__(9);
 var waiting_1 = __webpack_require__(10);
@@ -17407,11 +17341,11 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
 
         var _this = _possibleConstructorReturn(this, (Ctrl.__proto__ || Object.getPrototypeOf(Ctrl)).call(this, $scope, $injector));
 
-        module_config_1.ModuleConfig.init(_this.panel);
+        _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
-        progress_1.initProgress('progressListPluginProgress');
-        waiting_1.initWaiting('progressListPluginWaiting');
-        _this.mapper = new mapper_1.Mapper();
+        progress_1.initProgress(_this._panelConfig, 'progressListPluginProgress');
+        waiting_1.initWaiting(_this._panelConfig, 'progressListPluginWaiting');
+        _this.mapper = new mapper_1.Mapper(_this._panelConfig);
         _this.itemSet = new items_set_1.ItemsSet();
         _this.$scope.ItemState = item_model_1.ItemState;
         _this.events.on('init-edit-mode', _this._onInitEditMode.bind(_this));
@@ -17427,12 +17361,12 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         value: function _initStyles() {
             // small hack to load base styles
             sdk_1.loadPluginCss({
-                light: module_config_1.ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css',
-                dark: module_config_1.ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css'
+                light: this._panelConfig.pluginDirName + 'css/panel.base.css',
+                dark: this._panelConfig.pluginDirName + 'css/panel.base.css'
             });
             sdk_1.loadPluginCss({
-                light: module_config_1.ModuleConfig.getInstance().pluginDirName + 'css/panel.light.css',
-                dark: module_config_1.ModuleConfig.getInstance().pluginDirName + 'css/panel.dark.css'
+                light: this._panelConfig.pluginDirName + 'css/panel.light.css',
+                dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
             });
         }
     }, {
@@ -17444,7 +17378,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
     }, {
         key: "_onInitEditMode",
         value: function _onInitEditMode() {
-            var thisPartialPath = module_config_1.ModuleConfig.getInstance().pluginDirName + 'partials/';
+            var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
             this.addEditorTab('Data Mapping', thisPartialPath + 'editor.mapping.html', 2);
         }
     }, {
@@ -17462,6 +17396,55 @@ Ctrl.templateUrl = "partials/template.html";
 exports.PanelCtrl = Ctrl;
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+var PanelConfig = function () {
+    function PanelConfig(panel) {
+        _classCallCheck(this, PanelConfig);
+
+        this._panel = panel;
+    }
+
+    _createClass(PanelConfig, [{
+        key: "getValue",
+        value: function getValue(key) {
+            return this._panel[key];
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(key, value) {
+            this._panel[key] = value;
+        }
+    }, {
+        key: "pluginDirName",
+        get: function get() {
+            if (!this._pluginDirName) {
+                var panels = window['grafanaBootData'].settings.panels;
+                var thisPanel = panels[this._panel.type];
+                // the system loader preprends publib to the url,
+                // add a .. to go back one level
+                this._pluginDirName = '../' + thisPanel.baseUrl + '/';
+            }
+            return this._pluginDirName;
+        }
+    }]);
+
+    return PanelConfig;
+}();
+
+exports.PanelConfig = PanelConfig;
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17473,15 +17456,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_model_1 = __webpack_require__(1);
-var module_config_1 = __webpack_require__(0);
-var _ = __webpack_require__(2);
+var item_model_1 = __webpack_require__(0);
+var _ = __webpack_require__(1);
 
 var Mapper = function () {
-    function Mapper() {
+    function Mapper(panelConfig) {
         _classCallCheck(this, Mapper);
 
-        var configValue = module_config_1.ModuleConfig.getInstance().getValue('mappingFunctionSource');
+        this._panelConfig = panelConfig;
+        var configValue = this._panelConfig.getValue('mappingFunctionSource');
         this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
         this.recompileMappingFunction();
     }
@@ -17506,7 +17489,7 @@ var Mapper = function () {
             return this._mappingFunctionSource;
         },
         set: function set(text) {
-            module_config_1.ModuleConfig.getInstance().setValue('mappingFunctionSource', text);
+            this._panelConfig.setValue('mappingFunctionSource', text);
             this._mappingFunctionSource = text;
             this.recompileMappingFunction();
         }
@@ -17592,7 +17575,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = __webpack_require__(2);
+var _ = __webpack_require__(1);
 
 var ItemsSet = function () {
     function ItemsSet() {
@@ -17639,14 +17622,18 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_config_1 = __webpack_require__(0);
-var core_module_1 = __webpack_require__(3);
-function initProgress() {
-    var directiveName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "progress";
+var core_module_1 = __webpack_require__(2);
+var directiveInited = false;
+function initProgress(panelConfig) {
+    var directiveName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "progress";
 
+    if (directiveInited) {
+        return;
+    }
+    directiveInited = true;
     core_module_1.default.directive(directiveName, function () {
         return {
-            templateUrl: module_config_1.ModuleConfig.getInstance().pluginDirName + 'directives/progress.html',
+            templateUrl: panelConfig.pluginDirName + 'directives/progress.html',
             restrict: 'E',
             scope: {
                 item: "="
@@ -17664,14 +17651,18 @@ exports.initProgress = initProgress;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_config_1 = __webpack_require__(0);
-var core_module_1 = __webpack_require__(3);
-function initWaiting() {
-    var directiveName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "waiting";
+var core_module_1 = __webpack_require__(2);
+var directiveInited = false;
+function initWaiting(panelConfig) {
+    var directiveName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "waiting";
 
+    if (directiveInited) {
+        return;
+    }
+    directiveInited = true;
     core_module_1.default.directive(directiveName, function () {
         return {
-            templateUrl: module_config_1.ModuleConfig.getInstance().pluginDirName + '/directives/waiting.html',
+            templateUrl: panelConfig.pluginDirName + '/directives/waiting.html',
             restrict: 'E',
             scope: {
                 item: "="
