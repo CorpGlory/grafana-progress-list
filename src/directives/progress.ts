@@ -1,13 +1,18 @@
-import { ModuleConfig } from '../module-config';
+import { PanelConfig } from '../panel-config';
 
 import coreModule from 'grafana/app/core/core_module';
 
 
-export function initProgress(directiveName: string = "progress") {
+var directiveInited = false;
+export function initProgress(panelConfig: PanelConfig, directiveName: string = "progress") {
+  if(directiveInited) {
+    return;
+  }
+  directiveInited = true;
   coreModule
     .directive(directiveName, function() {
       return {
-        templateUrl: ModuleConfig.getInstance().pluginDirName + 'directives/progress.html',
+        templateUrl: panelConfig.pluginDirName + 'directives/progress.html',
         restrict: 'E',
         scope: {
           item: "="

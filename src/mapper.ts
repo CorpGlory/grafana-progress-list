@@ -1,5 +1,5 @@
 import { ItemModel, ItemState } from './item-model';
-import { ModuleConfig } from './module-config';
+import { PanelConfig } from './panel-config';
 
 import * as _ from 'lodash';
 
@@ -8,9 +8,11 @@ export class Mapper {
 
   private _mappingFunctionSource: string;
   private _mappingFunction: any;
+  private _panelConfig: PanelConfig;
 
-  constructor() {
-    var configValue = ModuleConfig.getInstance().getValue('mappingFunctionSource');
+  constructor(panelConfig: PanelConfig) {
+    this._panelConfig = panelConfig;
+    var configValue = this._panelConfig.getValue('mappingFunctionSource');
     this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
     this.recompileMappingFunction();
   }
@@ -20,7 +22,7 @@ export class Mapper {
   }
 
   set mappingFunctionSource(text: string) {
-    ModuleConfig.getInstance().setValue('mappingFunctionSource', text);
+    this._panelConfig.setValue('mappingFunctionSource', text);
     this._mappingFunctionSource = text;
     this.recompileMappingFunction();
   }
@@ -34,7 +36,7 @@ export class Mapper {
   }
 
   private recompileMappingFunction() {
-    this._mappingFunction = eval(`(${this._mappingFunctionSource})`);
+    this._mappingFunction = eval(`(${ this._mappingFunctionSource })`);
   }
 
 }

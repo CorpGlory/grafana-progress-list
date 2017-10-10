@@ -1,4 +1,4 @@
-import { ModuleConfig } from './module-config';
+import { PanelConfig } from './panel-config';
 import { Mapper } from './mapper';
 import { ItemsSet } from './items-set';
 import { ItemState } from './item-model';
@@ -10,42 +10,42 @@ import { initWaiting } from './directives/waiting';
 
 class Ctrl extends MetricsPanelCtrl {
   static templateUrl = "partials/template.html";
-  
+
   public mapper: Mapper;
   public itemSet: ItemsSet;
-  
-  private _panelPath?: string;
-  
+
+  private _panelConfig: PanelConfig;
+
 
   constructor($scope, $injector) {
     super($scope, $injector);
-    ModuleConfig.init(this.panel);
+    this._panelConfig = new PanelConfig(this.panel);
     this._initStyles();
-    
-    initProgress('progressListPluginProgress');
-    initWaiting('progressListPluginWaiting');
-    
-    this.mapper = new Mapper();
+
+    initProgress(this._panelConfig, 'progressListPluginProgress');
+    initWaiting(this._panelConfig, 'progressListPluginWaiting');
+
+    this.mapper = new Mapper(this._panelConfig);
     this.itemSet = new ItemsSet();
-    
+
     this.$scope.ItemState = ItemState;
-    
+
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
   }
 
   link(scope, element) {
   }
-  
+
   _initStyles() {
     // small hack to load base styles
     loadPluginCss({
-      light: ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css',
-      dark: ModuleConfig.getInstance().pluginDirName + 'css/panel.base.css'
+      light: this._panelConfig.pluginDirName + 'css/panel.base.css',
+      dark: this._panelConfig.pluginDirName + 'css/panel.base.css'
     });
     loadPluginCss({
-      light: ModuleConfig.getInstance().pluginDirName + 'css/panel.light.css',
-      dark: ModuleConfig.getInstance().pluginDirName + 'css/panel.dark.css'
+      light: this._panelConfig.pluginDirName + 'css/panel.light.css',
+      dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
     });
   }
 
@@ -55,7 +55,7 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _onInitEditMode() {
-    var thisPartialPath = ModuleConfig.getInstance().pluginDirName + 'partials/';
+    var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
     this.addEditorTab(
       'Data Mapping', thisPartialPath + 'editor.mapping.html', 2
     );
