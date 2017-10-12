@@ -1,11 +1,9 @@
 import { PanelConfig } from './panel-config';
 import { Mapper } from './mapper';
 import { ItemsSet } from './items-set';
-import { ItemState } from './item-model';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 import { initProgress } from './directives/progress';
-import { initWaiting } from './directives/waiting';
 
 
 class Ctrl extends MetricsPanelCtrl {
@@ -23,12 +21,9 @@ class Ctrl extends MetricsPanelCtrl {
     this._initStyles();
 
     initProgress(this._panelConfig, 'progressListPluginProgress');
-    initWaiting(this._panelConfig, 'progressListPluginWaiting');
 
     this.mapper = new Mapper(this._panelConfig);
     this.itemSet = new ItemsSet();
-
-    this.$scope.ItemState = ItemState;
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
@@ -57,7 +52,7 @@ class Ctrl extends MetricsPanelCtrl {
   _onInitEditMode() {
     var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
     this.addEditorTab(
-      'Data Mapping', thisPartialPath + 'editor.mapping.html', 2
+      'Options', thisPartialPath + 'editor.mapping.html', 2
     );
   }
 
