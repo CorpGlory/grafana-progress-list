@@ -8,7 +8,8 @@ import * as _ from 'lodash';
 
 const defaults = {
   statNameOptionValue: 'current',
-  statProgressType: 'shared'
+  statProgressType: 'shared',
+  sorting: false,
 };
 
 
@@ -58,7 +59,13 @@ class Ctrl extends MetricsPanelCtrl {
   }
   
   render() {
-    this.$scope.items = this.mapper.mapMetricData(this._seriesList);
+    var items = this.mapper.mapMetricData(this._seriesList);
+    
+    if(this._panelConfig.getValue('sorting') === true) {
+      items = _.sortBy(items, i => -i[1]);
+    }
+    
+    this.$scope.items = items;
   }
 
   _onDataReceived(seriesList: any) {
