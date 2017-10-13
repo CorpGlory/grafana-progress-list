@@ -81,9 +81,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 Object.defineProperty(exports, "__esModule", { value: true });
 var panel_config_1 = __webpack_require__(1);
 var mapper_1 = __webpack_require__(2);
-var items_set_1 = __webpack_require__(4);
 var sdk_1 = __webpack_require__(7);
 var progress_1 = __webpack_require__(8);
+var _ = __webpack_require__(5);
+var defaults = {
+    statNameOptionValue: 'current',
+    statProgressType: 'shared'
+};
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
     _inherits(Ctrl, _sdk_1$MetricsPanelCt);
@@ -93,11 +97,14 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
 
         var _this = _possibleConstructorReturn(this, (Ctrl.__proto__ || Object.getPrototypeOf(Ctrl)).call(this, $scope, $injector));
 
+        _this.statNameOptions = ['current', 'min', 'max', 'total'];
+        _this.statProgressTypeOptions = ['max Value', 'shared'];
+        _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
         progress_1.initProgress(_this._panelConfig, 'progressListPluginProgress');
         _this.mapper = new mapper_1.Mapper(_this._panelConfig);
-        _this.itemSet = new items_set_1.ItemsSet();
+        _this.items = [];
         _this.events.on('init-edit-mode', _this._onInitEditMode.bind(_this));
         _this.events.on('data-received', _this._onDataReceived.bind(_this));
         return _this;
@@ -120,16 +127,21 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
             });
         }
     }, {
+        key: "render",
+        value: function render() {
+            this.$scope.items = this.mapper.mapMetricData(this._seriesList);
+        }
+    }, {
         key: "_onDataReceived",
         value: function _onDataReceived(seriesList) {
-            var items = this.itemSet.setItemStates(this.mapper.mapMetricData(seriesList));
-            this.$scope.items = items;
+            this._seriesList = seriesList;
+            this.render();
         }
     }, {
         key: "_onInitEditMode",
         value: function _onInitEditMode() {
             var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
-            this.addEditorTab('Options', thisPartialPath + 'editor.mapping.html', 2);
+            this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
         }
     }, {
         key: "_dataError",
@@ -206,7 +218,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_progress_model_1 = __webpack_require__(3);
+var _ = __webpack_require__(5);
 
 var Mapper = function () {
     function Mapper(panelConfig) {
@@ -218,7 +230,106 @@ var Mapper = function () {
     _createClass(Mapper, [{
         key: "mapMetricData",
         value: function mapMetricData(seriesList) {
-            return [item_progress_model_1.ItemProgressModel.buildFromObject({ id: 1, name: "st1", progress: 35.1 }), item_progress_model_1.ItemProgressModel.buildFromObject({ id: 2, name: "st2", progress: 12.98 }), item_progress_model_1.ItemProgressModel.buildFromObject({ id: 3, name: "st3", progress: 57.5 })];
+            if (seriesList.length == 0) {
+                return [];
+            }
+            var kstat = [];
+            if (this._panelConfig.getValue('statNameOptionValue') === 'total') {
+                kstat = this._mapTotal(seriesList);
+            } else {
+                kstat = this._mapNumeric(seriesList);
+            }
+            var progressType = this._panelConfig.getValue('statProgressType');
+            if (this._panelConfig.getValue('statProgressType') === 'shared') {
+                var total = 0;
+                for (var i = 0; i < kstat.length; i++) {
+                    total += kstat[i][1];
+                }
+                for (var _i = 0; _i < kstat.length; _i++) {
+                    kstat[_i][1] = 100 * kstat[_i][1] / total;
+                }
+            }
+            if (this._panelConfig.getValue('statProgressType') === 'max Value') {
+                var max = 0;
+                for (var _i2 = 0; _i2 < kstat.length; _i2++) {
+                    max = Math.max(kstat[_i2][1], max);
+                }
+                for (var _i3 = 0; _i3 < kstat.length; _i3++) {
+                    kstat[_i3][1] = 100 * kstat[_i3][1] / max;
+                }
+            }
+            return kstat;
+        }
+    }, {
+        key: "_mapTotal",
+        value: function _mapTotal(seriesList) {
+            if (seriesList.length !== 1) {
+                throw new Error('Expecting list of keys: got more than one timeseries');
+            }
+            var kv = {};
+            var datapointsLength = seriesList[0].datapoints.length;
+            for (var i = 0; i < datapointsLength; i++) {
+                var k = seriesList[0].datapoints[i][0].toString();
+                if (kv[k] === undefined) {
+                    kv[k] = 0;
+                }
+                kv[k]++;
+            }
+            var res = [];
+            for (var _k in kv) {
+                res.push([_k, kv[_k]]);
+            }
+            return res;
+        }
+    }, {
+        key: "_mapNumeric",
+        value: function _mapNumeric(seriesList) {
+            if (seriesList.length != 2) {
+                throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
+            }
+            if (seriesList[0].datapoints.length !== seriesList[1].datapoints.length) {
+                throw new Error('Timeseries has different length');
+            }
+            var kv = {};
+            var datapointsLength = seriesList[0].datapoints.length;
+            for (var i = 0; i < datapointsLength; i++) {
+                var k = seriesList[0].datapoints[i][0].toString();
+                var v = seriesList[1].datapoints[i][0];
+                var vn = parseFloat(v);
+                if (v === null) {
+                    vn = 0;
+                }
+                if (isNaN(vn)) {
+                    throw new Error('Got non-numberic value: ' + v);
+                }
+                if (kv[k] === undefined) {
+                    kv[k] = [];
+                }
+                kv[k].push(vn);
+            }
+            var res = [];
+            for (var _k2 in kv) {
+                res.push([_k2, this._flatSeries(kv[_k2])]);
+            }
+            return res;
+        }
+    }, {
+        key: "_flatSeries",
+        value: function _flatSeries(values) {
+            if (values.length === 0) {
+                return 0;
+            }
+            var t = this._panelConfig.getValue('statNameOptionValue');
+            if (t === 'max') {
+                return _.max(values);
+            }
+            if (t === 'min') {
+                return _.min(values);
+            }
+            if (t === 'current') {
+                return values[values.length - 1];
+            }
+            return 0;
         }
     }]);
 
@@ -228,120 +339,8 @@ var Mapper = function () {
 exports.Mapper = Mapper;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-var ItemProgressModel = function () {
-    _createClass(ItemProgressModel, null, [{
-        key: "buildFromObject",
-        value: function buildFromObject(obj) {
-            if (!obj.id) {
-                throw new Error('No id in object');
-            }
-            if (isNaN(obj.id)) {
-                throw new Error('Type of id should be number');
-            }
-            obj.progress = +obj.progress;
-            if (isNaN(obj.progress)) {
-                throw new Error('Progress should be number');
-            }
-            var id = +obj.id;
-            var name = "NO_NAME";
-            if (obj.name !== undefined) {
-                name = obj.name;
-            }
-            return new ItemProgressModel(obj.id, obj.name, obj.progress);
-        }
-    }]);
-
-    function ItemProgressModel(id, name, progress) {
-        _classCallCheck(this, ItemProgressModel);
-
-        if (id === undefined) {
-            throw new Error('Id is undefined');
-        }
-        this._id = id;
-        this._name = name;
-        this._progress = progress;
-    }
-
-    _createClass(ItemProgressModel, [{
-        key: "id",
-        get: function get() {
-            return this._id;
-        }
-    }, {
-        key: "name",
-        get: function get() {
-            return this._name;
-        }
-    }, {
-        key: "progress",
-        get: function get() {
-            return this._progress;
-        }
-    }]);
-
-    return ItemProgressModel;
-}();
-
-exports.ItemProgressModel = ItemProgressModel;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _ = __webpack_require__(5);
-
-var ItemsSet = function () {
-    function ItemsSet() {
-        _classCallCheck(this, ItemsSet);
-
-        this._map = {};
-    }
-
-    _createClass(ItemsSet, [{
-        key: "setItemStates",
-        value: function setItemStates(models) {
-            var _this = this;
-
-            // It's because I want to find killed items and track changes between states
-            var keys = _(this._map).keys().map(function (k) {
-                return +k;
-            }).value();
-            _.each(models, function (m) {
-                _.remove(keys, m.id);
-            });
-            _.each(keys, function (k) {
-                delete _this._map[k];
-            });
-            return models;
-        }
-    }]);
-
-    return ItemsSet;
-}();
-
-exports.ItemsSet = ItemsSet;
-
-/***/ }),
+/* 3 */,
+/* 4 */,
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
