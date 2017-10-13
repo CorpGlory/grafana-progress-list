@@ -1,4 +1,4 @@
-define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_8__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/plugins/sdk","app/core/core_module"], function(__WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_9__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -60,7 +60,7 @@ define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_M
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,147 +72,276 @@ define(["app/core/core_module","app/plugins/sdk"], function(__WEBPACK_EXTERNAL_M
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 Object.defineProperty(exports, "__esModule", { value: true });
-var ItemState;
-(function (ItemState) {
-    ItemState[ItemState["WAITING"] = 0] = "WAITING";
-    ItemState[ItemState["PROGRESS"] = 1] = "PROGRESS";
-})(ItemState = exports.ItemState || (exports.ItemState = {}));
+var panel_config_1 = __webpack_require__(1);
+var mapper_1 = __webpack_require__(2);
+var sdk_1 = __webpack_require__(7);
+var progress_1 = __webpack_require__(8);
+var _ = __webpack_require__(5);
+var defaults = {
+    statNameOptionValue: 'current',
+    statProgressType: 'shared'
+};
 
-var ItemModel = function () {
-    _createClass(ItemModel, null, [{
-        key: "buildFromObject",
-        value: function buildFromObject(obj) {
-            if (!obj.id) {
-                throw new Error('No id in object');
-            }
-            if (!obj.state) {
-                throw new Error('No state in object');
-            }
-            if (isNaN(obj.id)) {
-                throw new Error('Type of id should be number');
-            }
-            var stateStr = obj.state.toUpperCase();
-            if (ItemState[stateStr] === undefined) {
-                throw new Error('Can`t find state ' + obj.state);
-            }
-            var state = ItemState[stateStr];
-            var id = +obj.id;
-            var name = "NO_NAME";
-            if (obj.name !== undefined) {
-                name = obj.name;
-            }
-            try {
-                if (state === ItemState.PROGRESS) {
-                    return new ItemProgressModel(id, name, obj);
-                }
-                if (state === ItemState.WAITING) {
-                    return new ItemWaitingModel(id, name, obj);
-                }
-                return new ItemWaitingModel(id, name, obj);
-            } catch (e) {
-                throw new Error(e.message + ' [' + id + ']');
-            }
-        }
-    }]);
+var Ctrl = function (_sdk_1$MetricsPanelCt) {
+    _inherits(Ctrl, _sdk_1$MetricsPanelCt);
 
-    function ItemModel(id, state, name, options) {
-        _classCallCheck(this, ItemModel);
+    function Ctrl($scope, $injector) {
+        _classCallCheck(this, Ctrl);
 
-        if (id === undefined) {
-            throw new Error('Id is undefined');
-        }
-        if (state === undefined) {
-            throw new Error('State is undefined');
-        }
-        this._id = id;
-        this._state = state;
-        this._name = name;
-        this._options = options;
-    }
+        var _this = _possibleConstructorReturn(this, (Ctrl.__proto__ || Object.getPrototypeOf(Ctrl)).call(this, $scope, $injector));
 
-    _createClass(ItemModel, [{
-        key: "id",
-        get: function get() {
-            return this._id;
-        }
-    }, {
-        key: "state",
-        get: function get() {
-            return this._state;
-        }
-    }, {
-        key: "name",
-        get: function get() {
-            return this._name;
-        }
-    }, {
-        key: "options",
-        get: function get() {
-            if (this._state === undefined) {
-                throw new Error('State is undefined');
-            }
-            return this._options;
-        }
-    }]);
-
-    return ItemModel;
-}();
-
-exports.ItemModel = ItemModel;
-
-var ItemProgressModel = function (_ItemModel) {
-    _inherits(ItemProgressModel, _ItemModel);
-
-    function ItemProgressModel(id, name, obj) {
-        _classCallCheck(this, ItemProgressModel);
-
-        var _this = _possibleConstructorReturn(this, (ItemProgressModel.__proto__ || Object.getPrototypeOf(ItemProgressModel)).call(this, id, ItemState.PROGRESS, name, obj));
-
-        if (obj.progress === undefined) {
-            throw new Error('Expecting progress in object');
-        }
-        if (isNaN(obj.progress)) {
-            throw new Error('Progress should be a number');
-        }
-        _this._progress = +obj.progress;
+        _this.statNameOptions = ['current', 'min', 'max', 'total'];
+        _this.statProgressTypeOptions = ['max Value', 'shared'];
+        _.defaults(_this.panel, defaults);
+        _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
+        _this._initStyles();
+        progress_1.initProgress(_this._panelConfig, 'progressListPluginProgress');
+        _this.mapper = new mapper_1.Mapper(_this._panelConfig);
+        _this.items = [];
+        _this.events.on('init-edit-mode', _this._onInitEditMode.bind(_this));
+        _this.events.on('data-received', _this._onDataReceived.bind(_this));
         return _this;
     }
 
-    _createClass(ItemProgressModel, [{
-        key: "progress",
-        get: function get() {
-            return this._progress;
+    _createClass(Ctrl, [{
+        key: "link",
+        value: function link(scope, element) {}
+    }, {
+        key: "_initStyles",
+        value: function _initStyles() {
+            // small hack to load base styles
+            sdk_1.loadPluginCss({
+                light: this._panelConfig.pluginDirName + 'css/panel.base.css',
+                dark: this._panelConfig.pluginDirName + 'css/panel.base.css'
+            });
+            sdk_1.loadPluginCss({
+                light: this._panelConfig.pluginDirName + 'css/panel.light.css',
+                dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.$scope.items = this.mapper.mapMetricData(this._seriesList);
+        }
+    }, {
+        key: "_onDataReceived",
+        value: function _onDataReceived(seriesList) {
+            this._seriesList = seriesList;
+            this.render();
+        }
+    }, {
+        key: "_onInitEditMode",
+        value: function _onInitEditMode() {
+            var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
+            this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
+        }
+    }, {
+        key: "_dataError",
+        value: function _dataError(err) {
+            this.$scope.data = [];
+            this.$scope.dataError = err;
         }
     }]);
 
-    return ItemProgressModel;
-}(ItemModel);
+    return Ctrl;
+}(sdk_1.MetricsPanelCtrl);
 
-exports.ItemProgressModel = ItemProgressModel;
-
-var ItemWaitingModel = function (_ItemModel2) {
-    _inherits(ItemWaitingModel, _ItemModel2);
-
-    function ItemWaitingModel(id, name, obj) {
-        _classCallCheck(this, ItemWaitingModel);
-
-        return _possibleConstructorReturn(this, (ItemWaitingModel.__proto__ || Object.getPrototypeOf(ItemWaitingModel)).call(this, id, ItemState.WAITING, name, obj));
-    }
-
-    return ItemWaitingModel;
-}(ItemModel);
-
-exports.ItemWaitingModel = ItemWaitingModel;
+Ctrl.templateUrl = "partials/template.html";
+exports.PanelCtrl = Ctrl;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+var PanelConfig = function () {
+    function PanelConfig(panel) {
+        _classCallCheck(this, PanelConfig);
+
+        this._panel = panel;
+    }
+
+    _createClass(PanelConfig, [{
+        key: "getValue",
+        value: function getValue(key) {
+            return this._panel[key];
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(key, value) {
+            this._panel[key] = value;
+        }
+    }, {
+        key: "pluginDirName",
+        get: function get() {
+            if (!this._pluginDirName) {
+                var panels = window['grafanaBootData'].settings.panels;
+                var thisPanel = panels[this._panel.type];
+                // the system loader preprends publib to the url,
+                // add a .. to go back one level
+                this._pluginDirName = '../' + thisPanel.baseUrl + '/';
+            }
+            return this._pluginDirName;
+        }
+    }]);
+
+    return PanelConfig;
+}();
+
+exports.PanelConfig = PanelConfig;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _ = __webpack_require__(5);
+
+var Mapper = function () {
+    function Mapper(panelConfig) {
+        _classCallCheck(this, Mapper);
+
+        this._panelConfig = panelConfig;
+    }
+
+    _createClass(Mapper, [{
+        key: "mapMetricData",
+        value: function mapMetricData(seriesList) {
+            if (seriesList.length == 0) {
+                return [];
+            }
+            var kstat = [];
+            if (this._panelConfig.getValue('statNameOptionValue') === 'total') {
+                kstat = this._mapTotal(seriesList);
+            } else {
+                kstat = this._mapNumeric(seriesList);
+            }
+            var progressType = this._panelConfig.getValue('statProgressType');
+            if (this._panelConfig.getValue('statProgressType') === 'shared') {
+                var total = 0;
+                for (var i = 0; i < kstat.length; i++) {
+                    total += kstat[i][1];
+                }
+                for (var _i = 0; _i < kstat.length; _i++) {
+                    kstat[_i][1] = 100 * kstat[_i][1] / total;
+                }
+            }
+            if (this._panelConfig.getValue('statProgressType') === 'max Value') {
+                var max = 0;
+                for (var _i2 = 0; _i2 < kstat.length; _i2++) {
+                    max = Math.max(kstat[_i2][1], max);
+                }
+                for (var _i3 = 0; _i3 < kstat.length; _i3++) {
+                    kstat[_i3][1] = 100 * kstat[_i3][1] / max;
+                }
+            }
+            return kstat;
+        }
+    }, {
+        key: "_mapTotal",
+        value: function _mapTotal(seriesList) {
+            if (seriesList.length !== 1) {
+                throw new Error('Expecting list of keys: got more than one timeseries');
+            }
+            var kv = {};
+            var datapointsLength = seriesList[0].datapoints.length;
+            for (var i = 0; i < datapointsLength; i++) {
+                var k = seriesList[0].datapoints[i][0].toString();
+                if (kv[k] === undefined) {
+                    kv[k] = 0;
+                }
+                kv[k]++;
+            }
+            var res = [];
+            for (var _k in kv) {
+                res.push([_k, kv[_k]]);
+            }
+            return res;
+        }
+    }, {
+        key: "_mapNumeric",
+        value: function _mapNumeric(seriesList) {
+            if (seriesList.length != 2) {
+                throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
+            }
+            if (seriesList[0].datapoints.length !== seriesList[1].datapoints.length) {
+                throw new Error('Timeseries has different length');
+            }
+            var kv = {};
+            var datapointsLength = seriesList[0].datapoints.length;
+            for (var i = 0; i < datapointsLength; i++) {
+                var k = seriesList[0].datapoints[i][0].toString();
+                var v = seriesList[1].datapoints[i][0];
+                var vn = parseFloat(v);
+                if (v === null) {
+                    vn = 0;
+                }
+                if (isNaN(vn)) {
+                    throw new Error('Got non-numberic value: ' + v);
+                }
+                if (kv[k] === undefined) {
+                    kv[k] = [];
+                }
+                kv[k].push(vn);
+            }
+            var res = [];
+            for (var _k2 in kv) {
+                res.push([_k2, this._flatSeries(kv[_k2])]);
+            }
+            return res;
+        }
+    }, {
+        key: "_flatSeries",
+        value: function _flatSeries(values) {
+            if (values.length === 0) {
+                return 0;
+            }
+            var t = this._panelConfig.getValue('statNameOptionValue');
+            if (t === 'max') {
+                return _.max(values);
+            }
+            if (t === 'min') {
+                return _.min(values);
+            }
+            if (t === 'current') {
+                return values[values.length - 1];
+            }
+            return 0;
+        }
+    }]);
+
+    return Mapper;
+}();
+
+exports.Mapper = Mapper;
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17304,238 +17433,6 @@ exports.ItemWaitingModel = ItemWaitingModel;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var panel_config_1 = __webpack_require__(4);
-var mapper_1 = __webpack_require__(5);
-var items_set_1 = __webpack_require__(7);
-var item_model_1 = __webpack_require__(0);
-var sdk_1 = __webpack_require__(8);
-var progress_1 = __webpack_require__(9);
-var waiting_1 = __webpack_require__(10);
-
-var Ctrl = function (_sdk_1$MetricsPanelCt) {
-    _inherits(Ctrl, _sdk_1$MetricsPanelCt);
-
-    function Ctrl($scope, $injector) {
-        _classCallCheck(this, Ctrl);
-
-        var _this = _possibleConstructorReturn(this, (Ctrl.__proto__ || Object.getPrototypeOf(Ctrl)).call(this, $scope, $injector));
-
-        _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
-        _this._initStyles();
-        progress_1.initProgress(_this._panelConfig, 'progressListPluginProgress');
-        waiting_1.initWaiting(_this._panelConfig, 'progressListPluginWaiting');
-        _this.mapper = new mapper_1.Mapper(_this._panelConfig);
-        _this.itemSet = new items_set_1.ItemsSet();
-        _this.$scope.ItemState = item_model_1.ItemState;
-        _this.events.on('init-edit-mode', _this._onInitEditMode.bind(_this));
-        _this.events.on('data-received', _this._onDataReceived.bind(_this));
-        return _this;
-    }
-
-    _createClass(Ctrl, [{
-        key: "link",
-        value: function link(scope, element) {}
-    }, {
-        key: "_initStyles",
-        value: function _initStyles() {
-            // small hack to load base styles
-            sdk_1.loadPluginCss({
-                light: this._panelConfig.pluginDirName + 'css/panel.base.css',
-                dark: this._panelConfig.pluginDirName + 'css/panel.base.css'
-            });
-            sdk_1.loadPluginCss({
-                light: this._panelConfig.pluginDirName + 'css/panel.light.css',
-                dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
-            });
-        }
-    }, {
-        key: "_onDataReceived",
-        value: function _onDataReceived(seriesList) {
-            var items = this.itemSet.setItemStates(this.mapper.mapMetricData(seriesList));
-            this.$scope.items = items;
-        }
-    }, {
-        key: "_onInitEditMode",
-        value: function _onInitEditMode() {
-            var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
-            this.addEditorTab('Data Mapping', thisPartialPath + 'editor.mapping.html', 2);
-        }
-    }, {
-        key: "_dataError",
-        value: function _dataError(err) {
-            this.$scope.data = [];
-            this.$scope.dataError = err;
-        }
-    }]);
-
-    return Ctrl;
-}(sdk_1.MetricsPanelCtrl);
-
-Ctrl.templateUrl = "partials/template.html";
-exports.PanelCtrl = Ctrl;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-var PanelConfig = function () {
-    function PanelConfig(panel) {
-        _classCallCheck(this, PanelConfig);
-
-        this._panel = panel;
-    }
-
-    _createClass(PanelConfig, [{
-        key: "getValue",
-        value: function getValue(key) {
-            return this._panel[key];
-        }
-    }, {
-        key: "setValue",
-        value: function setValue(key, value) {
-            this._panel[key] = value;
-        }
-    }, {
-        key: "pluginDirName",
-        get: function get() {
-            if (!this._pluginDirName) {
-                var panels = window['grafanaBootData'].settings.panels;
-                var thisPanel = panels[this._panel.type];
-                // the system loader preprends publib to the url,
-                // add a .. to go back one level
-                this._pluginDirName = '../' + thisPanel.baseUrl + '/';
-            }
-            return this._pluginDirName;
-        }
-    }]);
-
-    return PanelConfig;
-}();
-
-exports.PanelConfig = PanelConfig;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var item_model_1 = __webpack_require__(0);
-var _ = __webpack_require__(1);
-
-var Mapper = function () {
-    function Mapper(panelConfig) {
-        _classCallCheck(this, Mapper);
-
-        this._panelConfig = panelConfig;
-        var configValue = this._panelConfig.getValue('mappingFunctionSource');
-        this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
-        this.recompileMappingFunction();
-    }
-
-    _createClass(Mapper, [{
-        key: "mapMetricData",
-        value: function mapMetricData(seriesList) {
-            if (!this._mappingFunction) {
-                throw new Error('Mapping function doesn`t exist');
-            }
-            var rawRes = this._mappingFunction(seriesList);
-            return _.map(rawRes, item_model_1.ItemModel.buildFromObject);
-        }
-    }, {
-        key: "recompileMappingFunction",
-        value: function recompileMappingFunction() {
-            this._mappingFunction = eval("(" + this._mappingFunctionSource + ")");
-        }
-    }, {
-        key: "mappingFunctionSource",
-        get: function get() {
-            return this._mappingFunctionSource;
-        },
-        set: function set(text) {
-            this._panelConfig.setValue('mappingFunctionSource', text);
-            this._mappingFunctionSource = text;
-            this.recompileMappingFunction();
-        }
-    }]);
-
-    return Mapper;
-}();
-
-exports.Mapper = Mapper;
-var DEFAULT_MAPPING_FUN = function DEFAULT_MAPPING_FUN(seriesListItem) {
-    /*
-    Should return:
-    [{
-      id: (number),
-      state: (string),
-      ... other options ...
-    }]
-    */
-    // use
-    // console.log(seriesListItem)
-    // to see your query data
-    return [{
-        id: 1,
-        state: "progress",
-        name: "Stage 1",
-        progress: 87.44
-    }, {
-        id: 2,
-        state: "waiting",
-        progress: 23.23,
-        name: "Stage 2"
-    }, {
-        id: 3,
-        state: "progress",
-        progress: 67.8,
-        name: "Stage 3"
-    }, {
-        id: 4,
-        state: "progress",
-        progress: 11.8,
-        name: "Stage 4"
-    }];
-};
-var DEFAULT_MAPPING_SOURCE = (DEFAULT_MAPPING_FUN + '$').replace('function DEFAULT_MAPPING(', 'function(').replace(new RegExp('    ', 'g'), '  ').replace('}$', '}');
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -17565,64 +17462,19 @@ module.exports = function(module) {
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _ = __webpack_require__(1);
-
-var ItemsSet = function () {
-    function ItemsSet() {
-        _classCallCheck(this, ItemsSet);
-
-        this._map = {};
-    }
-
-    _createClass(ItemsSet, [{
-        key: "setItemStates",
-        value: function setItemStates(models) {
-            var _this = this;
-
-            // It's because I want to find killed items and track changes betwwen states
-            var keys = _(this._map).keys().map(function (k) {
-                return +k;
-            }).value();
-            _.each(models, function (m) {
-                _.remove(keys, m.id);
-            });
-            _.each(keys, function (k) {
-                delete _this._map[k];
-            });
-            return models;
-        }
-    }]);
-
-    return ItemsSet;
-}();
-
-exports.ItemsSet = ItemsSet;
+module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_module_1 = __webpack_require__(2);
+var core_module_1 = __webpack_require__(9);
 var directiveInited = false;
 function initProgress(panelConfig) {
     var directiveName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "progress";
@@ -17644,33 +17496,10 @@ function initProgress(panelConfig) {
 exports.initProgress = initProgress;
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 9 */
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_module_1 = __webpack_require__(2);
-var directiveInited = false;
-function initWaiting(panelConfig) {
-    var directiveName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "waiting";
-
-    if (directiveInited) {
-        return;
-    }
-    directiveInited = true;
-    core_module_1.default.directive(directiveName, function () {
-        return {
-            templateUrl: panelConfig.pluginDirName + '/directives/waiting.html',
-            restrict: 'E',
-            scope: {
-                item: "="
-            }
-        };
-    });
-}
-exports.initWaiting = initWaiting;
+module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
 /***/ })
 /******/ ])});;

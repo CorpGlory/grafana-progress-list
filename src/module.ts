@@ -1,34 +1,42 @@
 import { PanelConfig } from './panel-config';
-import { Mapper } from './mapper';
-import { ItemsSet } from './items-set';
-import { ItemState } from './item-model';
+import { Mapper, KeyValue } from './mapper';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 import { initProgress } from './directives/progress';
-import { initWaiting } from './directives/waiting';
+
+import * as _ from 'lodash';
+
+const defaults = {
+  statNameOptionValue: 'current',
+  statProgressType: 'shared'
+};
 
 
 class Ctrl extends MetricsPanelCtrl {
   static templateUrl = "partials/template.html";
 
   public mapper: Mapper;
-  public itemSet: ItemsSet;
+  public items: KeyValue[];
 
   private _panelConfig: PanelConfig;
+  
+  private _seriesList: any;
 
+  private statNameOptions = [ 'current', 'min', 'max', 'total' ];
+  private statProgressTypeOptions = [ 'max Value', 'shared' ];
 
   constructor($scope, $injector) {
     super($scope, $injector);
+    
+    _.defaults(this.panel, defaults);
+
     this._panelConfig = new PanelConfig(this.panel);
     this._initStyles();
 
     initProgress(this._panelConfig, 'progressListPluginProgress');
-    initWaiting(this._panelConfig, 'progressListPluginWaiting');
 
     this.mapper = new Mapper(this._panelConfig);
-    this.itemSet = new ItemsSet();
-
-    this.$scope.ItemState = ItemState;
+    this.items = [];
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
@@ -48,17 +56,19 @@ class Ctrl extends MetricsPanelCtrl {
       dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
     });
   }
+  
+  render() {
+    this.$scope.items = this.mapper.mapMetricData(this._seriesList);
+  }
 
   _onDataReceived(seriesList: any) {
-    var items = this.itemSet.setItemStates(this.mapper.mapMetricData(seriesList));
-    this.$scope.items = items;
+    this._seriesList = seriesList;
+    this.render();
   }
 
   _onInitEditMode() {
     var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
-    this.addEditorTab(
-      'Data Mapping', thisPartialPath + 'editor.mapping.html', 2
-    );
+    this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
   }
 
   _dataError(err) {

@@ -1,89 +1,134 @@
-import { ItemModel, ItemState } from './item-model';
 import { PanelConfig } from './panel-config';
 
 import * as _ from 'lodash';
 
+export type KeyValue = [string, number];
 
 export class Mapper {
 
-  private _mappingFunctionSource: string;
-  private _mappingFunction: any;
   private _panelConfig: PanelConfig;
 
   constructor(panelConfig: PanelConfig) {
     this._panelConfig = panelConfig;
-    var configValue = this._panelConfig.getValue('mappingFunctionSource');
-    this._mappingFunctionSource = configValue ? configValue : DEFAULT_MAPPING_SOURCE;
-    this.recompileMappingFunction();
   }
 
-  get mappingFunctionSource(): string {
-    return this._mappingFunctionSource;
-  }
-
-  set mappingFunctionSource(text: string) {
-    this._panelConfig.setValue('mappingFunctionSource', text);
-    this._mappingFunctionSource = text;
-    this.recompileMappingFunction();
-  }
-
-  mapMetricData(seriesList: any): ItemModel[] {
-    if(!this._mappingFunction) {
-      throw new Error('Mapping function doesn`t exist');
+  mapMetricData(seriesList: any): KeyValue[] {
+    if(seriesList.length == 0) {
+      return [];
     }
-    var rawRes = this._mappingFunction(seriesList) as any[];
-    return _.map(rawRes, ItemModel.buildFromObject);
+    var kstat: KeyValue[] = [];
+    if(this._panelConfig.getValue('statNameOptionValue') === 'total') {
+      kstat =  this._mapTotal(seriesList);
+    } else {
+      kstat = this._mapNumeric(seriesList);  
+    }
+    
+    let progressType = this._panelConfig.getValue('statProgressType');
+    
+    if(this._panelConfig.getValue('statProgressType') === 'shared') {
+      let total = 0;
+      for(let i = 0; i < kstat.length; i++) {
+        total += kstat[i][1];
+      }
+      for(let i = 0; i < kstat.length; i++) {
+        kstat[i][1] = 100 * kstat[i][1] / total;
+      }
+    }
+    
+    if(this._panelConfig.getValue('statProgressType') === 'max Value') {
+      let max = 0;
+      for(let i = 0; i < kstat.length; i++) {
+        max = Math.max(kstat[i][1], max);
+      }
+      for(let i = 0; i < kstat.length; i++) {
+        kstat[i][1] = 100 * kstat[i][1] / max;
+      }
+    }
+
+    return kstat;
+    
   }
 
-  private recompileMappingFunction() {
-    this._mappingFunction = eval(`(${ this._mappingFunctionSource })`);
+  _mapTotal(seriesList): KeyValue[] {
+    if(seriesList.length !== 1) {
+      throw new Error('Expecting list of keys: got more than one timeseries');
+    }
+    var kv = {};
+    var datapointsLength = seriesList[0].datapoints.length;
+    for(let i = 0; i < datapointsLength; i++) {
+      let k = seriesList[0].datapoints[i][0].toString();
+      if(kv[k] === undefined) {
+        kv[k] = 0;
+      }
+      kv[k]++;
+    }
+    
+    var res: KeyValue[] = [];
+    for(let k in kv) {
+      res.push([k, kv[k]]);
+    }
+    
+    return res;
+    
+  }
+
+  _mapNumeric(seriesList): KeyValue[] {
+    if(seriesList.length != 2) {
+      throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
+    }
+    if(seriesList[0].datapoints.length !==  seriesList[1].datapoints.length) {
+      throw new Error('Timeseries has different length');
+    }
+    
+    var kv = {};
+    var datapointsLength = seriesList[0].datapoints.length;
+
+    for(let i = 0; i < datapointsLength; i++) {
+      let k = seriesList[0].datapoints[i][0].toString();
+      let v = seriesList[1].datapoints[i][0];
+      let vn = parseFloat(v);
+      if(v === null) {
+        vn = 0;
+      }
+      if(isNaN(vn)) {
+        throw new Error('Got non-numberic value: ' + v);
+      }
+      if(kv[k] === undefined) {
+        kv[k] = [];
+      }
+      kv[k].push(vn);
+    }
+    
+    var res: KeyValue[] = [];
+    for(let k in kv) {
+      res.push([k, this._flatSeries(kv[k])]);
+    }
+    
+    return res;
+
+  }
+  
+  _flatSeries(values: number[]): number {
+    
+    if(values.length === 0) {
+      return 0;
+    }
+
+    var t = this._panelConfig.getValue('statNameOptionValue');
+    
+    if(t === 'max') {
+      return _.max(values) as number;
+    }
+    
+    if(t === 'min') {
+      return _.min(values) as number;
+    }
+    
+    if(t === 'current') {
+      return values[values.length - 1];
+    }
+  
+    return 0;
   }
 
 }
-
-const DEFAULT_MAPPING_FUN = function(seriesListItem) {
-  /*
-  Should return:
-  [{
-    id: (number),
-    state: (string),
-    ... other options ...
-  }]
-  */
-
-  // use
-  // console.log(seriesListItem)
-  // to see your query data
-
-  return [
-    {
-      id: 1,
-      state: "progress",
-      name: "Stage 1",
-      progress: 87.44
-    },
-    {
-      id: 2,
-      state: "waiting",
-      progress: 23.23,
-      name: "Stage 2"
-    },
-    {
-      id: 3,
-      state: "progress",
-      progress: 67.8,
-      name: "Stage 3"
-    },
-    {
-      id: 4,
-      state: "progress",
-      progress: 11.8,
-      name: "Stage 4"
-    }
-  ];
-}
-
-const DEFAULT_MAPPING_SOURCE = (DEFAULT_MAPPING_FUN + '$')
-  .replace('function DEFAULT_MAPPING(', 'function(')
-  .replace(new RegExp('    ', 'g'), '  ')
-  .replace('}$', '}');
