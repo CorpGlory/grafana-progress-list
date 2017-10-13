@@ -241,8 +241,8 @@ var Mapper = function () {
                 return [];
             }
             var kstat = [];
-            if (this._panelConfig.getValue('statNameOptionValue') === 'total') {
-                kstat = this._mapTotal(seriesList);
+            if (this._panelConfig.getValue('statNameOptionValue') === 'total' && seriesList.length == 1) {
+                kstat = this._mapKeysTotal(seriesList);
             } else {
                 kstat = this._mapNumeric(seriesList);
             }
@@ -268,8 +268,8 @@ var Mapper = function () {
             return kstat;
         }
     }, {
-        key: "_mapTotal",
-        value: function _mapTotal(seriesList) {
+        key: "_mapKeysTotal",
+        value: function _mapKeysTotal(seriesList) {
             if (seriesList.length !== 1) {
                 throw new Error('Expecting list of keys: got more than one timeseries');
             }
@@ -327,6 +327,9 @@ var Mapper = function () {
                 return 0;
             }
             var t = this._panelConfig.getValue('statNameOptionValue');
+            if (t === 'total') {
+                return _.sum(values);
+            }
             if (t === 'max') {
                 return _.max(values);
             }
