@@ -86,7 +86,8 @@ var progress_1 = __webpack_require__(8);
 var _ = __webpack_require__(5);
 var defaults = {
     statNameOptionValue: 'current',
-    statProgressType: 'shared'
+    statProgressType: 'shared',
+    sorting: false
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -129,7 +130,13 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
     }, {
         key: "render",
         value: function render() {
-            this.$scope.items = this.mapper.mapMetricData(this._seriesList);
+            var items = this.mapper.mapMetricData(this._seriesList);
+            if (this._panelConfig.getValue('sorting') === true) {
+                items = _.sortBy(items, function (i) {
+                    return -i[1];
+                });
+            }
+            this.$scope.items = items;
         }
     }, {
         key: "_onDataReceived",
