@@ -87,7 +87,9 @@ var _ = __webpack_require__(5);
 var defaults = {
     statNameOptionValue: 'current',
     statProgressType: 'shared',
-    sorting: false
+    sorting: false,
+    prefix: '',
+    postfix: ''
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -250,6 +252,7 @@ var Mapper = function () {
             if (this._panelConfig.getValue('statProgressType') === 'shared') {
                 var total = 0;
                 for (var i = 0; i < kstat.length; i++) {
+                    а;
                     total += kstat[i][1];
                 }
                 for (var _i = 0; _i < kstat.length; _i++) {

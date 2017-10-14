@@ -27,7 +27,7 @@ export class Mapper {
 
     if(this._panelConfig.getValue('statProgressType') === 'shared') {
       let total = 0;
-      for(let i = 0; i < kstat.length; i++) {
+      for(let i = 0; i < kstat.length; i++) {а
         total += kstat[i][1];
       }
       for(let i = 0; i < kstat.length; i++) {

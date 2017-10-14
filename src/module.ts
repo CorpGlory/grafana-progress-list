@@ -10,6 +10,8 @@ const defaults = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
   sorting: false,
+  prefix: '',
+  postfix: ''
 };
 
 
