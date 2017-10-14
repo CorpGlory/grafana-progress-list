@@ -1,9 +1,9 @@
 <div class="list-item progress-item">
   <div class="list-item-title">
-    {{ item[0] }}
+    {{ item.title }}
   </div>
   <div class="list-item-content">
-    <div style="width: {{ item[1] }}%" class="progress-bar-line" />
-    <span class="list-item-value progress-bar-value"> {{ item[1] }}% </span>
+    <div style="width: {{ item.progress }}%" class="progress-bar-line" />
+    <span class="list-item-value progress-bar-value"> {{ item.formattedProgress }} </span>
   </div>
 </div>

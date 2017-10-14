@@ -1,5 +1,5 @@
 import { PanelConfig } from './panel-config';
-import { Mapper, KeyValue } from './mapper';
+import { Mapper, ProgressItem } from './mapper';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 import { initProgress } from './directives/progress';
@@ -19,10 +19,10 @@ class Ctrl extends MetricsPanelCtrl {
   static templateUrl = "partials/template.html";
 
   public mapper: Mapper;
-  public items: KeyValue[];
+  public items: ProgressItem[];
 
   private _panelConfig: PanelConfig;
-  
+
   private _seriesList: any;
 
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
