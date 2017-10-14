@@ -11,7 +11,9 @@ const defaults = {
   statProgressType: 'shared',
   sorting: false,
   prefix: '',
-  postfix: ''
+  postfix: '',
+  // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
+  colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"]
 };
 
 
@@ -78,6 +80,13 @@ class Ctrl extends MetricsPanelCtrl {
   _onInitEditMode() {
     var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
     this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
+  }
+  
+  invertColorOrder() {
+    var tmp = this.panel.colors[0];
+    this.panel.colors[0] = this.panel.colors[2];
+    this.panel.colors[2] = tmp;
+    this.render();
   }
 
   _dataError(err) {

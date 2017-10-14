@@ -17181,7 +17181,9 @@ var defaults = {
     statProgressType: 'shared',
     sorting: false,
     prefix: '',
-    postfix: ''
+    postfix: '',
+    // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
+    colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"]
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -17243,6 +17245,14 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         value: function _onInitEditMode() {
             var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
             this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
+        }
+    }, {
+        key: "invertColorOrder",
+        value: function invertColorOrder() {
+            var tmp = this.panel.colors[0];
+            this.panel.colors[0] = this.panel.colors[2];
+            this.panel.colors[2] = tmp;
+            this.render();
         }
     }, {
         key: "_dataError",
@@ -17406,6 +17416,24 @@ var ProgressItem = function () {
             res += this._panelConfig.getValue('postfix');
             return res;
         }
+    }, {
+        key: "color",
+        get: function get() {
+            var thresholdsStr = this._panelConfig.getValue('thresholds');
+            var colors = this._panelConfig.getValue('colors');
+            console.log(colors);
+            var value = this._value;
+            if (thresholdsStr === undefined) {
+                return colors[0];
+            }
+            var thresholds = thresholdsStr.split(',').map(parseFloat);
+            for (var i = thresholds.length; i > 0; i--) {
+                if (value >= thresholds[i - 1]) {
+                    return colors[i];
+                }
+            }
+            return colors[0];
+        }
     }]);
 
     return ProgressItem;
@@ -17425,7 +17453,7 @@ var Mapper = function () {
         value: function mapMetricData(seriesList) {
             var _this = this;
 
-            if (seriesList.length == 0) {
+            if (seriesList === undefined || seriesList.length == 0) {
                 return [];
             }
             var kstat = [];

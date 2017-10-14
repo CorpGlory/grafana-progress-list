@@ -36,7 +36,7 @@
     Based ob singlestat editor plugin
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html 
   -->
-  <div class="section gf-form-group"></div>
+  <div class="section gf-form-group">
     <h5 class="section-heading">Labels</h5>
     <div class="gf-form-inline">
       <div class="gf-form">
@@ -66,6 +66,43 @@
         ng-model="ctrl.panel.decimals" 
         ng-change="ctrl.render()" ng-model-onblur
       />
+    </div>
+  </div>
+  
+  <!-- 
+    Based ob singlestat editor plugin
+    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html 
+  -->
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Coloring</h5>
+    <div class="gf-form-inline">
+      <div class="gf-form max-width-21">
+        <label class="gf-form-label width-8">Thresholds
+          <tip>Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red</tip>
+        </label>
+        <input type="text" class="gf-form-input" 
+          ng-model="ctrl.panel.thresholds"
+          ng-blur="ctrl.render()"
+          placeholder="50,80"
+        />
+      </div>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Colors</label>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" ></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" ></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" ></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+        <a ng-click="ctrl.invertColorOrder()">
+          Invert
+        </a>
+      </span>
     </div>
   </div>
 

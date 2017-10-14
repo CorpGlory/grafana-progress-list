@@ -97,6 +97,25 @@ export class ProgressItem {
     return result;
   }
   
+  get color() {
+    
+    var thresholdsStr = this._panelConfig.getValue('thresholds');
+    var colors = this._panelConfig.getValue('colors');
+    
+    console.log(colors);
+    var value = this._value;
+    if(thresholdsStr === undefined) {
+      return colors[0];
+    }
+    var thresholds = thresholdsStr.split(',').map(parseFloat);
+    for (var i = thresholds.length; i > 0; i--) {
+      if (value >= thresholds[i - 1]) {
+        return colors[i];
+      }
+    }
+    return colors[0];
+  }
+  
 }
 
 
@@ -110,7 +129,7 @@ export class Mapper {
   }
 
   mapMetricData(seriesList: any): ProgressItem[] {
-    if(seriesList.length == 0) {
+    if(seriesList === undefined || seriesList.length == 0) {
       return [];
     }
     var kstat: KeyValue[] = [];
