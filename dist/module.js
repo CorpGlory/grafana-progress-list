@@ -17179,11 +17179,14 @@ var _ = __webpack_require__(0);
 var defaults = {
     statNameOptionValue: 'current',
     statProgressType: 'shared',
+    coloringType: 'thresholds',
     sorting: false,
     prefix: '',
     postfix: '',
     // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
-    colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"]
+    colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
+    colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
+    colorKeyMappings: []
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -17196,6 +17199,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
 
         _this.statNameOptions = ['current', 'min', 'max', 'total'];
         _this.statProgressTypeOptions = ['max Value', 'shared'];
+        _this.coloringTypeOptions = ['thresholds', 'key mapping'];
         _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
@@ -17253,6 +17257,14 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
             this.panel.colors[0] = this.panel.colors[2];
             this.panel.colors[2] = tmp;
             this.render();
+        }
+    }, {
+        key: "addColorKeyMapping",
+        value: function addColorKeyMapping() {
+            this.panel.colorKeyMappings.push({
+                key: 'KEY_NAME',
+                color: "rgba(50, 172, 45, 0.97)"
+            });
         }
     }, {
         key: "_dataError",
@@ -17421,7 +17433,6 @@ var ProgressItem = function () {
         get: function get() {
             var thresholdsStr = this._panelConfig.getValue('thresholds');
             var colors = this._panelConfig.getValue('colors');
-            console.log(colors);
             var value = this._value;
             if (thresholdsStr === undefined) {
                 return colors[0];

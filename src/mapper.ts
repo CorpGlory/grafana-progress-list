@@ -5,44 +5,44 @@ import * as _ from 'lodash';
 type KeyValue = [string, number];
 
 export class ProgressItem {
-  
+
   private _panelConfig: PanelConfig;
-  
+
   private _key: string;
   private _value: number;
-  
+
   public constructor(panelConfig: PanelConfig, keyValue: KeyValue) {
     this._panelConfig = panelConfig;
     this._key = keyValue[0];
     this._value = keyValue[1];
   }
-  
+
   get title(): string {
     return this._key;
   }
-  
+
   get progress(): number {
     return this._value;
   }
-  
+
   get formattedProgress(): string {
     var value = this._value;
     var res = this._panelConfig.getValue('prefix');
     res += this._getFormattedFloat();
-    
+
     res += this._panelConfig.getValue('postfix');
     return res;
   }
-  
+
   _getFormattedFloat(): string {
     var value = this._value;
-    
+
     var dm = this._getDecimalsForValue().decimals;
-    
+
     if(dm === 0) {
       return Math.round(value).toString();
     }
-    
+
     var fv = value;
     for(var i = 0; i < dm; i++) {
       fv *= 10;
@@ -50,13 +50,13 @@ export class ProgressItem {
     var fvs = Math.round(fv).toString();
     return fvs.substr(0, fvs.length - dm) + '.' + fvs.substr(fvs.length - dm);
   }
-  
+
   _getDecimalsForValue() {
     var value = this._value;
     // based on https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts
     if(_.isNumber(this._panelConfig.getValue('decimals'))) {
-      return { 
-        decimals: this._panelConfig.getValue('decimals'), 
+      return {
+        decimals: this._panelConfig.getValue('decimals'),
         scaledDecimals: null
       };
     }
@@ -86,8 +86,8 @@ export class ProgressItem {
     size *= magn;
 
     // reduce starting decimals if not needed
-    if(Math.floor(value) === value) { 
-      dec = 0; 
+    if(Math.floor(value) === value) {
+      dec = 0;
     }
 
     var result: any = {};
@@ -96,13 +96,10 @@ export class ProgressItem {
 
     return result;
   }
-  
+
   get color() {
-    
     var thresholdsStr = this._panelConfig.getValue('thresholds');
     var colors = this._panelConfig.getValue('colors');
-    
-    console.log(colors);
     var value = this._value;
     if(thresholdsStr === undefined) {
       return colors[0];
@@ -115,7 +112,7 @@ export class ProgressItem {
     }
     return colors[0];
   }
-  
+
 }
 
 

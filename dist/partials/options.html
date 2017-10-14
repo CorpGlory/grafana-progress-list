@@ -1,109 +1,167 @@
 <div class="editor-row editor-mapping">
   <div class="section gf-form-group">
     <h5 class="section-heading">Mapping</h5>
-    <div class="gf-form-inline">
       <div class="gf-form">
-        <label class="gf-form-label width-6">Stat</label>
+        <label class="gf-form-label width-8">Stat</label>
         <div class="gf-form-select-wrapper width-7">
-          <select 
-            class="gf-form-input" 
-            ng-model="ctrl.panel.statNameOptionValue" 
-            ng-options="n for n in ctrl.statNameOptions" 
+          <select
+            class="gf-form-input"
+            ng-model="ctrl.panel.statNameOptionValue"
+            ng-options="n for n in ctrl.statNameOptions"
             ng-change="ctrl.render()"
-          ></select>
+          />
         </div>
       </div>
       <div class="gf-form">
         <label class="gf-form-label width-8">Progress Type</label>
         <div class="gf-form-select-wrapper width-7">
-          <select 
+          <select
             class="gf-form-input"
-            ng-model="ctrl.panel.statProgressType" 
-            ng-options="n for n in ctrl.statProgressTypeOptions" 
+            ng-model="ctrl.panel.statProgressType"
+            ng-options="n for n in ctrl.statProgressTypeOptions"
             ng-change="ctrl.render()"
-          ></select>
+          />
         </div>
       </div>
-      
+
       <gf-form-switch class="gf-form"
-        label="Sorting" label-class="width-5"
-        checked="ctrl.panel.sorting" on-change="ctrl.render()">
-      </gf-form-switch>
-    </div>
+        label="Sorting" label-class="width-8"
+        checked="ctrl.panel.sorting" on-change="ctrl.render()"
+      />
+
   </div>
-  
-  <!-- 
+
+  <!--
     Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html 
+    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
   <div class="section gf-form-group">
     <h5 class="section-heading">Labels</h5>
     <div class="gf-form-inline">
       <div class="gf-form">
         <label class="gf-form-label width-6">Prefix</label>
-        <input 
-          type="text" class="gf-form-input width-7" 
-          ng-model="ctrl.panel.prefix" 
+        <input
+          type="text" class="gf-form-input width-7"
+          ng-model="ctrl.panel.prefix"
           ng-change="ctrl.render()" ng-model-onblur
         />
       </div>
     </div>
     <div class="gf-form">
       <label class="gf-form-label width-6">Postfix</label>
-      <input 
-        type="text" class="gf-form-input width-7" 
-        ng-model="ctrl.panel.postfix" 
+      <input
+        type="text" class="gf-form-input width-7"
+        ng-model="ctrl.panel.postfix"
         ng-change="ctrl.render()" ng-model-onblur
       />
     </div>
     <div class="gf-form">
       <label class="gf-form-label width-6">Decimals</label>
-      <input 
-        type="number" 
-        class="gf-form-input width-18" 
-        placeholder="auto" data-placement="right" 
-        bs-tooltip="'Override automatic decimal precision for legend and tooltips'" 
-        ng-model="ctrl.panel.decimals" 
+      <input
+        type="number"
+        class="gf-form-input width-7"
+        placeholder="auto" data-placement="right"
+        bs-tooltip="'Override automatic decimal precision for legend and tooltips'"
+        ng-model="ctrl.panel.decimals"
         ng-change="ctrl.render()" ng-model-onblur
       />
     </div>
   </div>
-  
-  <!-- 
+
+  <!--
     Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html 
+    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
   <div class="section gf-form-group">
     <h5 class="section-heading">Coloring</h5>
     <div class="gf-form-inline">
-      <div class="gf-form max-width-21">
-        <label class="gf-form-label width-8">Thresholds
-          <tip>Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red</tip>
-        </label>
-        <input type="text" class="gf-form-input" 
-          ng-model="ctrl.panel.thresholds"
-          ng-blur="ctrl.render()"
-          placeholder="50,80"
+      <label class="gf-form-label width-7">Type</label>
+      <div class="gf-form-select-wrapper width-10">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.coloringType"
+          ng-options="n for n in ctrl.coloringTypeOptions"
+          ng-change="ctrl.render()"
         />
       </div>
     </div>
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Colors</label>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" ></spectrum-picker>
-      </span>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" ></spectrum-picker>
-      </span>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" ></spectrum-picker>
-      </span>
-      <span class="gf-form-label">
-        <a ng-click="ctrl.invertColorOrder()">
-          Invert
-        </a>
-      </span>
+    <br/>
+
+    <div ng-if="ctrl.panel.coloringType == 'thresholds'" class="gf-form">
+
+      <div class="gf-form-inline">
+        <div class="gf-form max-width-21">
+          <label class="gf-form-label width-8">Thresholds
+            <tip>
+              Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
+            </tip>
+          </label>
+          <input type="text" class="gf-form-input"
+            ng-model="ctrl.panel.thresholds"
+            ng-blur="ctrl.render()"
+            placeholder="50,80"
+          />
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-8">Colors</label>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+          <a ng-click="ctrl.invertColorOrder()"> Invert </a>
+        </span>
+      </div>
     </div>
+
+    <div ng-if="ctrl.panel.coloringType == 'key mapping'">
+
+      <div ng-repeat="item in ctrl.panel.colorKeyMappings">
+        <div class="gf-form">
+          <input
+            type="text" class="gf-form-input width-11"
+            ng-model="item.key"
+            ng-change="ctrl.render()" ng-model-onblur
+          />
+          <span class="gf-form-label">
+            <spectrum-picker
+              ng-model="item.color"
+              ng-change="ctrl.render()"
+            />
+          </span>
+          <label class="gf-form-label">
+            <a ng-click="ctrl.removeQuery(ctrl.target)">
+            <i class="fa fa-trash"></i></a>
+          </label>
+        </div>
+      </div>
+      <div class="gf-form">
+        <span class="gf-form-label">
+          <a ng-click="ctrl.addColorKeyMapping()">
+            <i class="fa fa-plus"></i>
+            Add key color mapping
+          </a>
+        </span>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-8">Default
+          <tip>Color for all other keys</tip>
+        </label>
+        <span class="gf-form-label">
+          <spectrum-picker
+            ng-model="ctrl.panel.colorsKeyMappingDefault"
+            ng-change="ctrl.render()"
+          />
+        </span>
+      </div>
+    </div>
+
   </div>
 
 </div>

@@ -9,11 +9,14 @@ import * as _ from 'lodash';
 const defaults = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
+  coloringType: 'thresholds',
   sorting: false,
   prefix: '',
   postfix: '',
   // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
-  colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"]
+  colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
+  colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
+  colorKeyMappings: []
 };
 
 
@@ -29,10 +32,11 @@ class Ctrl extends MetricsPanelCtrl {
 
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max Value', 'shared' ];
+  private coloringTypeOptions = [ 'thresholds', 'key mapping' ];
 
   constructor($scope, $injector) {
     super($scope, $injector);
-    
+
     _.defaults(this.panel, defaults);
 
     this._panelConfig = new PanelConfig(this.panel);
@@ -61,14 +65,14 @@ class Ctrl extends MetricsPanelCtrl {
       dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
     });
   }
-  
+
   render() {
     var items = this.mapper.mapMetricData(this._seriesList);
-    
+
     if(this._panelConfig.getValue('sorting') === true) {
       items = _.sortBy(items, i => -i[1]);
     }
-    
+
     this.$scope.items = items;
   }
 
@@ -81,12 +85,19 @@ class Ctrl extends MetricsPanelCtrl {
     var thisPartialPath = this._panelConfig.pluginDirName + 'partials/';
     this.addEditorTab('Options', thisPartialPath + 'options.html', 2);
   }
-  
+
   invertColorOrder() {
     var tmp = this.panel.colors[0];
     this.panel.colors[0] = this.panel.colors[2];
     this.panel.colors[2] = tmp;
     this.render();
+  }
+  
+  addColorKeyMapping() {
+    this.panel.colorKeyMappings.push({
+      key: 'KEY_NAME',
+      color: "rgba(50, 172, 45, 0.97)"
+    });
   }
 
   _dataError(err) {
