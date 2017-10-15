@@ -24,16 +24,21 @@
       </div>
     </div>
 
-    <gf-form-switch class="gf-form"
-      label="Sorting" label-class="width-8"
-      checked="ctrl.panel.sorting" on-change="ctrl.render()"
-    />
+    
+    <br/>
+    <div class="editor-row editor-mapping">
+      <div class="section gf-form-group">
+        <h5 class="section-heading">Other</h5>
+        <gf-form-switch class="gf-form"
+        label="Sorting" label-class="width-8"
+        checked="ctrl.panel.sorting" on-change="ctrl.render()"
+      />
+      </div>  
+    </div>
 
   </div>
+
   
-  <div class="section gf-form-group">
-    <h5 class="section-heading">Value Mappings</h5>
-  </div>
 
   <!--
     Based ob singlestat editor plugin
@@ -125,7 +130,6 @@
     </div>
 
     <div ng-if="ctrl.panel.coloringType == 'key mapping'">
-
       <div ng-repeat="item in ctrl.panel.colorKeyMappings">
         <div class="gf-form">
           <input
@@ -147,25 +151,25 @@
         </div>
       </div>
       <div class="gf-form">
-          <label class="gf-form-label width-11">Default
-            <tip>Color for all other keys</tip>
-          </label>
-          <span class="gf-form-label">
-            <spectrum-picker
-              ng-model="ctrl.panel.colorsKeyMappingDefault"
-              ng-change="ctrl.render()"
-            />
-          </span>
-        </div>
+        <label class="gf-form-label width-11">Default
+          <tip>Color for all other keys</tip>
+        </label>
+        <span class="gf-form-label">
+          <spectrum-picker
+            ng-model="ctrl.panel.colorsKeyMappingDefault"
+            ng-change="ctrl.render()"
+          />
+        </span>
+      </div>
       <div class="gf-form">
         <div class="gf-form-button-row">
           <button class="btn btn-inverse" ng-click="ctrl.addColorKeyMapping()">
-            <i class="fa fa-plus"></i> 
+            <i class="fa fa-plus"></i>
             Add a key color mapping
           </button>
         </div>
       </div>
-      
+
     </div>
 
   </div>
