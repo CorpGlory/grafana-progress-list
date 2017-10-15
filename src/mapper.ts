@@ -97,20 +97,36 @@ export class ProgressItem {
     return result;
   }
 
-  get color() {
-    var thresholdsStr = this._panelConfig.getValue('thresholds');
-    var colors = this._panelConfig.getValue('colors');
-    var value = this._value;
-    if(thresholdsStr === undefined) {
+  get color(): string {
+    var colorType = this._panelConfig.getValue('coloringType');
+    if(colorType === 'auto') {
+      return 'auto'
+    }
+    if(colorType === 'thresholds') {
+      var thresholdsStr = this._panelConfig.getValue('thresholds');
+      var colors = this._panelConfig.getValue('colors');
+      var value = this._value;
+      if(thresholdsStr === undefined) {
+        return colors[0];
+      }
+      var thresholds = thresholdsStr.split(',').map(parseFloat);
+      for (var i = thresholds.length; i > 0; i--) {
+        if (value >= thresholds[i - 1]) {
+          return colors[i];
+        }
+      }
       return colors[0];
     }
-    var thresholds = thresholdsStr.split(',').map(parseFloat);
-    for (var i = thresholds.length; i > 0; i--) {
-      if (value >= thresholds[i - 1]) {
-        return colors[i];
+    if(colorType === 'key mapping') {
+      var colorKeyMappings = this._panelConfig.getValue('colorKeyMappings') as any[];
+      var keyColorMapping = _.find(colorKeyMappings, k => k.key === this._key);
+      if(keyColorMapping === undefined) {
+        return this._panelConfig.getValue('colorsKeyMappingDefault');
       }
+      return keyColorMapping.color;
     }
-    return colors[0];
+    
+    throw new Error('Unknown color type ' + colorType);
   }
 
 }

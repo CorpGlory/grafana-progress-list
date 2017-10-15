@@ -17179,7 +17179,7 @@ var _ = __webpack_require__(0);
 var defaults = {
     statNameOptionValue: 'current',
     statProgressType: 'shared',
-    coloringType: 'thresholds',
+    coloringType: 'none',
     sorting: false,
     prefix: '',
     postfix: '',
@@ -17199,7 +17199,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
 
         _this.statNameOptions = ['current', 'min', 'max', 'total'];
         _this.statProgressTypeOptions = ['max Value', 'shared'];
-        _this.coloringTypeOptions = ['thresholds', 'key mapping'];
+        _this.coloringTypeOptions = ['none', 'thresholds', 'key mapping'];
         _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
@@ -17265,6 +17265,12 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
                 key: 'KEY_NAME',
                 color: "rgba(50, 172, 45, 0.97)"
             });
+        }
+    }, {
+        key: "removeColorKeyMapping",
+        value: function removeColorKeyMapping(index) {
+            this.panel.colorKeyMappings.splice(index, 1);
+            this.render();
         }
     }, {
         key: "_dataError",
@@ -17431,19 +17437,38 @@ var ProgressItem = function () {
     }, {
         key: "color",
         get: function get() {
-            var thresholdsStr = this._panelConfig.getValue('thresholds');
-            var colors = this._panelConfig.getValue('colors');
-            var value = this._value;
-            if (thresholdsStr === undefined) {
+            var _this = this;
+
+            var colorType = this._panelConfig.getValue('coloringType');
+            if (colorType === 'auto') {
+                return 'auto';
+            }
+            if (colorType === 'thresholds') {
+                var thresholdsStr = this._panelConfig.getValue('thresholds');
+                var colors = this._panelConfig.getValue('colors');
+                var value = this._value;
+                if (thresholdsStr === undefined) {
+                    return colors[0];
+                }
+                var thresholds = thresholdsStr.split(',').map(parseFloat);
+                for (var i = thresholds.length; i > 0; i--) {
+                    if (value >= thresholds[i - 1]) {
+                        return colors[i];
+                    }
+                }
                 return colors[0];
             }
-            var thresholds = thresholdsStr.split(',').map(parseFloat);
-            for (var i = thresholds.length; i > 0; i--) {
-                if (value >= thresholds[i - 1]) {
-                    return colors[i];
+            if (colorType === 'key mapping') {
+                var colorKeyMappings = this._panelConfig.getValue('colorKeyMappings');
+                var keyColorMapping = _.find(colorKeyMappings, function (k) {
+                    return k.key === _this._key;
+                });
+                if (keyColorMapping === undefined) {
+                    return this._panelConfig.getValue('colorsKeyMappingDefault');
                 }
+                return keyColorMapping.color;
             }
-            return colors[0];
+            throw new Error('Unknown color type ' + colorType);
         }
     }]);
 
@@ -17462,7 +17487,7 @@ var Mapper = function () {
     _createClass(Mapper, [{
         key: "mapMetricData",
         value: function mapMetricData(seriesList) {
-            var _this = this;
+            var _this2 = this;
 
             if (seriesList === undefined || seriesList.length == 0) {
                 return [];
@@ -17493,7 +17518,7 @@ var Mapper = function () {
                 }
             }
             return _.map(kstat, function (k) {
-                return new ProgressItem(_this._panelConfig, k);
+                return new ProgressItem(_this2._panelConfig, k);
             });
         }
     }, {

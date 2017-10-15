@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 const defaults = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
-  coloringType: 'thresholds',
+  coloringType: 'none',
   sorting: false,
   prefix: '',
   postfix: '',
@@ -32,7 +32,7 @@ class Ctrl extends MetricsPanelCtrl {
 
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max Value', 'shared' ];
-  private coloringTypeOptions = [ 'thresholds', 'key mapping' ];
+  private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
 
   constructor($scope, $injector) {
     super($scope, $injector);
@@ -98,6 +98,11 @@ class Ctrl extends MetricsPanelCtrl {
       key: 'KEY_NAME',
       color: "rgba(50, 172, 45, 0.97)"
     });
+  }
+  
+  removeColorKeyMapping(index) {
+    this.panel.colorKeyMappings.splice(index, 1);
+    this.render();
   }
 
   _dataError(err) {
