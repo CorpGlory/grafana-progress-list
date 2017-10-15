@@ -1,34 +1,38 @@
 <div class="editor-row editor-mapping">
   <div class="section gf-form-group">
     <h5 class="section-heading">Mapping</h5>
-      <div class="gf-form">
-        <label class="gf-form-label width-8">Stat</label>
-        <div class="gf-form-select-wrapper width-7">
-          <select
-            class="gf-form-input"
-            ng-model="ctrl.panel.statNameOptionValue"
-            ng-options="n for n in ctrl.statNameOptions"
-            ng-change="ctrl.render()"
-          />
-        </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Stat</label>
+      <div class="gf-form-select-wrapper width-7">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.statNameOptionValue"
+          ng-options="n for n in ctrl.statNameOptions"
+          ng-change="ctrl.render()"
+        />
       </div>
-      <div class="gf-form">
-        <label class="gf-form-label width-8">Progress Type</label>
-        <div class="gf-form-select-wrapper width-7">
-          <select
-            class="gf-form-input"
-            ng-model="ctrl.panel.statProgressType"
-            ng-options="n for n in ctrl.statProgressTypeOptions"
-            ng-change="ctrl.render()"
-          />
-        </div>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Progress Type</label>
+      <div class="gf-form-select-wrapper width-7">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.statProgressType"
+          ng-options="n for n in ctrl.statProgressTypeOptions"
+          ng-change="ctrl.render()"
+        />
       </div>
+    </div>
 
-      <gf-form-switch class="gf-form"
-        label="Sorting" label-class="width-8"
-        checked="ctrl.panel.sorting" on-change="ctrl.render()"
-      />
+    <gf-form-switch class="gf-form"
+      label="Sorting" label-class="width-8"
+      checked="ctrl.panel.sorting" on-change="ctrl.render()"
+    />
 
+  </div>
+  
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Value Mappings</h5>
   </div>
 
   <!--
@@ -137,29 +141,31 @@
           </span>
           <label class="gf-form-label">
             <a ng-click="ctrl.removeColorKeyMapping($index)">
-            <i class="fa fa-trash"></i></a>
+              <i class="fa fa-remove"></i>
+            </a>
           </label>
         </div>
       </div>
       <div class="gf-form">
-        <span class="gf-form-label">
-          <a ng-click="ctrl.addColorKeyMapping()">
-            <i class="fa fa-plus"></i>
-            Add key color mapping
-          </a>
-        </span>
-      </div>
+          <label class="gf-form-label width-11">Default
+            <tip>Color for all other keys</tip>
+          </label>
+          <span class="gf-form-label">
+            <spectrum-picker
+              ng-model="ctrl.panel.colorsKeyMappingDefault"
+              ng-change="ctrl.render()"
+            />
+          </span>
+        </div>
       <div class="gf-form">
-        <label class="gf-form-label width-8">Default
-          <tip>Color for all other keys</tip>
-        </label>
-        <span class="gf-form-label">
-          <spectrum-picker
-            ng-model="ctrl.panel.colorsKeyMappingDefault"
-            ng-change="ctrl.render()"
-          />
-        </span>
+        <div class="gf-form-button-row">
+          <button class="btn btn-inverse" ng-click="ctrl.addColorKeyMapping()">
+            <i class="fa fa-plus"></i> 
+            Add a key color mapping
+          </button>
+        </div>
       </div>
+      
     </div>
 
   </div>
