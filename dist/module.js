@@ -17186,7 +17186,8 @@ var defaults = {
     // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
     colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
     colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
-    colorKeyMappings: []
+    colorKeyMappings: [],
+    nullMapping: undefined
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -17553,12 +17554,17 @@ var Mapper = function () {
             }
             var kv = {};
             var datapointsLength = seriesList[0].datapoints.length;
+            var nullMapping = this._panelConfig.getValue('nullMapping');
             for (var i = 0; i < datapointsLength; i++) {
                 var k = seriesList[0].datapoints[i][0].toString();
                 var v = seriesList[1].datapoints[i][0];
                 var vn = parseFloat(v);
                 if (v === null) {
-                    vn = 0;
+                    if (nullMapping === undefined || nullMapping === null) {
+                        throw new Error('Got null value. You set null value mapping in Options -> Mapping -> Null');
+                    }
+                    console.log('nullMapping ->' + nullMapping);
+                    vn = nullMapping;
                 }
                 if (isNaN(vn)) {
                     throw new Error('Got non-numberic value: ' + v);

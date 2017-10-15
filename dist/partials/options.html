@@ -24,21 +24,33 @@
       </div>
     </div>
 
-    
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Null</label>
+      <input
+        type="number"
+        class="gf-form-input width-7"
+        placeholder="error" data-placement="right"
+        bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
+        ng-model="ctrl.panel.nullMapping"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      />
+    </div>
+
     <br/>
     <div class="editor-row editor-mapping">
       <div class="section gf-form-group">
         <h5 class="section-heading">Other</h5>
         <gf-form-switch class="gf-form"
-        label="Sorting" label-class="width-8"
-        checked="ctrl.panel.sorting" on-change="ctrl.render()"
-      />
-      </div>  
+          label="Sorting" label-class="width-8"
+          checked="ctrl.panel.sorting"
+          on-change="ctrl.render()"
+        />
+      </div>
     </div>
 
   </div>
 
-  
 
   <!--
     Based ob singlestat editor plugin
@@ -52,7 +64,8 @@
         <input
           type="text" class="gf-form-input width-7"
           ng-model="ctrl.panel.prefix"
-          ng-change="ctrl.render()" ng-model-onblur
+          ng-change="ctrl.render()"
+          ng-model-onblur
         />
       </div>
     </div>
@@ -61,7 +74,8 @@
       <input
         type="text" class="gf-form-input width-7"
         ng-model="ctrl.panel.postfix"
-        ng-change="ctrl.render()" ng-model-onblur
+        ng-change="ctrl.render()"
+        ng-model-onblur
       />
     </div>
     <div class="gf-form">
@@ -70,9 +84,10 @@
         type="number"
         class="gf-form-input width-7"
         placeholder="auto" data-placement="right"
-        bs-tooltip="'Override automatic decimal precision for legend and tooltips'"
+        bs-tooltip="'Override automatic decimal precision'"
         ng-model="ctrl.panel.decimals"
-        ng-change="ctrl.render()" ng-model-onblur
+        ng-change="ctrl.render()"
+        ng-model-onblur
       />
     </div>
   </div>

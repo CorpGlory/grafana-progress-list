@@ -132,7 +132,6 @@ export class ProgressItem {
 }
 
 
-
 export class Mapper {
 
   private _panelConfig: PanelConfig;
@@ -211,13 +210,19 @@ export class Mapper {
 
     var kv = {};
     var datapointsLength = seriesList[0].datapoints.length;
+    
+    var nullMapping = this._panelConfig.getValue('nullMapping');
 
     for(let i = 0; i < datapointsLength; i++) {
       let k = seriesList[0].datapoints[i][0].toString();
       let v = seriesList[1].datapoints[i][0];
       let vn = parseFloat(v);
       if(v === null) {
-        vn = 0;
+        if(nullMapping === undefined || nullMapping === null) {
+          throw new Error('Got null value. You set null value mapping in Options -> Mapping -> Null');
+        }
+        console.log('nullMapping ->' + nullMapping);
+        vn = nullMapping;
       }
       if(isNaN(vn)) {
         throw new Error('Got non-numberic value: ' + v);
