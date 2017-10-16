@@ -9,17 +9,18 @@ import * as _ from 'lodash';
 const defaults = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
+  statProgressMaxValue: null,
   coloringType: 'none',
   sorting: false,
   prefix: '',
   postfix: '',
+  thresholds: '10, 30',
   // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
   colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
   colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
   colorKeyMappings: [],
   nullMapping: undefined
 };
-
 
 class Ctrl extends MetricsPanelCtrl {
   static templateUrl = "partials/template.html";
@@ -32,11 +33,15 @@ class Ctrl extends MetricsPanelCtrl {
   private _seriesList: any;
 
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
-  private statProgressTypeOptions = [ 'max Value', 'shared' ];
+  private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
 
   constructor($scope, $injector) {
+  
+    
     super($scope, $injector);
+    
+    console.log('asd');
 
     _.defaults(this.panel, defaults);
 

@@ -17179,10 +17179,12 @@ var _ = __webpack_require__(0);
 var defaults = {
     statNameOptionValue: 'current',
     statProgressType: 'shared',
+    statProgressMaxValue: null,
     coloringType: 'none',
     sorting: false,
     prefix: '',
     postfix: '',
+    thresholds: '10, 30',
     // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
     colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
     colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
@@ -17199,8 +17201,9 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         var _this = _possibleConstructorReturn(this, (Ctrl.__proto__ || Object.getPrototypeOf(Ctrl)).call(this, $scope, $injector));
 
         _this.statNameOptions = ['current', 'min', 'max', 'total'];
-        _this.statProgressTypeOptions = ['max Value', 'shared'];
+        _this.statProgressTypeOptions = ['max value', 'shared'];
         _this.coloringTypeOptions = ['none', 'thresholds', 'key mapping'];
+        console.log('asd');
         _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
@@ -17509,10 +17512,16 @@ var Mapper = function () {
                     kstat[_i][1] = 100 * kstat[_i][1] / total;
                 }
             }
-            if (this._panelConfig.getValue('statProgressType') === 'max Value') {
-                var max = 0;
-                for (var _i2 = 0; _i2 < kstat.length; _i2++) {
-                    max = Math.max(kstat[_i2][1], max);
+            if (this._panelConfig.getValue('statProgressType') === 'max value') {
+                var max = -Infinity;
+                var ss = this._panelConfig.getValue('statProgressMaxValue');
+                console.log('hey ss' + ss);
+                if (this._panelConfig.getValue('statProgressMaxValue') !== null) {
+                    max = this._panelConfig.getValue('statProgressMaxValue');
+                } else {
+                    for (var _i2 = 0; _i2 < kstat.length; _i2++) {
+                        max = Math.max(kstat[_i2][1], max);
+                    }
                 }
                 for (var _i3 = 0; _i3 < kstat.length; _i3++) {
                     kstat[_i3][1] = 100 * kstat[_i3][1] / max;

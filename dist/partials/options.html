@@ -23,9 +23,22 @@
         />
       </div>
     </div>
+    
+    <div class="gf-form" ng-if="ctrl.panel.statProgressType == 'max value'">
+      <label class="gf-form-label width-8">Max Value</label>
+      <input
+        type="number"
+        class="gf-form-input width-7"
+        placeholder="auto" data-placement="right"
+        bs-tooltip="'Max value will be equal to max progreesss in auto mode'"
+        ng-model="ctrl.panel.statProgressMaxValue"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      />
+    </div>
 
     <div class="gf-form">
-      <label class="gf-form-label width-8">Null</label>
+      <label class="gf-form-label width-8">Null Value</label>
       <input
         type="number"
         class="gf-form-input width-7"
@@ -50,7 +63,6 @@
     </div>
 
   </div>
-
 
   <!--
     Based ob singlestat editor plugin
@@ -99,8 +111,8 @@
   <div class="section gf-form-group">
     <h5 class="section-heading">Coloring</h5>
     <div class="gf-form-inline">
-      <label class="gf-form-label width-7">Type</label>
-      <div class="gf-form-select-wrapper width-10">
+      <label class="gf-form-label width-8">Type</label>
+      <div class="gf-form-select-wrapper width-11">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.coloringType"
@@ -113,14 +125,14 @@
 
     <div ng-if="ctrl.panel.coloringType == 'thresholds'" class="gf-form">
 
-      <div class="gf-form-inline">
+      <div class="gf-form">
         <div class="gf-form max-width-21">
           <label class="gf-form-label width-8">Thresholds
             <tip>
               Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
             </tip>
           </label>
-          <input type="text" class="gf-form-input"
+          <input type="text" class="gf-form-input width-11"
             ng-model="ctrl.panel.thresholds"
             ng-blur="ctrl.render()"
             placeholder="50,80"

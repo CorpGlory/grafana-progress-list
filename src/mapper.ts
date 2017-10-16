@@ -163,10 +163,16 @@ export class Mapper {
       }
     }
 
-    if(this._panelConfig.getValue('statProgressType') === 'max Value') {
-      let max = 0;
-      for(let i = 0; i < kstat.length; i++) {
-        max = Math.max(kstat[i][1], max);
+    if(this._panelConfig.getValue('statProgressType') === 'max value') {
+      let max = -Infinity;
+      var ss = this._panelConfig.getValue('statProgressMaxValue');
+      console.log('hey ss' + ss);
+      if(this._panelConfig.getValue('statProgressMaxValue') !== null) {
+        max = this._panelConfig.getValue('statProgressMaxValue');
+      } else {
+        for(let i = 0; i < kstat.length; i++) {
+          max = Math.max(kstat[i][1], max);
+        }
       }
       for(let i = 0; i < kstat.length; i++) {
         kstat[i][1] = 100 * kstat[i][1] / max;
@@ -174,7 +180,6 @@ export class Mapper {
     }
 
     return _.map(kstat, k => new ProgressItem(this._panelConfig, k));
-
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
