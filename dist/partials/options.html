@@ -52,7 +52,7 @@
       />
     </div>
 
-    <br/>  
+    <br/>
     <h5 class="section-heading">Sorting</h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
@@ -72,7 +72,19 @@
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
   <div class="section gf-form-group">
-    <h5 class="section-heading">Labels</h5>
+    <h5 class="section-heading">Value Labels</h5>
+    <div class="gf-form-inline"></div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Type</label>
+      <div class="gf-form-select-wrapper width-7">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.valueLabelType"
+          ng-options="n for n in ctrl.valueLabelTypeOptions"
+          ng-change="ctrl.render()"
+        />
+      </div>
+    </div>
     <div class="gf-form-inline">
       <div class="gf-form">
         <label class="gf-form-label width-8">Prefix</label>
@@ -124,7 +136,7 @@
         />
       </div>
     </div>
-    
+
     <div ng-if="ctrl.panel.coloringType == 'thresholds'">
       <div class="gf-form">
         <label class="gf-form-label width-8">Thresholds
@@ -178,7 +190,7 @@
           </label>
         </div>
       </div>
-      
+
       <div class="gf-form">
         <label class="gf-form-label width-11">Default
           <tip>Color for all other keys</tip>

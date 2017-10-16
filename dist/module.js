@@ -17182,6 +17182,7 @@ var defaults = {
     statProgressMaxValue: null,
     coloringType: 'none',
     sortingOrder: 'none',
+    valueLabelType: 'percentage',
     prefix: '',
     postfix: '',
     thresholds: '10, 30',
@@ -17204,7 +17205,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         _this.statProgressTypeOptions = ['max value', 'shared'];
         _this.coloringTypeOptions = ['none', 'thresholds', 'key mapping'];
         _this.sortingOrderOptions = ['none', 'increasing', 'decreasing'];
-        console.log('asd');
+        _this.valueLabelTypeOptions = ['absolute', 'percentage'];
         _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
@@ -17236,17 +17237,12 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         key: "render",
         value: function render() {
             var items = this.mapper.mapMetricData(this._seriesList);
-            console.log('sorting order: ' + this._panelConfig.getValue('sortingOrder'));
             if (this._panelConfig.getValue('sortingOrder') === 'increasing') {
-                console.log('hey increasing');
-                console.log(items);
                 items = _.sortBy(items, function (i) {
                     return i.progress;
                 });
-                console.log(items);
             }
             if (this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-                console.log('hey decreasing');
                 items = _.sortBy(items, function (i) {
                     return -i.progress;
                 });
@@ -17365,18 +17361,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = __webpack_require__(0);
 
 var ProgressItem = function () {
-    function ProgressItem(panelConfig, keyValue) {
+    function ProgressItem(panelConfig, key, value, maxValue) {
         _classCallCheck(this, ProgressItem);
 
         this._panelConfig = panelConfig;
-        this._key = keyValue[0];
-        this._value = keyValue[1];
+        this._key = key;
+        this._value = value;
+        this._maxValue = maxValue;
     }
 
     _createClass(ProgressItem, [{
         key: "_getFormattedFloat",
         value: function _getFormattedFloat() {
-            var value = this._value;
+            var value = this._panelConfig.getValue('valueLabelType') === 'percentage' ? this.progress : this.value;
             var dm = this._getDecimalsForValue().decimals;
             if (dm === 0) {
                 return Math.round(value).toString();
@@ -17438,10 +17435,15 @@ var ProgressItem = function () {
     }, {
         key: "progress",
         get: function get() {
+            return 100 * this._value / this._maxValue;
+        }
+    }, {
+        key: "value",
+        get: function get() {
             return this._value;
         }
     }, {
-        key: "formattedProgress",
+        key: "formattedValue",
         get: function get() {
             var value = this._value;
             var res = this._panelConfig.getValue('prefix');
@@ -17461,7 +17463,7 @@ var ProgressItem = function () {
             if (colorType === 'thresholds') {
                 var thresholdsStr = this._panelConfig.getValue('thresholds');
                 var colors = this._panelConfig.getValue('colors');
-                var value = this._value;
+                var value = this.progress;
                 if (thresholdsStr === undefined) {
                     return colors[0];
                 }
@@ -17514,32 +17516,27 @@ var Mapper = function () {
                 kstat = this._mapNumeric(seriesList);
             }
             var progressType = this._panelConfig.getValue('statProgressType');
+            var maxValue = -1;
             if (this._panelConfig.getValue('statProgressType') === 'shared') {
                 var total = 0;
                 for (var i = 0; i < kstat.length; i++) {
                     total += kstat[i][1];
                 }
-                for (var _i = 0; _i < kstat.length; _i++) {
-                    kstat[_i][1] = 100 * kstat[_i][1] / total;
-                }
+                maxValue = total;
             }
             if (this._panelConfig.getValue('statProgressType') === 'max value') {
                 var max = -Infinity;
-                var ss = this._panelConfig.getValue('statProgressMaxValue');
-                console.log('hey ss' + ss);
                 if (this._panelConfig.getValue('statProgressMaxValue') !== null) {
                     max = this._panelConfig.getValue('statProgressMaxValue');
                 } else {
-                    for (var _i2 = 0; _i2 < kstat.length; _i2++) {
-                        max = Math.max(kstat[_i2][1], max);
+                    for (var _i = 0; _i < kstat.length; _i++) {
+                        max = Math.max(kstat[_i][1], max);
                     }
                 }
-                for (var _i3 = 0; _i3 < kstat.length; _i3++) {
-                    kstat[_i3][1] = 100 * kstat[_i3][1] / max;
-                }
+                maxValue = max;
             }
             return _.map(kstat, function (k) {
-                return new ProgressItem(_this2._panelConfig, k);
+                return new ProgressItem(_this2._panelConfig, k[0], k[1], maxValue);
             });
         }
     }, {

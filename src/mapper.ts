@@ -10,11 +10,13 @@ export class ProgressItem {
 
   private _key: string;
   private _value: number;
+  private _maxValue: number;
 
-  public constructor(panelConfig: PanelConfig, keyValue: KeyValue) {
+  constructor(panelConfig: PanelConfig, key: string, value: number, maxValue: number) {
     this._panelConfig = panelConfig;
-    this._key = keyValue[0];
-    this._value = keyValue[1];
+    this._key = key;
+    this._value = value;
+    this._maxValue = maxValue;
   }
 
   get title(): string {
@@ -22,10 +24,14 @@ export class ProgressItem {
   }
 
   get progress(): number {
+    return 100 * this._value / this._maxValue;
+  }
+
+  get value(): number {
     return this._value;
   }
 
-  get formattedProgress(): string {
+  get formattedValue(): string {
     var value = this._value;
     var res = this._panelConfig.getValue('prefix');
     res += this._getFormattedFloat();
@@ -35,7 +41,8 @@ export class ProgressItem {
   }
 
   _getFormattedFloat(): string {
-    var value = this._value;
+    var value = this._panelConfig.getValue('valueLabelType') === 'percentage' ?
+      this.progress : this.value;
 
     var dm = this._getDecimalsForValue().decimals;
 
@@ -105,7 +112,7 @@ export class ProgressItem {
     if(colorType === 'thresholds') {
       var thresholdsStr = this._panelConfig.getValue('thresholds');
       var colors = this._panelConfig.getValue('colors');
-      var value = this._value;
+      var value = this.progress;
       if(thresholdsStr === undefined) {
         return colors[0];
       }
@@ -125,7 +132,7 @@ export class ProgressItem {
       }
       return keyColorMapping.color;
     }
-    
+
     throw new Error('Unknown color type ' + colorType);
   }
 
@@ -153,20 +160,17 @@ export class Mapper {
 
     let progressType = this._panelConfig.getValue('statProgressType');
 
+    var maxValue = -1;
     if(this._panelConfig.getValue('statProgressType') === 'shared') {
       let total = 0;
       for(let i = 0; i < kstat.length; i++) {
         total += kstat[i][1];
       }
-      for(let i = 0; i < kstat.length; i++) {
-        kstat[i][1] = 100 * kstat[i][1] / total;
-      }
+      maxValue = total;
     }
 
     if(this._panelConfig.getValue('statProgressType') === 'max value') {
       let max = -Infinity;
-      var ss = this._panelConfig.getValue('statProgressMaxValue');
-      console.log('hey ss' + ss);
       if(this._panelConfig.getValue('statProgressMaxValue') !== null) {
         max = this._panelConfig.getValue('statProgressMaxValue');
       } else {
@@ -174,12 +178,10 @@ export class Mapper {
           max = Math.max(kstat[i][1], max);
         }
       }
-      for(let i = 0; i < kstat.length; i++) {
-        kstat[i][1] = 100 * kstat[i][1] / max;
-      }
+      maxValue = max;
     }
 
-    return _.map(kstat, k => new ProgressItem(this._panelConfig, k));
+    return _.map(kstat, k => new ProgressItem(this._panelConfig, k[0], k[1], maxValue));
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
@@ -215,7 +217,7 @@ export class Mapper {
 
     var kv = {};
     var datapointsLength = seriesList[0].datapoints.length;
-    
+
     var nullMapping = this._panelConfig.getValue('nullMapping');
 
     for(let i = 0; i < datapointsLength; i++) {

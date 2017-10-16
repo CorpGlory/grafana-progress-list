@@ -12,6 +12,7 @@ const defaults = {
   statProgressMaxValue: null,
   coloringType: 'none',
   sortingOrder: 'none',
+  valueLabelType: 'percentage',
   prefix: '',
   postfix: '',
   thresholds: '10, 30',
@@ -36,12 +37,11 @@ class Ctrl extends MetricsPanelCtrl {
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
-  
+  private valueLabelTypeOptions = [ 'absolute', 'percentage' ]
+
 
   constructor($scope, $injector) {
     super($scope, $injector);
-    
-    console.log('asd');
 
     _.defaults(this.panel, defaults);
 
@@ -74,20 +74,12 @@ class Ctrl extends MetricsPanelCtrl {
 
   render() {
     var items = this.mapper.mapMetricData(this._seriesList);
-    
-    console.log('sorting order: ' + this._panelConfig.getValue('sortingOrder'));
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      console.log('hey increasing' );
-      console.log(items);
       items = _.sortBy(items, i => i.progress);
-      console.log(items);
     }
-    
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      console.log('hey decreasing' );
       items = _.sortBy(items, i => -i.progress);
     }
-
     this.$scope.items = items;
   }
 
@@ -107,14 +99,14 @@ class Ctrl extends MetricsPanelCtrl {
     this.panel.colors[2] = tmp;
     this.render();
   }
-  
+
   addColorKeyMapping() {
     this.panel.colorKeyMappings.push({
       key: 'KEY_NAME',
       color: "rgba(50, 172, 45, 0.97)"
     });
   }
-  
+
   removeColorKeyMapping(index) {
     this.panel.colorKeyMappings.splice(index, 1);
     this.render();
