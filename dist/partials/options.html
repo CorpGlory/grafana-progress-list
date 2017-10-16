@@ -1,10 +1,10 @@
-<div class="editor-row editor-mapping">
+<div class="editor-row options-tab">
   <div class="section gf-form-group">
     <h5 class="section-heading">Mapping</h5>
 
     <div class="gf-form">
       <label class="gf-form-label width-8">Stat</label>
-      <div class="gf-form-select-wrapper width-7">
+      <div class="gf-form-select-wrapper width-8">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.statNameOptionValue"
@@ -16,7 +16,7 @@
 
     <div class="gf-form">
       <label class="gf-form-label width-8">Progress Type</label>
-      <div class="gf-form-select-wrapper width-7">
+      <div class="gf-form-select-wrapper width-8">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.statProgressType"
@@ -30,7 +30,7 @@
       <label class="gf-form-label width-8">Max Value</label>
       <input
         type="number"
-        class="gf-form-input width-7"
+        class="gf-form-input width-8"
         placeholder="auto" data-placement="right"
         bs-tooltip="'Max value will be equal to max progreesss in auto mode'"
         ng-model="ctrl.panel.statProgressMaxValue"
@@ -43,7 +43,7 @@
       <label class="gf-form-label width-8">Null Value</label>
       <input
         type="number"
-        class="gf-form-input width-7"
+        class="gf-form-input width-8"
         placeholder="error" data-placement="right"
         bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
         ng-model="ctrl.panel.nullMapping"
@@ -52,24 +52,19 @@
       />
     </div>
 
-    <br/>
-    <div class="editor-row">
-      <div class="section gf-form-group">
-        <h5 class="section-heading">Sorting</h5>
-        <div class="gf-form">
-          <label class="gf-form-label width-8">Type</label>
-          <div class="gf-form-select-wrapper width-11">
-            <select
-              class="gf-form-input"
-              ng-model="ctrl.panel.sortingOrder"
-              ng-options="n for n in ctrl.sortingOrderOptions"
-              ng-change="ctrl.render()"
-            />
-          </div>
-        </div>
+    <br/>  
+    <h5 class="section-heading">Sorting</h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Type</label>
+      <div class="gf-form-select-wrapper width-8">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.sortingOrder"
+          ng-options="n for n in ctrl.sortingOrderOptions"
+          ng-change="ctrl.render()"
+        />
       </div>
     </div>
-
   </div>
 
   <!--
@@ -117,7 +112,7 @@
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
   <div class="section gf-form-group">
-    <h5 class="section-heading">Coloring</h5>
+    <h5 class="section-heading">Coloring<h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
       <div class="gf-form-select-wrapper width-11">
@@ -146,7 +141,7 @@
         />
       </div>
       <div class="gf-form">
-        <label class="gf-form-label width-8">Colors</label>
+        <label class="gf-form-label width-6">Colors</label>
         <span class="gf-form-label">
           <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
         </span>
