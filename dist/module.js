@@ -17181,7 +17181,7 @@ var defaults = {
     statProgressType: 'shared',
     statProgressMaxValue: null,
     coloringType: 'none',
-    sorting: false,
+    sortingOrder: 'none',
     prefix: '',
     postfix: '',
     thresholds: '10, 30',
@@ -17203,6 +17203,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         _this.statNameOptions = ['current', 'min', 'max', 'total'];
         _this.statProgressTypeOptions = ['max value', 'shared'];
         _this.coloringTypeOptions = ['none', 'thresholds', 'key mapping'];
+        _this.sortingOrderOptions = ['none', 'increasing', 'decreasing'];
         console.log('asd');
         _.defaults(_this.panel, defaults);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
@@ -17235,9 +17236,19 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         key: "render",
         value: function render() {
             var items = this.mapper.mapMetricData(this._seriesList);
-            if (this._panelConfig.getValue('sorting') === true) {
+            console.log('sorting order: ' + this._panelConfig.getValue('sortingOrder'));
+            if (this._panelConfig.getValue('sortingOrder') === 'increasing') {
+                console.log('hey increasing');
+                console.log(items);
                 items = _.sortBy(items, function (i) {
-                    return -i[1];
+                    return i.progress;
+                });
+                console.log(items);
+            }
+            if (this._panelConfig.getValue('sortingOrder') === 'decreasing') {
+                console.log('hey decreasing');
+                items = _.sortBy(items, function (i) {
+                    return -i.progress;
                 });
             }
             this.$scope.items = items;

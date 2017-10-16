@@ -11,7 +11,7 @@ const defaults = {
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'none',
-  sorting: false,
+  sortingOrder: 'none',
   prefix: '',
   postfix: '',
   thresholds: '10, 30',
@@ -35,6 +35,8 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
+  private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
+  
 
   constructor($scope, $injector) {
     super($scope, $injector);
@@ -72,9 +74,18 @@ class Ctrl extends MetricsPanelCtrl {
 
   render() {
     var items = this.mapper.mapMetricData(this._seriesList);
-
-    if(this._panelConfig.getValue('sorting') === true) {
-      items = _.sortBy(items, i => -i[1]);
+    
+    console.log('sorting order: ' + this._panelConfig.getValue('sortingOrder'));
+    if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
+      console.log('hey increasing' );
+      console.log(items);
+      items = _.sortBy(items, i => i.progress);
+      console.log(items);
+    }
+    
+    if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
+      console.log('hey decreasing' );
+      items = _.sortBy(items, i => -i.progress);
     }
 
     this.$scope.items = items;
