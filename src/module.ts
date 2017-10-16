@@ -37,8 +37,6 @@ class Ctrl extends MetricsPanelCtrl {
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
 
   constructor($scope, $injector) {
-  
-    
     super($scope, $injector);
     
     console.log('asd');

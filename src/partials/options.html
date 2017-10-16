@@ -23,7 +23,7 @@
         />
       </div>
     </div>
-    
+
     <div class="gf-form" ng-if="ctrl.panel.statProgressType == 'max value'">
       <label class="gf-form-label width-8">Max Value</label>
       <input
@@ -72,7 +72,7 @@
     <h5 class="section-heading">Labels</h5>
     <div class="gf-form-inline">
       <div class="gf-form">
-        <label class="gf-form-label width-6">Prefix</label>
+        <label class="gf-form-label width-8">Prefix</label>
         <input
           type="text" class="gf-form-input width-7"
           ng-model="ctrl.panel.prefix"
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-6">Postfix</label>
+      <label class="gf-form-label width-8">Postfix</label>
       <input
         type="text" class="gf-form-input width-7"
         ng-model="ctrl.panel.postfix"
@@ -91,7 +91,7 @@
       />
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-6">Decimals</label>
+      <label class="gf-form-label width-8">Decimals</label>
       <input
         type="number"
         class="gf-form-input width-7"
@@ -110,7 +110,7 @@
   -->
   <div class="section gf-form-group">
     <h5 class="section-heading">Coloring</h5>
-    <div class="gf-form-inline">
+    <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
       <div class="gf-form-select-wrapper width-11">
         <select
@@ -121,40 +121,41 @@
         />
       </div>
     </div>
-    <br/>
-
-    <div ng-if="ctrl.panel.coloringType == 'thresholds'" class="gf-form">
-
-      <div class="gf-form">
-        <div class="gf-form max-width-21">
-          <label class="gf-form-label width-8">Thresholds
-            <tip>
-              Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
-            </tip>
-          </label>
-          <input type="text" class="gf-form-input width-11"
-            ng-model="ctrl.panel.thresholds"
-            ng-blur="ctrl.render()"
-            placeholder="50,80"
-          />
-        </div>
-      </div>
-      <div class="gf-form">
-        <label class="gf-form-label width-8">Colors</label>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-          <a ng-click="ctrl.invertColorOrder()"> Invert </a>
-        </span>
-      </div>
+    
+    <div ng-if="ctrl.panel.coloringType == 'thresholds'">
+        
+            <div class="gf-form ">
+              <label class="gf-form-label width-8">Thresholds
+                <tip>
+                  Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
+                </tip>
+              </label>
+              <input
+                type="text"
+                class="gf-form-input width-11"
+                ng-model="ctrl.panel.thresholds"
+                ng-blur="ctrl.render()"
+                placeholder="50,80"
+              />
+            </div>
+            <div class="gf-form">
+                <label class="gf-form-label width-8">Colors</label>
+                <span class="gf-form-label">
+                  <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
+                </span>
+                <span class="gf-form-label">
+                  <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
+                </span>
+                <span class="gf-form-label">
+                  <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
+                </span>
+                <span class="gf-form-label">
+                  <a ng-click="ctrl.invertColorOrder()"> Invert </a>
+                </span>
+            </div>
     </div>
+
+    
 
     <div ng-if="ctrl.panel.coloringType == 'key mapping'">
       <div ng-repeat="item in ctrl.panel.colorKeyMappings">
@@ -177,6 +178,7 @@
           </label>
         </div>
       </div>
+      
       <div class="gf-form">
         <label class="gf-form-label width-11">Default
           <tip>Color for all other keys</tip>
