@@ -40,7 +40,7 @@ class Ctrl extends MetricsPanelCtrl {
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ]
 
 
-  constructor($scope, $injector) {
+  constructor($scope: any, $injector) {
     super($scope, $injector);
 
     _.defaults(this.panel, defaults);

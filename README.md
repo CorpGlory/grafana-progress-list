@@ -1,17 +1,17 @@
 # Progress List Panel
 
-<img src="https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png" width="400">
+<img src="https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png">
 
 ## About
 
 Show list of progress items by mapping your data.
 
-Based on [Webpack Typescript Plugin Template for Grafana](https://github.com/CorpGlory/grafana-plugin-template-webpack-typescript)
-
 ## How To Use
 
-YOu need to provide `(key, value)` or `key timeseries.
-See examples:  
+1. Create a metric query where result looks like this: `[(time, key, value)]`
+2. Goto Options tab and adjust your progress list.
+
+See examples: (Tutorial Wiki)[https://github.com/CorpGlory/grafana-progress-list/wiki]
 
 ## Installation
 
