@@ -13,6 +13,9 @@ Show list of progress items by mapping your data.
 
 See examples: (Tutorial Wiki)[https://github.com/CorpGlory/grafana-progress-list/wiki]
 
+You need pair of values: `(key, value)` where you aggregate by `key` field my `value` by `stat` function, where `stat = current|min|max|total`.
+
+
 ## Installation
 
 ```
