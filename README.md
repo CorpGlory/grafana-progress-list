@@ -4,16 +4,20 @@
 
 ## About
 
-Show list of progress items by mapping your data.
+A plugin showing list of progress-like list items in one board.
 
 ## How To Use
 
 1. Create a metric query where result looks like this: `[(time, key, value)]`
-2. Goto Options tab and adjust your progress list.
+2. Goto "Options" tab and choose aggregation function and other options
 
-See examples: (Tutorial Wiki)[https://github.com/CorpGlory/grafana-progress-list/wiki]
+More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
-You need pair of values: `(key, value)` where you aggregate by `key` field my `value` by `stat` function, where `stat = current|min|max|total`.
+Progress list will try to aggregate all values with `key` to a singlie value with one of aggregate funtions.
+
+You may think about progress list as many simple
+[Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). The difference is 
+that items generated from the query rather than defined manually.
 
 
 ## Installation
@@ -34,6 +38,7 @@ npm run build
 
 ## Credits
 
+Made by Alexey Velikiy
 
 ### See Also
 

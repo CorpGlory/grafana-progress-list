@@ -16,6 +16,9 @@
     "links": [{
       "name": "Project site",
       "url": "https://github.com/CorpGlory/grafana-progress-list"
+    },{
+      "name": "tutorial",
+      "url": "https://github.com/CorpGlory/grafana-progress-list/wiki"
     }],
     "screenshots": [{
       "name": "Main",
