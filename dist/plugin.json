@@ -17,15 +17,18 @@
       "name": "Project site",
       "url": "https://github.com/CorpGlory/grafana-progress-list"
     },{
-      "name": "tutorial",
+      "name": "Tutorials",
       "url": "https://github.com/CorpGlory/grafana-progress-list/wiki"
+    }, {
+      "name": "Discussion",
+      "url": "https://community.grafana.com/t/progress-list-panel/3286"
     }],
     "screenshots": [{
       "name": "Main",
       "path": "assets/screenshot_main.png"
     }],
     "version": "0.1.1",
-    "updated": "2017-09-24"
+    "updated": "2017-10-18"
   },
   "dependencies": {
     "grafanaVersion": "4.1.1",
