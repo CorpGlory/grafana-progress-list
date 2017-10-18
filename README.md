@@ -42,4 +42,6 @@ Made by Alexey Velikiy
 
 ### See Also
 
+Dicussion on [Grafana Community Forum](https://community.grafana.com/t/progress-list-panel/3286)
+
 Based on [Webpack Typescript Template](https://github.com/CorpGlory/grafana-plugin-template-webpack-typescript)
