@@ -13,10 +13,12 @@ A plugin showing list of progress-like list items in one board.
 
 More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
-Progress list will try to aggregate all values with `key` to a singlie value with one of aggregate funtions.
+Progress list will try to aggregate all values by key using chosen aggregate function.
+
+Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
 You may think about progress list as many simple
-[Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). The difference is 
+[Singlestat Panels](). The difference is 
 that items generated from the query rather than defined manually.
 
 
