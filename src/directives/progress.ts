@@ -1,6 +1,6 @@
 import { PanelConfig } from '../panel-config';
 
-import coreModule from 'grafana/app/core/core_module';
+import { coreModule } from 'grafana/app/core/core';
 
 
 var directiveInited = false;
