@@ -1,4 +1,4 @@
-define(["app/plugins/sdk","app/core/core_module"], function(__WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/plugins/sdk","app/core/core"], function(__WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -17667,7 +17667,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_module_1 = __webpack_require__(7);
+var core_1 = __webpack_require__(7);
 var directiveInited = false;
 function initProgress(panelConfig) {
     var directiveName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "progress";
@@ -17676,7 +17676,7 @@ function initProgress(panelConfig) {
         return;
     }
     directiveInited = true;
-    core_module_1.default.directive(directiveName, function () {
+    core_1.coreModule.directive(directiveName, function () {
         return {
             templateUrl: panelConfig.pluginDirName + 'directives/progress.html',
             restrict: 'E',
