@@ -1,7 +1,7 @@
 {
   "type": "panel",
   "name": "Progress List",
-  "id": "grafana-progress-list-plugin",
+  "id": "corpglory-progresslist-panel",
   "info": {
     "description": "Progress list panel",
     "author": {
