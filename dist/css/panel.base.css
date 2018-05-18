@@ -6,8 +6,7 @@
 .list-item-content {
   position: relative;
   display: block;
-  height: 20px;
-  width: 100%;
+  width: 99%;
 }
 
 .list-item-content .list-item-value {

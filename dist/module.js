@@ -17214,12 +17214,15 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         _this.items = [];
         _this.events.on('init-edit-mode', _this._onInitEditMode.bind(_this));
         _this.events.on('data-received', _this._onDataReceived.bind(_this));
+        _this.events.on('render', _this._onRender.bind(_this));
         return _this;
     }
 
     _createClass(Ctrl, [{
         key: "link",
-        value: function link(scope, element) {}
+        value: function link(scope, element) {
+            this._element = element;
+        }
     }, {
         key: "_initStyles",
         value: function _initStyles() {
@@ -17234,8 +17237,8 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
             });
         }
     }, {
-        key: "render",
-        value: function render() {
+        key: "_onRender",
+        value: function _onRender() {
             var items = this.mapper.mapMetricData(this._seriesList);
             if (this._panelConfig.getValue('sortingOrder') === 'increasing') {
                 items = _.sortBy(items, function (i) {
@@ -17248,6 +17251,10 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
                 });
             }
             this.$scope.items = items;
+            this._element.find('.table-panel-scroll').css({
+                'height': this.height + "px",
+                'max-height': this.height + "px"
+            });
         }
     }, {
         key: "_onDataReceived",
