@@ -30,6 +30,7 @@ class Ctrl extends MetricsPanelCtrl {
   public items: ProgressItem[];
 
   private _panelConfig: PanelConfig;
+  private _element: any;
 
   private _seriesList: any;
 
@@ -37,9 +38,9 @@ class Ctrl extends MetricsPanelCtrl {
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
-  private valueLabelTypeOptions = [ 'absolute', 'percentage' ]
+  private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
 
-
+  
   constructor($scope: any, $injector) {
     super($scope, $injector);
 
@@ -55,9 +56,11 @@ class Ctrl extends MetricsPanelCtrl {
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
+    this.events.on('render', this._onRender.bind(this));
   }
 
   link(scope, element) {
+    this._element = element;
   }
 
   _initStyles() {
@@ -72,7 +75,7 @@ class Ctrl extends MetricsPanelCtrl {
     });
   }
 
-  render() {
+  _onRender() {
     var items = this.mapper.mapMetricData(this._seriesList);
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
       items = _.sortBy(items, i => i.progress);
@@ -81,6 +84,10 @@ class Ctrl extends MetricsPanelCtrl {
       items = _.sortBy(items, i => -i.progress);
     }
     this.$scope.items = items;
+    this._element.find('.table-panel-scroll').css({
+      'height': `${this.height}px`,
+      'max-height': `${this.height}px`
+    });
   }
 
   _onDataReceived(seriesList: any) {
