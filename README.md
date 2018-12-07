@@ -36,7 +36,7 @@ npm run build
 
 ## Credits
 
-Made by Alexey Velikiy
+Made by [CorpGloryDev Team](https://corpglory.com/)
 
 ### See Also
 
