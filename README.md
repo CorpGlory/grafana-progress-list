@@ -36,7 +36,7 @@ npm run build
 
 ## Credits
 
-Made by [CorpGloryDev Team](https://corpglory.com/)
+Made by [CorpGlory Dev Team](https://corpglory.com/)
 
 ### See Also
 
