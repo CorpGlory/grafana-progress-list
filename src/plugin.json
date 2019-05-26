@@ -5,8 +5,8 @@
   "info": {
     "description": "Progress list panel",
     "author": {
-      "name": "Alexey Velikiy",
-      "url": ""
+      "name": "CorpGlory Inc.",
+      "url": "https://github.com/corpglory/grafana-progress-list"
     },
     "keywords": [ ],
     "logos": {
