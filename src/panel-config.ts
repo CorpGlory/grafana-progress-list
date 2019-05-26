@@ -1,5 +1,4 @@
 export class PanelConfig {
-
   private _panel: any;
   public constructor(panel: any) {
     this._panel = panel;
@@ -24,5 +23,4 @@ export class PanelConfig {
     }
     return this._pluginDirName;
   }
-
 }
