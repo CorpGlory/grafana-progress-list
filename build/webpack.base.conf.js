@@ -32,7 +32,7 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new CopyWebpackPlugin([
       { from: 'plugin.json' },
-      { from: 'img/*' }
+      { from: 'assets/*' }
     ])
   ],
   resolve: {
@@ -41,7 +41,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/, 
+        test: /\.tsx?$/,
         loaders: [
           'ts-loader'
         ],
