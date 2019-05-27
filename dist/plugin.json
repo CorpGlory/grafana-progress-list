@@ -5,8 +5,8 @@
   "info": {
     "description": "Progress list panel",
     "author": {
-      "name": "Alexey Velikiy",
-      "url": ""
+      "name": "CorpGlory Inc.",
+      "url": "https://github.com/corpglory/grafana-progress-list"
     },
     "keywords": [ ],
     "logos": {
@@ -27,8 +27,8 @@
       "name": "Main",
       "path": "assets/screenshot_main.png"
     }],
-    "version": "0.1.1",
-    "updated": "2017-10-18"
+    "version": "1.0.2",
+    "updated": "2019-05-27"
   },
   "dependencies": {
     "grafanaVersion": "4.1.1",
