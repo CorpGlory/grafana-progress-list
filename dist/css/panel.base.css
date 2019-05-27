@@ -1,0 +1,33 @@
+.list-item {
+  position: relative;
+  height: 30px;
+}
+
+.list-item-content {
+  position: relative;
+  display: block;
+  width: 99%;
+}
+
+.list-item-content .list-item-value {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  top: -9px;
+}
+
+.list-item-content .progress-item {
+  position: relative;
+}
+
+.list-item-content .progress-bar-line {
+  position: absolute;
+  z-index: 1;
+  top: 0px;
+  height: 8px;
+  background: darkgreen;
+}
+
+.options-tab .section {
+  margin-right: 1rem
+}
