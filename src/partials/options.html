@@ -52,6 +52,16 @@
       />
     </div>
 
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Mapping type</label>
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.mappingType"
+        ng-options="type for type in ctrl.mappingTypeOptions"
+        ng-change="ctrl.refresh()"
+      />
+    </div>
+
     <br/>
     <h5 class="section-heading">Sorting</h5>
     <div class="gf-form">

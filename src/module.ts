@@ -11,9 +11,10 @@ const DEFAULTS = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
   statProgressMaxValue: null,
-  coloringType: 'none',
+  coloringType: 'auto',
   sortingOrder: 'none',
   valueLabelType: 'percentage',
+  mappingType: 'datapoint to datapoint',
   prefix: '',
   postfix: '',
   thresholds: '10, 30',
@@ -37,9 +38,11 @@ class Ctrl extends MetricsPanelCtrl {
 
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max value', 'shared' ];
-  private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
+  private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
+  // TODO: change option names or add a tip in editor
+  private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
 
   constructor($scope: any, $injector) {
     super($scope, $injector);

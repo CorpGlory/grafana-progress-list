@@ -153,10 +153,14 @@ export class Mapper {
       return [];
     }
     var kstat: KeyValue[] = [];
-    if(this._panelConfig.getValue('statNameOptionValue') === 'total' && seriesList.length == 1) {
-      kstat = this._mapKeysTotal(seriesList);
+    if(this._panelConfig.getValue('mappingType') === 'datapoint to datapoint') {
+      if(this._panelConfig.getValue('statNameOptionValue') === 'total' && seriesList.length == 1) {
+        kstat = this._mapKeysTotal(seriesList);
+      } else {
+        kstat = this._mapNumeric(seriesList);
+      }
     } else {
-      kstat = this._mapNumeric(seriesList);
+      kstat = this._mapTargetToDatapoints(seriesList);
     }
 
     let progressType = this._panelConfig.getValue('statProgressType');
@@ -247,11 +251,16 @@ export class Mapper {
     }
 
     return res;
+  }
 
+  _mapTargetToDatapoints(seriesList): KeyValue[] {
+    return seriesList.map(serie => [
+      serie.target,
+      this._flatSeries(serie.datapoints.map(datapoint => datapoint[0]))
+    ]);
   }
 
   _flatSeries(values: number[]): number {
-
     if(values.length === 0) {
       return 0;
     }
