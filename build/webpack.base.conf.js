@@ -9,11 +9,9 @@ function resolve(dir) {
 module.exports = {
   target: 'node',
   context: resolve('src'),
-  entry: {
-    './module': './module.ts'
-  },
+  entry: './module.ts',
   output: {
-    filename: '[name].js',
+    filename: 'module.js',
     path: resolve('dist'),
     libraryTarget: 'amd'
   },
@@ -33,18 +31,24 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'plugin.json' },
       { from: 'README.md' },
+      { from: 'css/*' },
+      { from: '*/*.html' },
       { from: 'assets/*' },
-      { from: '*/*.html' }
     ])
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         loaders: [
+          // TODO: check if need babel-loader
+          {
+            loader: 'babel-loader',
+            options: { presets: ['env'] }
+          },
           'ts-loader'
         ],
         exclude: /node_modules/,
