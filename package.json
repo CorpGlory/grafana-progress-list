@@ -1,6 +1,6 @@
 {
   "name": "grafana-progress-list-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Show list of progress items by mapping your data.",
   "main": "src/module.js",
   "scripts": {
@@ -9,11 +9,9 @@
   "keywords": [
     "grafana",
     "plugin",
-    "progress list",
-    "typescript",
-    "webpack"
+    "progress list"
   ],
-  "author": "av",
+  "author": "CorpGlory Inc.",
   "license": "MIT",
   "repository": "https://github.com/CorpGlory/grafana-progress-list",
   "devDependencies": {
