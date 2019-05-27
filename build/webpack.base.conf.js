@@ -32,10 +32,7 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new CopyWebpackPlugin([
       { from: 'plugin.json' },
-      { from: 'img/*' },
-      { from: 'panel/graph_panel/plugin.json', to: 'panel/graph_panel/plugin.json' },
-      { from: 'panel/graph_panel/partials/*' },
-      { from: 'datasource/plugin.json', to: 'datasource/plugin.json' },
+      { from: 'img/*' }
     ])
   ],
   resolve: {
@@ -53,18 +50,6 @@ module.exports = {
       {
         test: /\.html$/,
         use: 'raw-loader'
-      },
-      {
-        test: /jquery\.flot\.(?!events)/,
-        loaders: [
-          'imports-loader?jQuery=jquery'
-        ]
-      },
-      {
-        test: /jquery\.flot\.events/,
-        loaders: [
-          'imports-loader?jQuery=jquery,lodash=lodash,angular=angular,tetherDrop=tether-drop'
-        ]
       }
     ]
   }
