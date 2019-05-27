@@ -28,7 +28,7 @@
       "path": "assets/screenshot_main.png"
     }],
     "version": "0.1.1",
-    "updated": "2017-10-18"
+    "updated": "2019-05-27"
   },
   "dependencies": {
     "grafanaVersion": "4.1.1",

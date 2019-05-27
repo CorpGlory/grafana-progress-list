@@ -2,7 +2,9 @@ import { PanelConfig } from './panel-config';
 
 import * as _ from 'lodash';
 
+
 type KeyValue = [string, number];
+
 
 export class ProgressItem {
 
@@ -137,7 +139,6 @@ export class ProgressItem {
   }
 
 }
-
 
 export class Mapper {
 

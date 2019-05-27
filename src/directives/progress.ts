@@ -20,4 +20,3 @@ export function initProgress(panelConfig: PanelConfig, directiveName: string = "
       };
     });
 }
-

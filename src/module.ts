@@ -6,7 +6,8 @@ import { initProgress } from './directives/progress';
 
 import * as _ from 'lodash';
 
-const defaults = {
+
+const DEFAULTS = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
   statProgressMaxValue: null,
@@ -40,11 +41,11 @@ class Ctrl extends MetricsPanelCtrl {
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
 
-  
+
   constructor($scope: any, $injector) {
     super($scope, $injector);
 
-    _.defaults(this.panel, defaults);
+    _.defaults(this.panel, DEFAULTS);
 
     this._panelConfig = new PanelConfig(this.panel);
     this._initStyles();
@@ -125,6 +126,5 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
 }
-
 
 export { Ctrl as PanelCtrl }
