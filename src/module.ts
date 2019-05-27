@@ -1,8 +1,8 @@
 import { PanelConfig } from './panel-config';
 import { Mapper, ProgressItem } from './mapper';
+import { initProgress } from './directives/progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
-import { initProgress } from './directives/progress';
 
 import * as _ from 'lodash';
 
@@ -18,14 +18,14 @@ const DEFAULTS = {
   postfix: '',
   thresholds: '10, 30',
   // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
-  colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
-  colorsKeyMappingDefault: "rgba(245, 54, 54, 0.9)",
+  colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
+  colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
   colorKeyMappings: [],
   nullMapping: undefined
 };
 
 class Ctrl extends MetricsPanelCtrl {
-  static templateUrl = "partials/template.html";
+  static templateUrl = 'partials/template.html';
 
   public mapper: Mapper;
   public items: ProgressItem[];
@@ -40,7 +40,6 @@ class Ctrl extends MetricsPanelCtrl {
   private coloringTypeOptions = [ 'none', 'thresholds', 'key mapping' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
-
 
   constructor($scope: any, $injector) {
     super($scope, $injector);
@@ -111,7 +110,7 @@ class Ctrl extends MetricsPanelCtrl {
   addColorKeyMapping() {
     this.panel.colorKeyMappings.push({
       key: 'KEY_NAME',
-      color: "rgba(50, 172, 45, 0.97)"
+      color: 'rgba(50, 172, 45, 0.97)'
     });
   }
 
