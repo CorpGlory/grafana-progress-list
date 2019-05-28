@@ -143,9 +143,11 @@ export class ProgressItem {
 export class Mapper {
 
   private _panelConfig: PanelConfig;
+  private _templateSrv: any;
 
-  constructor(panelConfig: PanelConfig) {
+  constructor(panelConfig: PanelConfig, templateSrv: any) {
     this._panelConfig = panelConfig;
+    this._templateSrv = templateSrv;
   }
 
   mapMetricData(seriesList: any): ProgressItem[] {
@@ -162,8 +164,6 @@ export class Mapper {
     } else {
       kstat = this._mapTargetToDatapoints(seriesList);
     }
-
-    let progressType = this._panelConfig.getValue('statProgressType');
 
     var maxValue = -1;
     if(this._panelConfig.getValue('statProgressType') === 'shared') {
@@ -184,6 +184,16 @@ export class Mapper {
         }
       }
       maxValue = max;
+    }
+
+    const alias = this._panelConfig.getValue('alias');
+    if(alias !== '') {
+      kstat.forEach(k => {
+        const scopedVars = {
+          '__key': { value: k[0] }
+        };
+        k[0] = this._templateSrv.replace(alias, scopedVars);
+      });
     }
 
     return _.map(kstat, k => new ProgressItem(this._panelConfig, k[0], k[1], maxValue));

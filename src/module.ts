@@ -15,6 +15,7 @@ const DEFAULTS = {
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',
+  alias: '',
   prefix: '',
   postfix: '',
   thresholds: '10, 30',
@@ -44,7 +45,7 @@ class Ctrl extends MetricsPanelCtrl {
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
 
-  constructor($scope: any, $injector) {
+  constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
 
     _.defaults(this.panel, DEFAULTS);
@@ -54,7 +55,7 @@ class Ctrl extends MetricsPanelCtrl {
 
     initProgress(this._panelConfig, 'progressListPluginProgress');
 
-    this.mapper = new Mapper(this._panelConfig);
+    this.mapper = new Mapper(this._panelConfig, this.templateSrv);
     this.items = [];
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
