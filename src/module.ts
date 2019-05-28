@@ -69,13 +69,14 @@ class Ctrl extends MetricsPanelCtrl {
 
   _initStyles() {
     // small hack to load base styles
+    const cssPath = this._panelConfig.pluginDirName.replace('public/', '');
     loadPluginCss({
-      light: this._panelConfig.pluginDirName + 'css/panel.base.css',
-      dark: this._panelConfig.pluginDirName + 'css/panel.base.css'
+      light: cssPath + 'css/panel.base.css',
+      dark: cssPath + 'css/panel.base.css'
     });
     loadPluginCss({
-      light: this._panelConfig.pluginDirName + 'css/panel.light.css',
-      dark: this._panelConfig.pluginDirName + 'css/panel.dark.css'
+      light: cssPath + 'css/panel.light.css',
+      dark: cssPath + 'css/panel.dark.css'
     });
   }
 

@@ -17,9 +17,10 @@ export class PanelConfig {
     if(!this._pluginDirName) {
       var panels = window['grafanaBootData'].settings.panels;
       var thisPanel = panels[this._panel.type];
+      console.log(thisPanel)
       // the system loader preprends publib to the url,
       // add a .. to go back one level
-      this._pluginDirName = '../' + thisPanel.baseUrl + '/';
+      this._pluginDirName = thisPanel.baseUrl + '/';
     }
     return this._pluginDirName;
   }
