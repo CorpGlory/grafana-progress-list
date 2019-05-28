@@ -4,7 +4,7 @@
 
     <div class="gf-form">
       <label class="gf-form-label width-8">Stat</label>
-      <div class="gf-form-select-wrapper width-10">
+      <div class="gf-form-select-wrapper width-14">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.statNameOptionValue"
@@ -16,7 +16,7 @@
 
     <div class="gf-form">
       <label class="gf-form-label width-8">Progress Type</label>
-      <div class="gf-form-select-wrapper width-10">
+      <div class="gf-form-select-wrapper width-14">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.statProgressType"
@@ -30,7 +30,7 @@
       <label class="gf-form-label width-8">Max Value</label>
       <input
         type="number"
-        class="gf-form-input width-10"
+        class="gf-form-input width-14"
         placeholder="auto" data-placement="right"
         bs-tooltip="'Max value will be equal to max progreesss in auto mode'"
         ng-model="ctrl.panel.statProgressMaxValue"
@@ -43,7 +43,7 @@
       <label class="gf-form-label width-8">Null Value</label>
       <input
         type="number"
-        class="gf-form-input width-10"
+        class="gf-form-input width-14"
         placeholder="error" data-placement="right"
         bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
         ng-model="ctrl.panel.nullMapping"
@@ -55,7 +55,7 @@
     <div class="gf-form">
       <label class="gf-form-label width-8">Mapping type</label>
       <select
-        class="gf-form-input"
+        class="gf-form-input width-14"
         ng-model="ctrl.panel.mappingType"
         ng-options="type for type in ctrl.mappingTypeOptions"
         ng-change="ctrl.refresh()"
@@ -66,7 +66,7 @@
     <h5 class="section-heading">Sorting</h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
-      <div class="gf-form-select-wrapper width-8">
+      <div class="gf-form-select-wrapper width-14">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.sortingOrder"
@@ -85,7 +85,7 @@
     <h5 class="section-heading">Value Labels</h5>
     <div class="gf-form-inline"></div>
     <div class="gf-form">
-      <label class="gf-form-label width-8">Type</label>
+      <label class="gf-form-label width-6">Type</label>
       <div class="gf-form-select-wrapper width-10">
         <select
           class="gf-form-input"
@@ -97,7 +97,7 @@
     </div>
     <div class="gf-form-inline">
       <div class="gf-form">
-        <label class="gf-form-label width-8">Prefix</label>
+        <label class="gf-form-label width-6">Prefix</label>
         <input
           type="text" class="gf-form-input width-10"
           ng-model="ctrl.panel.prefix"
@@ -107,7 +107,7 @@
       </div>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-8">Postfix</label>
+      <label class="gf-form-label width-6">Postfix</label>
       <input
         type="text" class="gf-form-input width-10"
         ng-model="ctrl.panel.postfix"
@@ -116,7 +116,7 @@
       />
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-8">Decimals</label>
+      <label class="gf-form-label width-6">Decimals</label>
       <input
         type="number"
         class="gf-form-input width-10"
@@ -126,6 +126,29 @@
         ng-change="ctrl.render()"
         ng-model-onblur
       />
+    </div>
+
+    <br>
+    <div class="section gf-form-group">
+      <h5 class="section-heading">Key Labels</h5>
+      <div class="gf-form-inline">
+        <div class="gf-form">
+          <label class="gf-form-label width-6">
+            Alias
+            <tip>
+              You can insert HTML here.
+              Use $__key variable to access the original key
+            </tip>
+          </label>
+          <!-- TODO: better style -->
+          <textarea
+            class="gf-form-input width-19"
+            ng-model="ctrl.panel.alias"
+            ng-change="ctrl.render()"
+            ng-model-onblur
+          />
+        </div>
+      </div>
     </div>
   </div>
 
