@@ -31,7 +31,7 @@
     "updated": "2019-05-27"
   },
   "dependencies": {
-    "grafanaVersion": "4.1.1",
+    "grafanaVersion": "4.1+",
     "plugins": [ ]
   }
 }
