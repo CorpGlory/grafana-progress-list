@@ -21,17 +21,7 @@ Progress list can be thought of as many simple [Singlestat Panels](http://docs.g
 ## Installation
 
 ```
-cd $GRAFANA_HOME/data/plugins
-git clone https://github.com/CorpGlory/grafana-progress-list.git
-```
-
-then restart your Grafana server
-
-## Build
-
-```
-npm install
-npm run build
+grafana-cli plugins install corpglory-progresslist-panel
 ```
 
 ## Credits
