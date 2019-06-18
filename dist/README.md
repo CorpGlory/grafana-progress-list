@@ -4,7 +4,7 @@
 
 ## About
 
-A panel showing list of progress-like list items in one board.
+A panel showing list of progress-like items in one board.
 
 ## How To Use
 

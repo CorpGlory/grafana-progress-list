@@ -3,7 +3,7 @@
   "name": "Progress List",
   "id": "corpglory-progresslist-panel",
   "info": {
-    "description": "Progress list panel",
+    "description": "A panel showing list of progress-like items in one board",
     "author": {
       "name": "CorpGlory Inc.",
       "url": "https://github.com/corpglory/grafana-progress-list"
