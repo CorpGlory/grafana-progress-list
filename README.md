@@ -4,7 +4,7 @@
 
 ## About
 
-A panel showing list of progress-like items in one board.
+A panel showing list of progress-like items in one board. More about [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
 ## How To Use
 
