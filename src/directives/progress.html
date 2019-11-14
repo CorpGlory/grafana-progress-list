@@ -1,7 +1,8 @@
 <div class="list-item progress-item">
-  <div class="list-item-title" ng-bind-html="item.title"></div>
+  <div style="visibility: hidden" class="list-item-title" ng-bind-html="item.title"></div>
   <div class="list-item-content">
     <div style="width: {{ item.progress }}%; background: {{ item.color }}" class="progress-bar-line" />
+    <div style="visibility: visible" class="list-item-title" ng-bind-html="item.title"></div>
     <span class="list-item-value progress-bar-value"> {{ item.formattedValue }} </span>
   </div>
 </div>

@@ -1,6 +1,6 @@
 .list-item {
   position: relative;
-  height: 30px;
+  height: 25px;
 }
 
 .list-item-content {
@@ -11,9 +11,8 @@
 
 .list-item-content .list-item-value {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 0;
-  top: -9px;
 }
 
 .list-item-content .progress-item {
@@ -24,8 +23,13 @@
   position: absolute;
   z-index: 1;
   top: 0px;
-  height: 8px;
+  height: 20px;
   background: darkgreen;
+}
+
+.list-item-content .list-item-title {
+  position: absolute;
+  z-index: 2;
 }
 
 .options-tab .section {
