@@ -6,6 +6,10 @@ import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
 import * as _ from 'lodash';
 
+export enum TitleViewOptions {
+  AUTO = 'auto',
+  INLINE = 'inline'
+}
 
 const DEFAULTS = {
   statNameOptionValue: 'current',
@@ -41,7 +45,7 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
-  private titleViewTypeOptions = [ 'auto', 'inline' ];
+  private titleViewTypeOptions = [TitleViewOptions.AUTO, TitleViewOptions.INLINE];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor

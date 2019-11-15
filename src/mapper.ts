@@ -1,5 +1,7 @@
 import { PanelConfig } from './panel-config';
 
+import { TitleViewOptions } from './module';
+
 import * as _ from 'lodash';
 
 
@@ -150,16 +152,17 @@ export class ProgressItem {
       titleTopMargin: '0',
       valueTopMargin: '-22'
     }
-    if(titleType === 'auto') {
-      return titleParams;
+    switch(titleType) {
+      case TitleViewOptions.AUTO:
+        return titleParams;
+      case TitleViewOptions.INLINE:
+        titleParams.barHeight = '20';
+        titleParams.titleTopMargin = '-20';
+        titleParams.valueTopMargin = '-18';
+        return titleParams;
+      default:
+        throw new Error(`Wrong titleType: ${titleType}`);
     }
-    if(titleType === 'inline') {
-      titleParams.barHeight = '20';
-      titleParams.titleTopMargin = '-20';
-      titleParams.valueTopMargin = '-18';
-      return titleParams;
-    }
-    throw new Error('Unknown title view type ' + titleType);
   }
 
 }
