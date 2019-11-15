@@ -131,6 +131,17 @@
     <br>
     <div class="section gf-form-group">
       <h5 class="section-heading">Key Labels</h5>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">Title Type</label>
+        <div class="gf-form-select-wrapper width-10">
+          <select
+            class="gf-form-input"
+            ng-model="ctrl.panel.titleViewType"
+            ng-options="n for n in ctrl.titleViewTypeOptions"
+            ng-change="ctrl.render()"
+          />
+        </div>
+      </div>
       <div class="gf-form-inline">
         <div class="gf-form">
           <label class="gf-form-label width-6">
@@ -245,19 +256,7 @@
       </div>
 
     </div>
-    <br>
-    <h5 class="section-heading">Title view<h5>
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Type</label>
-      <div class="gf-form-select-wrapper width-11">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.titleViewType"
-          ng-options="n for n in ctrl.titleViewTypeOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
+
   </div>
 
 </div>

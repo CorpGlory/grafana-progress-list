@@ -1,8 +1,14 @@
 <div class="list-item progress-item">
-  <div style="visibility: {{ item.titleHeaderView }}" class="list-item-title" ng-bind-html="item.title"></div>
+  <div class="list-item-title" ng-bind-html="item.title"></div>
   <div class="list-item-content">
-    <div style="width: {{ item.progress }}%; background: {{ item.color }}" class="progress-bar-line" />
-    <div style="visibility: {{ item.titleLineView }}" class="list-item-title" ng-bind-html="item.title"></div>
-    <span class="list-item-value progress-bar-value"> {{ item.formattedValue }} </span>
+    <div
+      style=
+        "width: {{ item.progress }}%;
+        background: {{ item.color }};
+        height: {{ item.titleParams.barHeight }}px;
+        margin-top: {{ item.titleParams.titleTop }}px;"
+      class="progress-bar-line"
+    />
+    <span style="top: {{ item.titleParams.valueTop }}px;" class="list-item-value progress-bar-value"> {{ item.formattedValue }} </span>
   </div>
 </div>

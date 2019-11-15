@@ -5,6 +5,11 @@ import * as _ from 'lodash';
 
 type KeyValue = [string, number];
 
+type TitleViewParams = {
+  barHeight: string,
+  titleTop: string,
+  valueTop: string
+}
 
 export class ProgressItem {
 
@@ -138,27 +143,25 @@ export class ProgressItem {
     throw new Error('Unknown color type ' + colorType);
   }
 
-  get titleHeaderView(): string {
+  get titleParams(): TitleViewParams {
     const titleType = this._panelConfig.getValue('titleViewType');
+    let titleParams = {
+      barHeight: '8',
+      titleTop: '0',
+      valueTop: '0'
+    }
     if(titleType === 'auto') {
-      return 'visible';
+      return titleParams;
     }
     if(titleType === 'inline') {
-      return 'hidden';
+      titleParams.barHeight = '20';
+      titleParams.titleTop = '-20';
+      titleParams.valueTop = '-3';
+      return titleParams;
     }
     throw new Error('Unknown title view type ' + titleType);
   }
 
-  get titleLineView(): string {
-    const titleType = this._panelConfig.getValue('titleViewType');
-    if(titleType === 'auto') {
-      return 'hidden';
-    }
-    if(titleType === 'inline') {
-      return 'visible';
-    }
-    throw new Error('Unknown title view type ' + titleType);
-  }
 }
 
 export class Mapper {
