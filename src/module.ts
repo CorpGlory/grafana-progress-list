@@ -1,5 +1,6 @@
+import { GraphTooltip, Serie } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
-import { Mapper, ProgressItem } from './mapper';
+import { Mapper, ProgressItem, StatType } from './mapper';
 import { initProgress } from './directives/progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
@@ -35,9 +36,11 @@ class Ctrl extends MetricsPanelCtrl {
   private _panelConfig: PanelConfig;
   private _element: any;
 
-  private _seriesList: any;
+  private _seriesList: Serie[];
 
-  private statNameOptions = [ 'current', 'min', 'max', 'total' ];
+  private _tooltip: GraphTooltip;
+
+  private statNameOptions = _.values(StatType);
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
@@ -93,6 +96,25 @@ class Ctrl extends MetricsPanelCtrl {
       'height': `${this.height}px`,
       'max-height': `${this.height}px`
     });
+
+    this.$timeout(() => {
+      const jqueryElement = this._element.find('.progress-bar-line');
+      
+      if(this._tooltip !== undefined) {
+        this._tooltip.destroy();
+      }
+
+      this._tooltip = new GraphTooltip(
+        jqueryElement, this.dashboard, this.$scope, this._panelConfig, () => this._seriesList
+      );
+      
+      jqueryElement.mouseenter((event) => {
+        this._tooltip.show(event);
+      });
+      jqueryElement.mouseleave(() => {
+        this._tooltip.clear();
+      });
+    }, 1000);
   }
 
   _onDataReceived(seriesList: any) {
