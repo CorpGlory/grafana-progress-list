@@ -12,6 +12,7 @@ const DEFAULTS = {
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
+  titleViewType: 'auto',
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',
@@ -40,6 +41,7 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
+  private titleViewTypeOptions = [ 'auto', 'inline' ];
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor

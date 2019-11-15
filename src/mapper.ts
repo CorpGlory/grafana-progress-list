@@ -138,6 +138,27 @@ export class ProgressItem {
     throw new Error('Unknown color type ' + colorType);
   }
 
+  get titleHeaderView(): string {
+    const titleType = this._panelConfig.getValue('titleViewType');
+    if(titleType === 'auto') {
+      return 'visible';
+    }
+    if(titleType === 'inline') {
+      return 'hidden';
+    }
+    throw new Error('Unknown title view type ' + titleType);
+  }
+
+  get titleLineView(): string {
+    const titleType = this._panelConfig.getValue('titleViewType');
+    if(titleType === 'auto') {
+      return 'hidden';
+    }
+    if(titleType === 'inline') {
+      return 'visible';
+    }
+    throw new Error('Unknown title view type ' + titleType);
+  }
 }
 
 export class Mapper {

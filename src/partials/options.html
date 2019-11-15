@@ -245,7 +245,19 @@
       </div>
 
     </div>
-
+    <br>
+    <h5 class="section-heading">Title view<h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Type</label>
+      <div class="gf-form-select-wrapper width-11">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.titleViewType"
+          ng-options="n for n in ctrl.titleViewTypeOptions"
+          ng-change="ctrl.render()"
+        />
+      </div>
+    </div>
   </div>
 
 </div>
