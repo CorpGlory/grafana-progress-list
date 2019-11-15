@@ -6,17 +6,18 @@ import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
 import * as _ from 'lodash';
 
+
 export enum TitleViewOptions {
   AUTO = 'auto',
   INLINE = 'inline'
-}
+};
 
 const DEFAULTS = {
   statNameOptionValue: 'current',
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
-  titleViewType: 'auto',
+  titleViewType: TitleViewOptions.AUTO,
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',

@@ -147,19 +147,20 @@ export class ProgressItem {
 
   get titleParams(): TitleViewParams {
     const titleType = this._panelConfig.getValue('titleViewType');
-    let titleParams = {
-      barHeight: '8',
-      titleTopMargin: '0',
-      valueTopMargin: '-22'
-    }
+
     switch(titleType) {
       case TitleViewOptions.AUTO:
-        return titleParams;
+        return {
+          barHeight: '8',
+          titleTopMargin: '0',
+          valueTopMargin: '-22'
+        };
       case TitleViewOptions.INLINE:
-        titleParams.barHeight = '20';
-        titleParams.titleTopMargin = '-20';
-        titleParams.valueTopMargin = '-18';
-        return titleParams;
+        return {
+          barHeight: '20',
+          titleTopMargin: '-20',
+          valueTopMargin: '-18'
+        };
       default:
         throw new Error(`Wrong titleType: ${titleType}`);
     }
