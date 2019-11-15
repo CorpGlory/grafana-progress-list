@@ -45,7 +45,7 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = [ 'current', 'min', 'max', 'total' ];
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
-  private titleViewTypeOptions = [TitleViewOptions.AUTO, TitleViewOptions.INLINE];
+  private titleViewTypeOptions = _.values(TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
