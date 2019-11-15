@@ -7,8 +7,8 @@ type KeyValue = [string, number];
 
 type TitleViewParams = {
   barHeight: string,
-  titleTop: string,
-  valueTop: string
+  titleTopMargin: string,
+  valueTopMargin: string
 }
 
 export class ProgressItem {
@@ -147,16 +147,16 @@ export class ProgressItem {
     const titleType = this._panelConfig.getValue('titleViewType');
     let titleParams = {
       barHeight: '8',
-      titleTop: '0',
-      valueTop: '0'
+      titleTopMargin: '0',
+      valueTopMargin: '-22'
     }
     if(titleType === 'auto') {
       return titleParams;
     }
     if(titleType === 'inline') {
       titleParams.barHeight = '20';
-      titleParams.titleTop = '-20';
-      titleParams.valueTop = '-3';
+      titleParams.titleTopMargin = '-20';
+      titleParams.valueTopMargin = '-18';
       return titleParams;
     }
     throw new Error('Unknown title view type ' + titleType);

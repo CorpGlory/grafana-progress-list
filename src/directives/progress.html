@@ -2,13 +2,18 @@
   <div class="list-item-title" ng-bind-html="item.title"></div>
   <div class="list-item-content">
     <div
-      style=
-        "width: {{ item.progress }}%;
+      style="
+        width: {{ item.progress }}%;
         background: {{ item.color }};
         height: {{ item.titleParams.barHeight }}px;
-        margin-top: {{ item.titleParams.titleTop }}px;"
+        margin-top: {{ item.titleParams.titleTopMargin }}px;
+      "
       class="progress-bar-line"
     />
-    <span style="top: {{ item.titleParams.valueTop }}px;" class="list-item-value progress-bar-value"> {{ item.formattedValue }} </span>
+    <span
+      style="margin-top: {{ item.titleParams.valueTopMargin }}px;"
+      class="list-item-value progress-bar-value">
+      {{ item.formattedValue }}
+    </span>
   </div>
 </div>
