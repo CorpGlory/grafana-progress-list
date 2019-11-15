@@ -9,7 +9,7 @@ type TitleViewParams = {
   barHeight: string,
   titleTopMargin: string,
   valueTopMargin: string
-}
+};
 
 export class ProgressItem {
 
