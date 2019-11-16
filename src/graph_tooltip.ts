@@ -2,6 +2,7 @@ import { PanelConfig } from './panel-config';
 import { getFormattedValue } from './value_formatter';
 
 import * as _ from 'lodash';
+import { ProgressItem } from './mapper';
 
 
 type Position = {
@@ -11,22 +12,22 @@ type Position = {
 
 export type Serie = {
   alias: string,
-  datapoints: number[]
+  datapoints: [number, number][]
 }
 
 export class GraphTooltip {
 
   private $tooltip: JQuery<HTMLElement>;
+  private _maxValue: number;
   private _visible = false;
 
   constructor(
-    private $elem: JQuery<HTMLElement>,
-    private dashboard,
-    private scope,
     private panelConfig: PanelConfig,
-    private getSeriesFn: () => Serie[]
+    private getSeriesFn: () => Serie[],
+    items: ProgressItem[]
   ) {
     this.$tooltip = $('<div class="graph-tooltip">');
+    this._maxValue = items[0].maxValue;
   }
 
   clear() {
@@ -41,12 +42,17 @@ export class GraphTooltip {
     }
 
     const currentValues = seriesList.map(serie => {
-      const lastPoit = _.last(serie.datapoints);
-      if(lastPoit === undefined) {
+      let value = _.first(_.last(serie.datapoints));
+      if(value === undefined) {
         return;
       }
-      const value = getFormattedValue(
-        lastPoit[0],
+
+      if(this.panelConfig.getValue('valueLabelType') === 'percentage') {
+        value = 100 * value / this._maxValue;
+      }
+
+      const formatedValue = getFormattedValue(
+        value,
         this.panelConfig.getValue('prefix'),
         this.panelConfig.getValue('postfix'),
         this.panelConfig.getValue('decimals')
@@ -57,7 +63,7 @@ export class GraphTooltip {
             ${serie.alias}
           </div>
           <div class="graph-tooltip-value">
-            ${value}
+            ${formatedValue}
           </div>
         </div>`;
     });

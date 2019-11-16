@@ -36,7 +36,7 @@ class Ctrl extends MetricsPanelCtrl {
   private _panelConfig: PanelConfig;
   private _element: any;
 
-  private _seriesList: Serie[];
+  private _seriesList: any;
 
   private _tooltip: GraphTooltip;
 
@@ -105,7 +105,7 @@ class Ctrl extends MetricsPanelCtrl {
       }
 
       this._tooltip = new GraphTooltip(
-        jqueryElement, this.dashboard, this.$scope, this._panelConfig, () => this._seriesList
+        this._panelConfig, () => this._seriesList, this.$scope.items
       );
       
       jqueryElement.mouseenter((event) => {

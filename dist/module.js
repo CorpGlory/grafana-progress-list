@@ -130,16 +130,14 @@ var value_formatter_1 = __webpack_require__(/*! ./value_formatter */ "./value_fo
 var _ = __webpack_require__(/*! lodash */ "lodash");
 
 var GraphTooltip = function () {
-    function GraphTooltip($elem, dashboard, scope, panelConfig, getSeriesFn) {
+    function GraphTooltip(panelConfig, getSeriesFn, items) {
         _classCallCheck(this, GraphTooltip);
 
-        this.$elem = $elem;
-        this.dashboard = dashboard;
-        this.scope = scope;
         this.panelConfig = panelConfig;
         this.getSeriesFn = getSeriesFn;
         this._visible = false;
         this.$tooltip = $('<div class="graph-tooltip">');
+        this._maxValue = items[0].maxValue;
     }
 
     _createClass(GraphTooltip, [{
@@ -157,12 +155,15 @@ var GraphTooltip = function () {
             var seriesList = this.getSeriesFn();
             if (seriesList.length === 0) {}
             var currentValues = seriesList.map(function (serie) {
-                var lastPoit = _.last(serie.datapoints);
-                if (lastPoit === undefined) {
+                var value = _.first(_.last(serie.datapoints));
+                if (value === undefined) {
                     return;
                 }
-                var value = value_formatter_1.getFormattedValue(lastPoit[0], _this.panelConfig.getValue('prefix'), _this.panelConfig.getValue('postfix'), _this.panelConfig.getValue('decimals'));
-                return "\n        <div class=\"graph-tooltip-list-item\">\n          <div class=\"graph-tooltip-series-name\">\n            " + serie.alias + "\n          </div>\n          <div class=\"graph-tooltip-value\">\n            " + value + "\n          </div>\n        </div>";
+                if (_this.panelConfig.getValue('valueLabelType') === 'percentage') {
+                    value = 100 * value / _this._maxValue;
+                }
+                var formatedValue = value_formatter_1.getFormattedValue(value, _this.panelConfig.getValue('prefix'), _this.panelConfig.getValue('postfix'), _this.panelConfig.getValue('decimals'));
+                return "\n        <div class=\"graph-tooltip-list-item\">\n          <div class=\"graph-tooltip-series-name\">\n            " + serie.alias + "\n          </div>\n          <div class=\"graph-tooltip-value\">\n            " + formatedValue + "\n          </div>\n        </div>";
             });
             this._renderAndShow(currentValues, pos);
         }
@@ -236,6 +237,11 @@ var ProgressItem = function () {
         key: "progress",
         get: function get() {
             return 100 * this._value / this._maxValue;
+        }
+    }, {
+        key: "maxValue",
+        get: function get() {
+            return this._maxValue;
         }
     }, {
         key: "value",
@@ -568,9 +574,9 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
                 if (_this2._tooltip !== undefined) {
                     _this2._tooltip.destroy();
                 }
-                _this2._tooltip = new graph_tooltip_1.GraphTooltip(jqueryElement, _this2.dashboard, _this2.$scope, _this2._panelConfig, function () {
+                _this2._tooltip = new graph_tooltip_1.GraphTooltip(_this2._panelConfig, function () {
                     return _this2._seriesList;
-                });
+                }, _this2.$scope.items);
                 jqueryElement.mouseenter(function (event) {
                     _this2._tooltip.show(event);
                 });
@@ -624,8 +630,8 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
     return Ctrl;
 }(sdk_1.MetricsPanelCtrl);
 
-Ctrl.templateUrl = 'partials/template.html';
 exports.PanelCtrl = Ctrl;
+Ctrl.templateUrl = 'partials/template.html';
 
 /***/ }),
 

@@ -36,6 +36,10 @@ export class ProgressItem {
     return 100 * this._value / this._maxValue;
   }
 
+  get maxValue(): number {
+    return this._maxValue;
+  }
+
   get value(): number {
     return this._value;
   }
