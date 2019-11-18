@@ -148,7 +148,7 @@ export class Mapper {
     let kstat: KeyValue[] = [];
     let currentStat: KeyValue[] = [];
     if(mappingType === 'datapoint to datapoint') {
-      if(statType === 'total' && seriesList.length == 1) {
+      if(statType === StatType.TOTAL && seriesList.length == 1) {
         kstat = this._mapKeysTotal(seriesList);
       } else {
         kstat = this._mapNumeric(seriesList, statType, nullMapping);
@@ -165,7 +165,7 @@ export class Mapper {
     if(alias !== '') {
       kstat.forEach(k => {
         const scopedVars = {
-          '__key': { value: k[0] }
+          __key: { value: k[0] }
         };
         k[0] = this._templateSrv.replace(alias, scopedVars);
       });
