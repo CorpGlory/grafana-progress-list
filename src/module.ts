@@ -88,10 +88,10 @@ class Ctrl extends MetricsPanelCtrl {
   _onRender() {
     let items = this.mapper.mapMetricData(this._seriesList);
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      items = _.sortBy(items, i => i.progress);
+      items = _.sortBy(items, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      items = _.sortBy(items, i => -i.progress);
+      items = _.sortBy(items, i => -i.aggregatedProgress);
     }
     this.$scope.items = items;
     this._element.find('.table-panel-scroll').css({

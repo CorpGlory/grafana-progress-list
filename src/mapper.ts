@@ -18,23 +18,23 @@ export class ProgressItem {
   private _panelConfig: PanelConfig;
 
   private _key: string;
-  private _value: number;
-  private _maxValue: number;
+  private _aggregatedValue: number;
+  private _maxAggregatedValue: number;
   private _currentValue: number;
   private _currentMaxValue: number;
 
   constructor(
     panelConfig: PanelConfig,
     key: string,
-    value: number,
-    maxValue: number,
+    aggregatedValue: number,
+    maxAggregatedValue: number,
     currentValue: number,
     currentMaxValue: number
   ) {
     this._panelConfig = panelConfig;
     this._key = key;
-    this._value = value;
-    this._maxValue = maxValue;
+    this._aggregatedValue = aggregatedValue;
+    this._maxAggregatedValue = maxAggregatedValue;
     // TODO: currentValue and currentMaxValue is not the best idea
     this._currentValue = currentValue;
     this._currentMaxValue = currentMaxValue;
@@ -44,8 +44,8 @@ export class ProgressItem {
     return this._key;
   }
 
-  get progress(): number {
-    return 100 * this._value / this._maxValue;
+  get aggregatedProgress(): number {
+    return 100 * this._aggregatedValue / this._maxAggregatedValue;
   }
 
   get currentProgress(): number {
@@ -53,11 +53,11 @@ export class ProgressItem {
   }
 
   get maxValue(): number {
-    return this._maxValue;
+    return this._maxAggregatedValue;
   }
 
-  get value(): number {
-    return this._value;
+  get aggregatedValue(): number {
+    return this._aggregatedValue;
   }
 
   get currentValue(): number {
@@ -80,8 +80,8 @@ export class ProgressItem {
   get formattedValue(): string {
     const value =
       this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-      this.progress :
-      this._value;
+      this.aggregatedProgress :
+      this._aggregatedValue;
     return getFormattedValue(
       value,
       this._panelConfig.getValue('prefix'),
@@ -98,7 +98,7 @@ export class ProgressItem {
     if(colorType === 'thresholds') {
       var thresholdsStr = this._panelConfig.getValue('thresholds');
       var colors = this._panelConfig.getValue('colors');
-      var value = this.progress;
+      var value = this.aggregatedProgress;
       if(thresholdsStr === undefined) {
         return colors[0];
       }
