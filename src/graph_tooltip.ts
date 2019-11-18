@@ -11,8 +11,9 @@ type Position = {
 }
 
 export type Serie = {
-  alias: string,
-  datapoints: [number, number][]
+  datapoints: [number, number][],
+  target: string,
+  alias?: string
 }
 
 export class GraphTooltip {
@@ -35,13 +36,13 @@ export class GraphTooltip {
     this.$tooltip.detach();
   };
 
-  show(pos: Position) {
+  show(pos: Position, index: number) {
     this._visible = true;
     const seriesList = this.getSeriesFn();
     if (seriesList.length === 0) {
     }
 
-    const currentValues = seriesList.map(serie => {
+    const currentValues = _.map(seriesList, (serie: Serie, idx: number) => {
       let value = _.first(_.last(serie.datapoints));
       if(value === undefined) {
         return;
@@ -57,19 +58,25 @@ export class GraphTooltip {
         this.panelConfig.getValue('postfix'),
         this.panelConfig.getValue('decimals')
       );
-      return `
+
+      const isCurrentItem = index === idx;
+      const html = `
         <div class="graph-tooltip-list-item">
           <div class="graph-tooltip-series-name">
-            ${serie.alias}
+            ${isCurrentItem ? '<b>' : ''}
+            ${serie.alias || serie.target}
+            ${isCurrentItem ? '</b>' : ''}
           </div>
           <div class="graph-tooltip-value">
             ${formatedValue}
           </div>
-        </div>`;
+        </div>
+      `;
+
+      return html;
     });
 
-
-    this._renderAndShow(currentValues, pos);
+    this._renderAndShow(currentValues.join('\n'), pos);
   };
 
   destroy() {
@@ -78,11 +85,11 @@ export class GraphTooltip {
   };
 
   get visible() { return this._visible; }
-  
-  private _renderAndShow(innerHtml, pos) {
+
+  private _renderAndShow(innerHtml: string, pos: Position): void {
     (this.$tooltip.html(innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
   };
 
- 
+
 }
 

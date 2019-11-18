@@ -99,22 +99,17 @@ class Ctrl extends MetricsPanelCtrl {
       'max-height': `${this.height}px`
     });
 
-    this.$timeout(() => {
-      const jqueryElement: JQuery<HTMLElement> = this._element.find('.tooltip-item');
-      if(this._tooltip !== undefined) {
-        this._tooltip.destroy();
-      }
+    this._tooltip = new GraphTooltip(
+      this._panelConfig, () => this._seriesList, this.$scope.items
+    );
+  }
 
-      this._tooltip = new GraphTooltip(
-        this._panelConfig, () => this._seriesList, this.$scope.items
-      );
-      jqueryElement.hover((event) => {
-        this._tooltip.show(event);
-      });
-      jqueryElement.mouseleave(() => {
-        this._tooltip.clear();
-      });
-    }, 1000);
+  onHover(index: number, event: any) {
+    this._tooltip.show(event.originalEvent, index);
+  }
+
+  onMouseLeave() {
+    this._tooltip.clear();
   }
 
   _onDataReceived(seriesList: any) {
