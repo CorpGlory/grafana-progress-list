@@ -32,7 +32,7 @@ export class GraphTooltip {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
-  clear() {
+  clear(): void {
     this._visible = false;
     this.$tooltip.detach();
   }
@@ -58,12 +58,12 @@ export class GraphTooltip {
     this._renderAndShow(currentValues.join('\n'), pos);
   }
 
-  destroy() {
+  destroy(): void {
     this._visible = false;
     this.$tooltip.remove();
   }
 
-  get visible() { return this._visible; }
+  get visible(): boolean { return this._visible; }
 
   private _renderAndShow(innerHtml: string, pos: Position): void {
     const title = `<div class="graph-tooltip-time">Current value</div>`;
