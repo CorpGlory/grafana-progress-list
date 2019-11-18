@@ -149,7 +149,7 @@ export class ProgressItem {
     const titleType = this._panelConfig.getValue('titleViewType');
 
     switch(titleType) {
-      case TitleViewOptions.SEPARATE:
+      case TitleViewOptions.SEPARATE_TITLE_LINE:
         return {
           barHeight: 8,
           titleTopMargin: 0,

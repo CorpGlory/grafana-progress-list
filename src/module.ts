@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 
 export enum TitleViewOptions {
-  SEPARATE = 'Separate title line',
+  SEPARATE_TITLE_LINE = 'Separate title line',
   INLINE = 'Inline'
 };
 
@@ -17,7 +17,7 @@ const DEFAULTS = {
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
-  titleViewType: TitleViewOptions.SEPARATE,
+  titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',
