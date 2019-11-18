@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 
 
 const DEFAULTS = {
-  statNameOptionValue: 'current',
+  statNameOptionValue: StatType.CURRENT,
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
