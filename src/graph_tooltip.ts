@@ -71,7 +71,7 @@ export class GraphTooltip {
     (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
   };
 
-  private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean) {
+  private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
     const html = `
       <div class="graph-tooltip-list-item">
         <div class="graph-tooltip-series-name">
