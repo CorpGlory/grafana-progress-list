@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 
 export enum TitleViewOptions {
-  AUTO = 'auto',
+  HEADER_LINE = 'header-line',
   INLINE = 'inline'
 };
 
@@ -17,7 +17,7 @@ const DEFAULTS = {
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
-  titleViewType: TitleViewOptions.AUTO,
+  titleViewType: TitleViewOptions.HEADER_LINE,
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',
