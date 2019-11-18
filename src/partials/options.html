@@ -208,20 +208,36 @@
       />
     </div>
 
-    <div class="gf-form">
-      <label class="gf-form-label width-6">Colors</label>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
-      </span>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
-      </span>
-      <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
-      </span>
-      <span class="gf-form-label">
-          <a ng-click="ctrl.invertColorOrder()"> Invert </a>
-      </span>
+    <div ng-if="ctrl.panel.coloringType == 'thresholds'">
+      <div class="gf-form">
+        <label class="gf-form-label width-8">Thresholds
+          <tip>
+            Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
+          </tip>
+        </label>
+        <input
+          type="text"
+          class="gf-form-input width-11"
+          ng-model="ctrl.panel.thresholds"
+          ng-blur="ctrl.render()"
+          placeholder="50,80"
+        />
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">Colors</label>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+          <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
+        </span>
+        <span class="gf-form-label">
+            <a ng-click="ctrl.invertColorOrder()"> Invert </a>
+        </span>
+      </div>
     </div>
 
     <div ng-if="ctrl.panel.coloringType == 'key mapping'">
