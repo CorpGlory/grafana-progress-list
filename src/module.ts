@@ -86,7 +86,7 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _onRender() {
-    var items = this.mapper.mapMetricData(this._seriesList);
+    let items = this.mapper.mapMetricData(this._seriesList);
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
       items = _.sortBy(items, i => i.progress);
     }
@@ -103,7 +103,7 @@ class Ctrl extends MetricsPanelCtrl {
       this._tooltip.destroy();
     }
     this._tooltip = new GraphTooltip(
-      () => this._seriesList, this.$scope.items, this.panel.tooltipMode
+      () => this._seriesList, items, this.panel.tooltipMode
     );
   }
 
