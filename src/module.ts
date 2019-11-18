@@ -1,4 +1,4 @@
-import { GraphTooltip, Serie } from './graph_tooltip';
+import { GraphTooltip, TooltipMode } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
 import { Mapper, ProgressItem, StatType } from './mapper';
 import { initProgress } from './directives/progress';
@@ -25,7 +25,7 @@ const DEFAULTS = {
   colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
   colorKeyMappings: [],
   nullMapping: undefined,
-  tooltipMode: 'all series'
+  tooltipMode: TooltipMode.ALL_SERIES
 };
 
 class Ctrl extends MetricsPanelCtrl {
@@ -48,7 +48,7 @@ class Ctrl extends MetricsPanelCtrl {
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
-  private tooltipModeOptions = ['all series', 'single'];
+  private tooltipModeOptions = _.values(TooltipMode);
 
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
@@ -100,7 +100,7 @@ class Ctrl extends MetricsPanelCtrl {
     });
 
     this._tooltip = new GraphTooltip(
-      this._panelConfig, () => this._seriesList, this.$scope.items
+      this._panelConfig, () => this._seriesList, this.$scope.items, this.panel.tooltipMode
     );
   }
 
