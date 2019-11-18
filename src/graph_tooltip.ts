@@ -36,7 +36,7 @@ export class GraphTooltip {
   clear() {
     this._visible = false;
     this.$tooltip.detach();
-  };
+  }
 
   show(pos: Position, index: number): void {
     this._visible = true;
@@ -57,19 +57,19 @@ export class GraphTooltip {
     }
 
     this._renderAndShow(currentValues.join('\n'), pos);
-  };
+  }
 
   destroy() {
     this._visible = false;
     this.$tooltip.remove();
-  };
+  }
 
   get visible() { return this._visible; }
 
   private _renderAndShow(innerHtml: string, pos: Position): void {
     const title = `<div class="graph-tooltip-time">Current value</div>`;
     (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
-  };
+  }
 
   private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
     const html = `
