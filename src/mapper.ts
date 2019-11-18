@@ -1,10 +1,17 @@
 import { PanelConfig } from './panel-config';
 
+import { TitleViewOptions } from './module';
+
 import * as _ from 'lodash';
 
 
 type KeyValue = [string, number];
 
+type TitleViewParams = {
+  barHeight: number,
+  titleTopMargin: number,
+  valueTopMargin: number
+};
 
 export class ProgressItem {
 
@@ -136,6 +143,27 @@ export class ProgressItem {
     }
 
     throw new Error('Unknown color type ' + colorType);
+  }
+
+  get titleParams(): TitleViewParams {
+    const titleType = this._panelConfig.getValue('titleViewType');
+
+    switch(titleType) {
+      case TitleViewOptions.SEPARATE_TITLE_LINE:
+        return {
+          barHeight: 8,
+          titleTopMargin: 0,
+          valueTopMargin: -22
+        };
+      case TitleViewOptions.INLINE:
+        return {
+          barHeight: 20,
+          titleTopMargin: -20,
+          valueTopMargin: -18
+        };
+      default:
+        throw new Error(`Wrong titleType: ${titleType}`);
+    }
   }
 
 }

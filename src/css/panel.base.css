@@ -4,16 +4,14 @@
 }
 
 .list-item-content {
-  position: relative;
   display: block;
   width: 99%;
 }
 
 .list-item-content .list-item-value {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 0;
-  top: -9px;
 }
 
 .list-item-content .progress-item {
@@ -21,11 +19,13 @@
 }
 
 .list-item-content .progress-bar-line {
-  position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 0px;
-  height: 8px;
   background: darkgreen;
+}
+
+.list-item-content .list-item-title {
+  z-index: 1;
 }
 
 .options-tab .section {
