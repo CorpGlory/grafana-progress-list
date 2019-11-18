@@ -1,5 +1,3 @@
-import { PanelConfig } from './panel-config';
-
 import * as _ from 'lodash';
 
 
@@ -13,17 +11,17 @@ export function getFormattedValue(
 }
 
 function getFormattedFloat(value: number, decimals: number): string {
-  var dm = getDecimalsForValue(value, decimals).decimals;
+  let dm = getDecimalsForValue(value, decimals).decimals;
 
   if(dm === 0) {
     return Math.round(value).toString();
   }
 
-  var fv = value;
-  for(var i = 0; i < dm; i++) {
+  let fv = value;
+  for(let i = 0; i < dm; i++) {
     fv *= 10;
   };
-  var fvs = Math.round(fv).toString();
+  let fvs = Math.round(fv).toString();
   return fvs.substr(0, fvs.length - dm) + '.' + fvs.substr(fvs.length - dm);
 }
 
@@ -36,10 +34,10 @@ function getDecimalsForValue(value: number, decimals?: number) {
     };
   }
 
-  var delta = value / 2;
-  var dec = -Math.floor(Math.log(delta) / Math.LN10);
+  let delta = value / 2;
+  let dec = -Math.floor(Math.log(delta) / Math.LN10);
 
-  var magn = Math.pow(10, -dec),
+  let magn = Math.pow(10, -dec),
     norm = delta / magn, // norm is between 1.0 and 10.0
     size;
 
@@ -65,7 +63,7 @@ function getDecimalsForValue(value: number, decimals?: number) {
     dec = 0;
   }
 
-  var result: any = {};
+  let result: any = {};
   result.decimals = Math.max(0, dec);
   result.scaledDecimals = result.decimals - Math.floor(Math.log(size) / Math.LN10) + 2;
 

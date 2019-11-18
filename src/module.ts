@@ -103,7 +103,7 @@ class Ctrl extends MetricsPanelCtrl {
       this._tooltip.destroy();
     }
     this._tooltip = new GraphTooltip(
-      this._panelConfig, () => this._seriesList, this.$scope.items, this.panel.tooltipMode
+      () => this._seriesList, this.$scope.items, this.panel.tooltipMode
     );
   }
 

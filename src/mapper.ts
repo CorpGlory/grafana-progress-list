@@ -20,12 +20,23 @@ export class ProgressItem {
   private _key: string;
   private _value: number;
   private _maxValue: number;
+  private _currentValue: number;
+  private _currentMaxValue: number;
 
-  constructor(panelConfig: PanelConfig, key: string, value: number, maxValue: number) {
+  constructor(
+    panelConfig: PanelConfig,
+    key: string,
+    value: number,
+    maxValue: number,
+    currentValue: number,
+    currentMaxValue: number
+  ) {
     this._panelConfig = panelConfig;
     this._key = key;
     this._value = value;
     this._maxValue = maxValue;
+    this._currentValue = currentValue;
+    this._currentMaxValue = currentMaxValue;
   }
 
   get title(): string {
@@ -36,6 +47,10 @@ export class ProgressItem {
     return 100 * this._value / this._maxValue;
   }
 
+  get currentProgress(): number {
+    return 100 * this._currentValue / this._currentMaxValue;
+  }
+
   get maxValue(): number {
     return this._maxValue;
   }
@@ -44,9 +59,28 @@ export class ProgressItem {
     return this._value;
   }
 
+  get currentValue(): number {
+    return this._currentValue;
+  }
+
+  get currentFormattedValue(): string {
+    const value =
+      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
+        this.currentProgress :
+        this._currentValue;
+    return getFormattedValue(
+      value,
+      this._panelConfig.getValue('prefix'),
+      this._panelConfig.getValue('postfix'),
+      this._panelConfig.getValue('decimals')
+    );
+  }
+
   get formattedValue(): string {
-    const value = this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-    this.progress : this._value;
+    const value =
+      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
+      this.progress :
+      this._value;
     return getFormattedValue(
       value,
       this._panelConfig.getValue('prefix'),
@@ -110,37 +144,23 @@ export class Mapper {
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
     }
-    var kstat: KeyValue[] = [];
+
+    let kstat: KeyValue[] = [];
+    let currentStat: KeyValue[] = [];
     if(mappingType === 'datapoint to datapoint') {
       if(statType === 'total' && seriesList.length == 1) {
         kstat = this._mapKeysTotal(seriesList);
       } else {
         kstat = this._mapNumeric(seriesList, statType, nullMapping);
       }
+      currentStat = this._mapNumeric(seriesList, StatType.CURRENT, nullMapping);
     } else {
       kstat = this._mapTargetToDatapoints(seriesList, statType);
+      currentStat = this._mapTargetToDatapoints(seriesList, StatType.CURRENT);
     }
 
-    var maxValue = -1;
-    if(statProgressType === 'shared') {
-      let total = 0;
-      for(let i = 0; i < kstat.length; i++) {
-        total += kstat[i][1];
-      }
-      maxValue = total;
-    }
-
-    if(statProgressType === 'max value') {
-      let max = -Infinity;
-      if(statProgressMaxValue !== null) {
-        max = statProgressMaxValue;
-      } else {
-        for(let i = 0; i < kstat.length; i++) {
-          max = Math.max(kstat[i][1], max);
-        }
-      }
-      maxValue = max;
-    }
+    const maxValue = this._getMaxValue(kstat, statProgressType, statProgressMaxValue);
+    const currentMaxValue = this._getMaxValue(currentStat, statProgressType, statProgressMaxValue);
 
     if(alias !== '') {
       kstat.forEach(k => {
@@ -151,7 +171,46 @@ export class Mapper {
       });
     }
 
-    return _.map(kstat, k => new ProgressItem(this._panelConfig, k[0], k[1], maxValue));
+    return _.map(
+      kstat,
+      (k: KeyValue, idx: number) => new ProgressItem(
+        this._panelConfig,
+        k[0],
+        k[1],
+        maxValue,
+        currentStat[idx][1],
+        currentMaxValue
+      )
+    );
+  }
+
+  // TODO: enum statProgressType
+  _getMaxValue(
+    kstat: KeyValue[],
+    statProgressType: string,
+    statProgressMaxValue: number | null
+  ): number {
+    if (statProgressType === 'shared') {
+      let total = 0;
+      for (let i = 0; i < kstat.length; i++) {
+        total += kstat[i][1];
+      }
+      return total;
+    }
+
+    if (statProgressType === 'max value') {
+      let max = -Infinity;
+      if (statProgressMaxValue !== null) {
+        max = statProgressMaxValue;
+      } else {
+        for (let i = 0; i < kstat.length; i++) {
+          max = Math.max(kstat[i][1], max);
+        }
+      }
+      return max;
+    }
+
+    return -1;
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
