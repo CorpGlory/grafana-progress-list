@@ -102,8 +102,8 @@ export class ProgressItem {
         return colors[0];
       }
       var thresholds = thresholdsStr.split(',').map(parseFloat);
-      for (var i = thresholds.length; i > 0; i--) {
-        if (value >= thresholds[i - 1]) {
+      for(var i = thresholds.length; i > 0; i--) {
+        if(value >= thresholds[i - 1]) {
           return colors[i];
         }
       }
@@ -190,20 +190,20 @@ export class Mapper {
     statProgressType: string,
     statProgressMaxValue: number | null
   ): number {
-    if (statProgressType === 'shared') {
+    if(statProgressType === 'shared') {
       let total = 0;
-      for (let i = 0; i < kstat.length; i++) {
+      for(let i = 0; i < kstat.length; i++) {
         total += kstat[i][1];
       }
       return total;
     }
 
-    if (statProgressType === 'max value') {
+    if(statProgressType === 'max value') {
       let max = -Infinity;
-      if (statProgressMaxValue !== null) {
+      if(statProgressMaxValue !== null) {
         max = statProgressMaxValue;
       } else {
-        for (let i = 0; i < kstat.length; i++) {
+        for(let i = 0; i < kstat.length; i++) {
           max = Math.max(kstat[i][1], max);
         }
       }
