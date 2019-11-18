@@ -1,12 +1,7 @@
 <div id="progress-list-panel">
   <div class="table-panel-scroll">
     <div ng-repeat="item in items">
-      <progress-list-plugin-progress
-        class="progress-list-item"
-        item="item"
-        on-hover="ctrl.onHover($index, event)"
-        on-mouse-leave="ctrl.onMouseLeave()"
-      />
+      <progress-list-plugin-progress item="item" />
     </div>
   </div>
 </div>
