@@ -99,6 +99,9 @@ class Ctrl extends MetricsPanelCtrl {
       'max-height': `${this.height}px`
     });
 
+    if(this._tooltip !== undefined) {
+      this._tooltip.destroy();
+    }
     this._tooltip = new GraphTooltip(
       this._panelConfig, () => this._seriesList, this.$scope.items, this.panel.tooltipMode
     );
