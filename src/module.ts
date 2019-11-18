@@ -1,5 +1,6 @@
+import { GraphTooltip, TooltipMode } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
-import { Mapper, ProgressItem } from './mapper';
+import { Mapper, ProgressItem, StatType } from './mapper';
 import { initProgress } from './directives/progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
@@ -13,7 +14,7 @@ export enum TitleViewOptions {
 };
 
 const DEFAULTS = {
-  statNameOptionValue: 'current',
+  statNameOptionValue: StatType.CURRENT,
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
@@ -29,7 +30,8 @@ const DEFAULTS = {
   colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
   colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
   colorKeyMappings: [],
-  nullMapping: undefined
+  nullMapping: undefined,
+  tooltipMode: TooltipMode.ALL_SERIES
 };
 
 class Ctrl extends MetricsPanelCtrl {
@@ -43,7 +45,9 @@ class Ctrl extends MetricsPanelCtrl {
 
   private _seriesList: any;
 
-  private statNameOptions = [ 'current', 'min', 'max', 'total' ];
+  private _tooltip: GraphTooltip;
+
+  private statNameOptions = _.values(StatType);
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
   private titleViewTypeOptions = _.values(TitleViewOptions);
@@ -51,6 +55,7 @@ class Ctrl extends MetricsPanelCtrl {
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
+  private tooltipModeOptions = _.values(TooltipMode);
 
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
@@ -88,18 +93,33 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _onRender() {
-    var items = this.mapper.mapMetricData(this._seriesList);
+    let items = this.mapper.mapMetricData(this._seriesList);
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      items = _.sortBy(items, i => i.progress);
+      items = _.sortBy(items, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      items = _.sortBy(items, i => -i.progress);
+      items = _.sortBy(items, i => -i.aggregatedProgress);
     }
     this.$scope.items = items;
     this._element.find('.table-panel-scroll').css({
       'height': `${this.height}px`,
       'max-height': `${this.height}px`
     });
+
+    if(this._tooltip !== undefined) {
+      this._tooltip.destroy();
+    }
+    this._tooltip = new GraphTooltip(
+      () => this._seriesList, items, this.panel.tooltipMode
+    );
+  }
+
+  onHover(index: number, event: any) {
+    this._tooltip.show(event.originalEvent, index);
+  }
+
+  onMouseLeave() {
+    this._tooltip.clear();
   }
 
   _onDataReceived(seriesList: any) {

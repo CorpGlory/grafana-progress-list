@@ -4,7 +4,7 @@ import { coreModule } from 'grafana/app/core/core';
 
 
 var directiveInited = false;
-export function initProgress(panelConfig: PanelConfig, directiveName: string = "progress") {
+export function initProgress(panelConfig: PanelConfig, directiveName: string = 'progress') {
   if(directiveInited) {
     return;
   }
@@ -15,7 +15,9 @@ export function initProgress(panelConfig: PanelConfig, directiveName: string = "
         templateUrl: panelConfig.pluginDirName + 'directives/progress.html',
         restrict: 'E',
         scope: {
-          item: "="
+          item: '=',
+          onHover: '&',
+          onMouseLeave: '&'
         }
       };
     });

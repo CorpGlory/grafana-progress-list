@@ -1,4 +1,5 @@
 import { PanelConfig } from './panel-config';
+import { getFormattedValue } from './value_formatter';
 
 import { TitleViewOptions } from './module';
 
@@ -6,6 +7,13 @@ import * as _ from 'lodash';
 
 
 type KeyValue = [string, number];
+
+export enum StatType {
+  CURRENT = 'current',
+  MIN = 'min',
+  MAX = 'max',
+  TOTAL = 'total'
+};
 
 type TitleViewParams = {
   barHeight: number,
@@ -18,99 +26,76 @@ export class ProgressItem {
   private _panelConfig: PanelConfig;
 
   private _key: string;
-  private _value: number;
-  private _maxValue: number;
+  private _aggregatedValue: number;
+  private _maxAggregatedValue: number;
+  private _currentValue: number;
+  private _currentMaxValue: number;
 
-  constructor(panelConfig: PanelConfig, key: string, value: number, maxValue: number) {
+  constructor(
+    panelConfig: PanelConfig,
+    key: string,
+    aggregatedValue: number,
+    maxAggregatedValue: number,
+    currentValue: number,
+    currentMaxValue: number
+  ) {
     this._panelConfig = panelConfig;
     this._key = key;
-    this._value = value;
-    this._maxValue = maxValue;
+    this._aggregatedValue = aggregatedValue;
+    this._maxAggregatedValue = maxAggregatedValue;
+    // TODO: currentValue and currentMaxValue is not the best idea
+    this._currentValue = currentValue;
+    this._currentMaxValue = currentMaxValue;
   }
 
   get title(): string {
     return this._key;
   }
 
-  get progress(): number {
-    return 100 * this._value / this._maxValue;
+  get aggregatedProgress(): number {
+    return 100 * this._aggregatedValue / this._maxAggregatedValue;
   }
 
-  get value(): number {
-    return this._value;
+  get currentProgress(): number {
+    return 100 * this._currentValue / this._currentMaxValue;
+  }
+
+  get maxValue(): number {
+    return this._maxAggregatedValue;
+  }
+
+  get aggregatedValue(): number {
+    return this._aggregatedValue;
+  }
+
+  get currentValue(): number {
+    return this._currentValue;
+  }
+
+  get currentFormattedValue(): string {
+    const value =
+      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
+        this.currentProgress :
+        this._currentValue;
+    return getFormattedValue(
+      value,
+      this._panelConfig.getValue('prefix'),
+      this._panelConfig.getValue('postfix'),
+      this._panelConfig.getValue('decimals')
+    );
   }
 
   get formattedValue(): string {
-    var value = this._value;
-    var res = this._panelConfig.getValue('prefix');
-    res += this._getFormattedFloat();
-
-    res += this._panelConfig.getValue('postfix');
-    return res;
-  }
-
-  _getFormattedFloat(): string {
-    var value = this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-      this.progress : this.value;
-
-    var dm = this._getDecimalsForValue().decimals;
-
-    if(dm === 0) {
-      return Math.round(value).toString();
-    }
-
-    var fv = value;
-    for(var i = 0; i < dm; i++) {
-      fv *= 10;
-    };
-    var fvs = Math.round(fv).toString();
-    return fvs.substr(0, fvs.length - dm) + '.' + fvs.substr(fvs.length - dm);
-  }
-
-  _getDecimalsForValue() {
-    var value = this._value;
-    // based on https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts
-    if(_.isNumber(this._panelConfig.getValue('decimals'))) {
-      return {
-        decimals: this._panelConfig.getValue('decimals'),
-        scaledDecimals: null
-      };
-    }
-
-    var delta = value / 2;
-    var dec = -Math.floor(Math.log(delta) / Math.LN10);
-
-    var magn = Math.pow(10, -dec),
-      norm = delta / magn, // norm is between 1.0 and 10.0
-      size;
-
-    if(norm < 1.5) {
-      size = 1;
-    } else if (norm < 3) {
-      size = 2;
-      // special case for 2.5, requires an extra decimal
-      if (norm > 2.25) {
-        size = 2.5;
-        ++dec;
-      }
-    } else if(norm < 7.5) {
-      size = 5;
-    } else {
-      size = 10;
-    }
-
-    size *= magn;
-
-    // reduce starting decimals if not needed
-    if(Math.floor(value) === value) {
-      dec = 0;
-    }
-
-    var result: any = {};
-    result.decimals = Math.max(0, dec);
-    result.scaledDecimals = result.decimals - Math.floor(Math.log(size) / Math.LN10) + 2;
-
-    return result;
+    const value =
+      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
+      this.aggregatedProgress :
+      this._aggregatedValue;
+    return getFormattedValue(
+      value,
+      this._panelConfig.getValue('prefix'),
+      this._panelConfig.getValue('postfix'),
+      this._panelConfig.getValue('decimals')
+    );
   }
 
   get color(): string {
@@ -121,13 +106,13 @@ export class ProgressItem {
     if(colorType === 'thresholds') {
       var thresholdsStr = this._panelConfig.getValue('thresholds');
       var colors = this._panelConfig.getValue('colors');
-      var value = this.progress;
+      var value = this.aggregatedProgress;
       if(thresholdsStr === undefined) {
         return colors[0];
       }
       var thresholds = thresholdsStr.split(',').map(parseFloat);
-      for (var i = thresholds.length; i > 0; i--) {
-        if (value >= thresholds[i - 1]) {
+      for(var i = thresholds.length; i > 0; i--) {
+        if(value >= thresholds[i - 1]) {
           return colors[i];
         }
       }
@@ -179,52 +164,83 @@ export class Mapper {
   }
 
   mapMetricData(seriesList: any): ProgressItem[] {
+    const statType: StatType = this._panelConfig.getValue('statNameOptionValue');
+    const mappingType = this._panelConfig.getValue('mappingType');
+    const statProgressType = this._panelConfig.getValue('statProgressType');
+    const statProgressMaxValue = this._panelConfig.getValue('statProgressMaxValue');
+    const alias = this._panelConfig.getValue('alias');
+    const nullMapping = this._panelConfig.getValue('nullMapping');
+
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
     }
-    var kstat: KeyValue[] = [];
-    if(this._panelConfig.getValue('mappingType') === 'datapoint to datapoint') {
-      if(this._panelConfig.getValue('statNameOptionValue') === 'total' && seriesList.length == 1) {
+
+    let kstat: KeyValue[] = [];
+    let currentStat: KeyValue[] = [];
+    if(mappingType === 'datapoint to datapoint') {
+      if(statType === StatType.TOTAL && seriesList.length == 1) {
         kstat = this._mapKeysTotal(seriesList);
       } else {
-        kstat = this._mapNumeric(seriesList);
+        kstat = this._mapNumeric(seriesList, statType, nullMapping);
       }
+      currentStat = this._mapNumeric(seriesList, StatType.CURRENT, nullMapping);
     } else {
-      kstat = this._mapTargetToDatapoints(seriesList);
+      kstat = this._mapTargetToDatapoints(seriesList, statType);
+      currentStat = this._mapTargetToDatapoints(seriesList, StatType.CURRENT);
     }
 
-    var maxValue = -1;
-    if(this._panelConfig.getValue('statProgressType') === 'shared') {
-      let total = 0;
-      for(let i = 0; i < kstat.length; i++) {
-        total += kstat[i][1];
-      }
-      maxValue = total;
-    }
+    const maxValue = this._getMaxValue(kstat, statProgressType, statProgressMaxValue);
+    const currentMaxValue = this._getMaxValue(currentStat, statProgressType, statProgressMaxValue);
 
-    if(this._panelConfig.getValue('statProgressType') === 'max value') {
-      let max = -Infinity;
-      if(this._panelConfig.getValue('statProgressMaxValue') !== null) {
-        max = this._panelConfig.getValue('statProgressMaxValue');
-      } else {
-        for(let i = 0; i < kstat.length; i++) {
-          max = Math.max(kstat[i][1], max);
-        }
-      }
-      maxValue = max;
-    }
-
-    const alias = this._panelConfig.getValue('alias');
     if(alias !== '') {
       kstat.forEach(k => {
         const scopedVars = {
-          '__key': { value: k[0] }
+          __key: { value: k[0] }
         };
         k[0] = this._templateSrv.replace(alias, scopedVars);
       });
     }
 
-    return _.map(kstat, k => new ProgressItem(this._panelConfig, k[0], k[1], maxValue));
+    return _.map(
+      kstat,
+      (k: KeyValue, idx: number) => new ProgressItem(
+        this._panelConfig,
+        k[0],
+        k[1],
+        maxValue,
+        currentStat[idx][1],
+        currentMaxValue
+      )
+    );
+  }
+
+  // TODO: enum statProgressType
+  _getMaxValue(
+    kstat: KeyValue[],
+    statProgressType: string,
+    statProgressMaxValue: number | null
+  ): number {
+    if(statProgressType === 'shared') {
+      let total = 0;
+      for(let i = 0; i < kstat.length; i++) {
+        total += kstat[i][1];
+      }
+      return total;
+    }
+
+    if(statProgressType === 'max value') {
+      let max = -Infinity;
+      if(statProgressMaxValue !== null) {
+        max = statProgressMaxValue;
+      } else {
+        for(let i = 0; i < kstat.length; i++) {
+          max = Math.max(kstat[i][1], max);
+        }
+      }
+      return max;
+    }
+
+    return -1;
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
@@ -250,7 +266,7 @@ export class Mapper {
 
   }
 
-  _mapNumeric(seriesList): KeyValue[] {
+  _mapNumeric(seriesList, statType: StatType, nullMapping): KeyValue[] {
     if(seriesList.length != 2) {
       throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
     }
@@ -260,8 +276,6 @@ export class Mapper {
 
     var kv = {};
     var datapointsLength = seriesList[0].datapoints.length;
-
-    var nullMapping = this._panelConfig.getValue('nullMapping');
 
     for(let i = 0; i < datapointsLength; i++) {
       let k = seriesList[0].datapoints[i][0].toString();
@@ -285,43 +299,40 @@ export class Mapper {
 
     var res: KeyValue[] = [];
     for(let k in kv) {
-      res.push([k, this._flatSeries(kv[k])]);
+      res.push([k, this._flatSeries(kv[k], statType)]);
     }
 
     return res;
   }
 
-  _mapTargetToDatapoints(seriesList): KeyValue[] {
+  _mapTargetToDatapoints(seriesList, statType: StatType): KeyValue[] {
     return seriesList.map(serie => [
       serie.target,
-      this._flatSeries(serie.datapoints.map(datapoint => datapoint[0]))
+      this._flatSeries(serie.datapoints.map(datapoint => datapoint[0]), statType)
     ]);
   }
 
-  _flatSeries(values: number[]): number {
+  _flatSeries(values: number[], statType: StatType): number {
     if(values.length === 0) {
       return 0;
     }
 
-    var t = this._panelConfig.getValue('statNameOptionValue');
-
-    if(t === 'total') {
+    if(statType === StatType.TOTAL) {
       return _.sum(values);
     }
 
-    if(t === 'max') {
+    if(statType === StatType.MAX) {
       return _.max(values) as number;
     }
 
-    if(t === 'min') {
+    if(statType === StatType.MIN) {
       return _.min(values) as number;
     }
 
-    if(t === 'current') {
-      return values[values.length - 1];
+    if(statType === StatType.CURRENT) {
+      return _.last(values) as number;
     }
 
     return 0;
   }
-
 }

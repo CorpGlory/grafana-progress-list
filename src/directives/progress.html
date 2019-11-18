@@ -1,9 +1,9 @@
-<div class="list-item progress-item">
+<div class="list-item progress-item" ng-mouseover="onHover({ event: $event })" ng-mouseleave="onMouseLeave()">
   <div class="list-item-title" ng-bind-html="item.title"></div>
   <div class="list-item-content">
     <div
       style="
-        width: {{ item.progress }}%;
+        width: {{ item.aggregatedProgress }}%;
         background: {{ item.color }};
         height: {{ item.titleParams.barHeight }}px;
         margin-top: {{ item.titleParams.titleTopMargin }}px;
