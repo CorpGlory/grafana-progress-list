@@ -35,6 +35,7 @@ export class ProgressItem {
     this._key = key;
     this._value = value;
     this._maxValue = maxValue;
+    // TODO: currentValue and currentMaxValue is not the best idea
     this._currentValue = currentValue;
     this._currentMaxValue = currentMaxValue;
   }
