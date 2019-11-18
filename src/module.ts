@@ -8,11 +8,17 @@ import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 import * as _ from 'lodash';
 
 
+export enum TitleViewOptions {
+  SEPARATE_TITLE_LINE = 'Separate title line',
+  INLINE = 'Inline'
+};
+
 const DEFAULTS = {
   statNameOptionValue: StatType.CURRENT,
   statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: 'auto',
+  titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
   valueLabelType: 'percentage',
   mappingType: 'datapoint to datapoint',
@@ -44,6 +50,7 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = _.values(StatType);
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
+  private titleViewTypeOptions = _.values(TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
