@@ -4,7 +4,7 @@
 
 ## About
 
-A panel showing list of progress-like items in one board.
+A panel showing list of progress-like items in one board. More about [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
 ## How To Use
 
@@ -24,12 +24,9 @@ Progress list can be thought of as many simple [Singlestat Panels](http://docs.g
 grafana-cli plugins install corpglory-progresslist-panel
 ```
 
-## Credits
-
-Made by [CorpGlory Dev Team](https://corpglory.com/)
-
 ### See Also
-
 Dicussion on [Grafana Community Forum](https://community.grafana.com/t/progress-list-panel/3286)
-
 Based on [Webpack Typescript Template](https://github.com/CorpGlory/grafana-plugin-template-webpack-typescript)
+
+## About CorpGlory Inc.
+The project developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides high quality software development, data visualization, Grafana and monitoring consulting.
