@@ -98,6 +98,10 @@ export class ProgressItem {
     );
   }
 
+  get opacity(): string {
+    return this._panelConfig.getValue('opacity');
+  }
+
   get color(): string {
     var colorType = this._panelConfig.getValue('coloringType');
     if(colorType === 'auto') {

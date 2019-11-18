@@ -31,7 +31,8 @@ const DEFAULTS = {
   colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
   colorKeyMappings: [],
   nullMapping: undefined,
-  tooltipMode: TooltipMode.ALL_SERIES
+  tooltipMode: TooltipMode.ALL_SERIES,
+  opacity: 0.5
 };
 
 class Ctrl extends MetricsPanelCtrl {

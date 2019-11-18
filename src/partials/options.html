@@ -195,6 +195,19 @@
       </div>
     </div>
 
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Opacity</label>
+      <input
+        type="number"
+        min="0"
+        max="1"
+        step="0.1"
+        class="gf-form-input width-11"
+        ng-model="ctrl.panel.opacity"
+        ng-blur="ctrl.render()"
+      />
+    </div>
+
     <div ng-if="ctrl.panel.coloringType == 'thresholds'">
       <div class="gf-form">
         <label class="gf-form-label width-8">Thresholds
