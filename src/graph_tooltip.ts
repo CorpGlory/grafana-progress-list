@@ -1,7 +1,6 @@
-import { PanelConfig } from './panel-config';
+import { ProgressItem } from './mapper';
 
 import * as _ from 'lodash';
-import { ProgressItem } from './mapper';
 
 
 export enum TooltipMode {
