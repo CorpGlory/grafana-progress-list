@@ -24,7 +24,8 @@ const DEFAULTS = {
   colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
   colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
   colorKeyMappings: [],
-  nullMapping: undefined
+  nullMapping: undefined,
+  tooltipMode: 'all series'
 };
 
 class Ctrl extends MetricsPanelCtrl {
@@ -47,6 +48,7 @@ class Ctrl extends MetricsPanelCtrl {
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
+  private tooltipModeOptions = ['all series', 'single'];
 
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
@@ -98,8 +100,7 @@ class Ctrl extends MetricsPanelCtrl {
     });
 
     this.$timeout(() => {
-      const jqueryElement = this._element.find('.progress-bar-line');
-      
+      const jqueryElement: JQuery<HTMLElement> = this._element.find('.tooltip-item');
       if(this._tooltip !== undefined) {
         this._tooltip.destroy();
       }
@@ -107,8 +108,7 @@ class Ctrl extends MetricsPanelCtrl {
       this._tooltip = new GraphTooltip(
         this._panelConfig, () => this._seriesList, this.$scope.items
       );
-      
-      jqueryElement.mouseenter((event) => {
+      jqueryElement.hover((event) => {
         this._tooltip.show(event);
       });
       jqueryElement.mouseleave(() => {

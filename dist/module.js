@@ -498,7 +498,8 @@ var DEFAULTS = {
     colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
     colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
     colorKeyMappings: [],
-    nullMapping: undefined
+    nullMapping: undefined,
+    tooltipMode: 'all series'
 };
 
 var Ctrl = function (_sdk_1$MetricsPanelCt) {
@@ -517,6 +518,7 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
         _this.valueLabelTypeOptions = ['absolute', 'percentage'];
         // TODO: change option names or add a tip in editor
         _this.mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
+        _this.tooltipModeOptions = ['all series', 'single'];
         _.defaults(_this.panel, DEFAULTS);
         _this._panelConfig = new panel_config_1.PanelConfig(_this.panel);
         _this._initStyles();
@@ -570,14 +572,17 @@ var Ctrl = function (_sdk_1$MetricsPanelCt) {
                 'max-height': this.height + "px"
             });
             this.$timeout(function () {
-                var jqueryElement = _this2._element.find('.progress-bar-line');
+                var jqueryElement = _this2._element.find('.tooltip-item');
+                console.log(jqueryElement.find('.progress-bar-value'));
+                console.log('s');
                 if (_this2._tooltip !== undefined) {
                     _this2._tooltip.destroy();
                 }
                 _this2._tooltip = new graph_tooltip_1.GraphTooltip(_this2._panelConfig, function () {
                     return _this2._seriesList;
                 }, _this2.$scope.items);
-                jqueryElement.mouseenter(function (event) {
+                jqueryElement.hover(function (event) {
+                    console.log(event.target);
                     _this2._tooltip.show(event);
                 });
                 jqueryElement.mouseleave(function () {
