@@ -25,8 +25,9 @@ grafana-cli plugins install corpglory-progresslist-panel
 ```
 
 ### See Also
-Dicussion on [Grafana Community Forum](https://community.grafana.com/t/progress-list-panel/3286)
-Based on [Webpack Typescript Template](https://github.com/CorpGlory/grafana-plugin-template-webpack-typescript)
+* Dicussion on [Grafana Community Forum](https://community.grafana.com/t/progress-list-panel/3286)
+* Based on [Webpack Typescript Template](https://github.com/CorpGlory/grafana-plugin-template-webpack-typescript)
+* more about Grafana from CorpGlory: https://corpglory.com/t/grafana/
 
 ## About CorpGlory Inc.
 The project developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides high quality software development, data visualization, Grafana and monitoring consulting.
