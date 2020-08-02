@@ -49,8 +49,7 @@ export class GraphTooltip {
       currentValues = _.map(
         seriesList,
         (serie: Serie, idx: number) => this._convertSerieToHtml(serie, this.items[idx], index === idx)
-      )
-        .filter(value => value !== undefined);
+      ).filter(value => value !== undefined);
     } else {
       currentValues = [this._convertSerieToHtml(seriesList[index], this.items[index], true)];
     }
@@ -67,24 +66,19 @@ export class GraphTooltip {
 
   private _renderAndShow(innerHtml: string, pos: Position): void {
     const title = `<div class="graph-tooltip-time">Current value</div>`;
+    // TODO: move this "20" to a constant
+    // TODO: check how this work when `pos` is close to the page bottom edge
     (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
   }
 
   private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
-    const html = `
+    return `
       <div class="graph-tooltip-list-item">
         <div class="graph-tooltip-series-name">
-          ${isBold ? '<b>' : ''}
-          ${serie.alias || serie.target}
-          ${isBold ? '</b>' : ''}
+          ${isBold ? '<b>' : ''} ${serie.alias || serie.target} ${isBold ? '</b>' : ''}
         </div>
-        <div class="graph-tooltip-value">
-          ${item.currentFormattedValue}
-        </div>
+        <div class="graph-tooltip-value">${item.currentFormattedValue}</div>
       </div>
     `;
-
-    return html;
   }
 }
-
