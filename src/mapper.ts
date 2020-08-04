@@ -268,7 +268,7 @@ export class Mapper {
 
       const keyColumn = this._panelConfig.getValue('keyColumn');
       let keyIndex = 0;
-      if (keyColumn !== '') {
+      if(keyColumn !== '') {
         keyIndex = keys.findIndex(key => key === keyColumn);
       }
 
@@ -276,7 +276,7 @@ export class Mapper {
 
       let skipIndexes: number[] = [keyIndex];
       const skipColumn = this._panelConfig.getValue('skipColumn');
-      if (skipColumn !== '') {
+      if(skipColumn !== '') {
         skipIndexes.push(keys.findIndex(key => key === skipColumn));
       }
 
@@ -290,7 +290,6 @@ export class Mapper {
 
       const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
 
-      console.log(seriesList[0].rows)
       return seriesList[0].rows.map(
         row => new MultiProgressItem(
           this._panelConfig,

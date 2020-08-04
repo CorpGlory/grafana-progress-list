@@ -174,6 +174,10 @@ class Ctrl extends MetricsPanelCtrl {
     return this._seriesList[0].columns.map(col => col.text);
   }
 
+  get skipColumns(): string[] {
+    return ['', ...this.columns];
+  }
+
   get isMultibar(): boolean {
     return this.panel.multibar;
   }
