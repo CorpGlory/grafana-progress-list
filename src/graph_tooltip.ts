@@ -39,10 +39,16 @@ export class GraphTooltip {
     this.$tooltip.detach();
   }
 
-  show(pos: Position, index: number): void {
+  show(pos: Position, index: number, title?: any, value?: any): void {
     this._visible = true;
     const seriesList = this.getSeriesFn();
     if (seriesList.length === 0) {
+      return;
+    }
+
+    if(title !== undefined && value !== undefined) {
+      const showTitle = false;
+      this._renderAndShow(this._convertTitleAndValueToHtml(title, value), pos, showTitle);
       return;
     }
 
@@ -66,8 +72,8 @@ export class GraphTooltip {
 
   get visible(): boolean { return this._visible; }
 
-  private _renderAndShow(innerHtml: string, pos: Position): void {
-    const title = `<div class="graph-tooltip-time">Current value</div>`;
+  private _renderAndShow(innerHtml: string, pos: Position, showTitle = true): void {
+    const title = showTitle ? `<div class="graph-tooltip-time">Current value</div>` : '';
     // TODO: move this "20" to a constant
     // TODO: check how this work when `pos` is close to the page bottom edge
     (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
@@ -80,6 +86,17 @@ export class GraphTooltip {
           ${isBold ? '<b>' : ''} ${serie.alias || serie.target} ${isBold ? '</b>' : ''}
         </div>
         <div class="graph-tooltip-value">${item.currentFormattedValue}</div>
+      </div>
+    `;
+  }
+
+  private _convertTitleAndValueToHtml(title: string, value: number): string {
+    return `
+      <div class="graph-tooltip-list-item">
+        <div class="graph-tooltip-series-name">
+          <b>${title}</b>
+        </div>
+        <div class="graph-tooltip-value">${value}</div>
       </div>
     `;
   }
