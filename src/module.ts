@@ -2,6 +2,7 @@ import { GraphTooltip, TooltipMode } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
 import { Mapper, ProgressItem, StatType } from './mapper';
 import { initProgress } from './directives/progress';
+import { initMultibarProgress } from './directives/multibar_progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
@@ -14,6 +15,10 @@ export enum TitleViewOptions {
 };
 
 const DEFAULTS = {
+  multibar: false,
+  keyColumn: '',
+  // TODO: skip multiple columns
+  skipColumn: '',
   statNameOptionValue: StatType.CURRENT,
   statProgressType: 'shared',
   statProgressMaxValue: null,
@@ -67,6 +72,7 @@ class Ctrl extends MetricsPanelCtrl {
     this._initStyles();
 
     initProgress(this._panelConfig, 'progressListPluginProgress');
+    initMultibarProgress(this._panelConfig, 'progressListPluginMultibarProgress');
 
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
     this.items = [];
@@ -115,8 +121,8 @@ class Ctrl extends MetricsPanelCtrl {
     );
   }
 
-  onHover(index: number, event: any) {
-    this._tooltip.show(event.originalEvent, index);
+  onHover(index: number, event: any, title?: any, value?: any) {
+    this._tooltip.show(event.originalEvent, index, title, value);
   }
 
   onMouseLeave() {
@@ -155,6 +161,25 @@ class Ctrl extends MetricsPanelCtrl {
   _dataError(err) {
     this.$scope.data = [];
     this.$scope.dataError = err;
+  }
+
+  get columns(): string[] {
+    if(
+      this._seriesList === undefined ||
+      this._seriesList.length === 0 ||
+      this._seriesList[0].columns === undefined
+    ) {
+      return [];
+    }
+    return this._seriesList[0].columns.map(col => col.text);
+  }
+
+  get isMultibar(): boolean {
+    return this.panel.multibar;
+  }
+
+  set isMultibar(isMultibar: boolean) {
+    this.panel.multibar = isMultibar;
   }
 
 }
