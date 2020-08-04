@@ -20,7 +20,7 @@ Progress list can be thought of as many simple [Singlestat Panels](http://docs.g
 
 ## Installation
 
-### On Linux
+### Linux
 - Navigate to either: 
   - `<GRAFANA_PATH>/data/plugins` (when Grafana is installed from tarball or source) 
   - or `/var/lib/grafana/plugins` (when Grafana is installed from `.deb`/`.rpm` package)
