@@ -1,5 +1,42 @@
 <div class="editor-row options-tab">
-  <div class="section gf-form-group">
+  <div class="gf-form">
+    <gf-form-switch
+      class="gf-form"
+      label="Multibar"
+      label-class="query-keyword width-8"
+      checked="ctrl.isMultibar"
+    />
+  </div>
+
+  <br/>
+  
+  <div class="section gf-form-group" ng-if="ctrl.isMultibar">
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Key column</label>
+      <div class="gf-form-select-wrapper width-14">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.keyColumn"
+          ng-options="n for n in ctrl.columns"
+          ng-change="ctrl.render()"
+        />
+      </div>
+    </div>
+
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Skip column</label>
+      <div class="gf-form-select-wrapper width-14">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.skipColumn"
+          ng-options="n for n in ctrl.columns"
+          ng-change="ctrl.render()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Mapping</h5>
 
     <div class="gf-form">
@@ -63,8 +100,8 @@
     </div>
 
     <br/>
-    <h5 class="section-heading">Tooltip</h5>
-    <div class="gf-form">
+    <h5 class="section-heading" ng-if="!ctrl.isMultibar">Tooltip</h5>
+    <div class="gf-form" ng-if="!ctrl.isMultibar">
       <label class="gf-form-label width-8">Tooltip Mode</label>
       <div class="gf-form-select-wrapper width-14">
         <select
@@ -95,7 +132,7 @@
     Based ob singlestat editor plugin
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
-  <div class="section gf-form-group">
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Value Labels</h5>
     <div class="gf-form-inline"></div>
     <div class="gf-form">
@@ -181,7 +218,8 @@
     Based ob singlestat editor plugin
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
-  <div class="section gf-form-group">
+  <!-- TODO: support colors customizing for multibar mode -->
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Coloring<h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>

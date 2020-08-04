@@ -1,10 +1,19 @@
 <div id="progress-list-panel">
   <div class="table-panel-scroll">
-    <div ng-repeat="item in items">
+    <div ng-repeat="item in items" ng-if="!ctrl.isMultibar">
       <progress-list-plugin-progress
         class="progress-list-item"
         item="item"
         on-hover="ctrl.onHover($index, event)"
+        on-mouse-leave="ctrl.onMouseLeave()"
+      />
+    </div>
+
+    <div ng-repeat="item in items" ng-if="ctrl.isMultibar">
+      <progress-list-plugin-multibar-progress
+        class="progress-list-item"
+        item="item"
+        on-hover="ctrl.onHover($index, event, title, value)"
         on-mouse-leave="ctrl.onMouseLeave()"
       />
     </div>
