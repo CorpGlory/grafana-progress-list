@@ -6,6 +6,7 @@ import { TitleViewOptions } from './module';
 import * as _ from 'lodash';
 
 
+// TODO: move to types.ts
 type KeyValue = [string, number];
 
 export enum StatType {

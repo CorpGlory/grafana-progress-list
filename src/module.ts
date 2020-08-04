@@ -147,6 +147,7 @@ class Ctrl extends MetricsPanelCtrl {
     });
   }
 
+  // TODO: add param type declaration
   removeColorKeyMapping(index) {
     this.panel.colorKeyMappings.splice(index, 1);
     this.render();

@@ -8,11 +8,13 @@ export enum TooltipMode {
   ALL_SERIES = 'all series'
 };
 
+// TODO: move to types.ts
 type Position = {
   pageX: number,
   pageY: number
 };
 
+// TODO: move to types.ts
 export type Serie = {
   datapoints: [number, number][],
   target: string,
