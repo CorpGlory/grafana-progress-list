@@ -62,6 +62,10 @@ class Ctrl extends MetricsPanelCtrl {
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(TooltipMode);
+  private _panelAlert = {
+    active: true,
+    message: 'loading...'
+  };
 
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
@@ -176,6 +180,14 @@ class Ctrl extends MetricsPanelCtrl {
 
   get skipColumns(): string[] {
     return ['', ...this.columns];
+  }
+
+  get isPanelAlert(): boolean {
+    return this._panelAlert.active;
+  }
+
+  get panelAlertMessage(): string {
+    return this._panelAlert.message;
   }
 
   get isMultibar(): boolean {
