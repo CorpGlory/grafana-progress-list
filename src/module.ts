@@ -16,7 +16,7 @@ export enum TitleViewOptions {
 
 const ERROR_MAPPING = `
   Can't map the received metrics, 
-  see <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a>
+  see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
 `;
 const ERROR_NO_DATA = "no data";
 
@@ -149,7 +149,7 @@ class Ctrl extends MetricsPanelCtrl {
       () => this._seriesList, items, this.panel.tooltipMode
     );
     this._panelAlert.active = false;
-    
+
   }
 
   onHover(index: number, event: any, title?: any, value?: any) {
