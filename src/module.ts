@@ -149,6 +149,7 @@ class Ctrl extends MetricsPanelCtrl {
       () => this._seriesList, items, this.panel.tooltipMode
     );
     this._panelAlert.active = false;
+    
   }
 
   onHover(index: number, event: any, title?: any, value?: any) {
@@ -189,6 +190,8 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _dataError(err) {
+    console.log('got data error');
+    console.log(err);
     this.$scope.data = [];
     this.$scope.dataError = err;
   }
