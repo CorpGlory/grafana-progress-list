@@ -14,6 +14,12 @@ export enum TitleViewOptions {
   INLINE = 'Inline'
 };
 
+const ERROR_MAPPING = `
+  Can't map the received metrics, 
+  see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
+`;
+const ERROR_NO_DATA = "no data";
+
 const DEFAULTS = {
   multibar: false,
   keyColumn: '',
@@ -62,6 +68,16 @@ class Ctrl extends MetricsPanelCtrl {
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(TooltipMode);
+  // used to show status messages replacing rendered graphics
+  // see isPanelAlert and panelAlertMessage
+  private _panelAlert = {
+    active: true,
+    // message prop can be formatted with html, 
+    message: '<strong>loading...</strong>' // loading will be showed only once at the beginning
+
+    // would be nice to add `type` property with values ['info', 'warning', 'error']
+    // and then move it https://github.com/chartwerk/grafana-panel-base/issues/1
+  };
 
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
@@ -100,7 +116,20 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _onRender() {
-    let items = this.mapper.mapMetricData(this._seriesList);
+    // maybe we want to make a config "last value" instead of ERROR_NO_DATA
+    // see https://github.com/chartwerk/grafana-panel-base/issues/3
+    if(this._seriesList === undefined || this._seriesList.length === 0) {
+      this._panelAlert.active = true;
+      this._panelAlert.message = ERROR_NO_DATA;
+      return;
+    }
+    try {
+      var items = this.mapper.mapMetricData(this._seriesList);
+    } catch(e) {
+      this._panelAlert.active = true;
+      this._panelAlert.message = ERROR_MAPPING;
+      return;
+    }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
       items = _.sortBy(items, i => i.aggregatedProgress);
     }
@@ -119,6 +148,8 @@ class Ctrl extends MetricsPanelCtrl {
     this._tooltip = new GraphTooltip(
       () => this._seriesList, items, this.panel.tooltipMode
     );
+    this._panelAlert.active = false;
+
   }
 
   onHover(index: number, event: any, title?: any, value?: any) {
@@ -159,6 +190,8 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   _dataError(err) {
+    console.log('got data error');
+    console.log(err);
     this.$scope.data = [];
     this.$scope.dataError = err;
   }
@@ -176,6 +209,15 @@ class Ctrl extends MetricsPanelCtrl {
 
   get skipColumns(): string[] {
     return ['', ...this.columns];
+  }
+
+  get isPanelAlert(): boolean {
+    return this._panelAlert.active;
+  }
+
+  // the field will be rendered as html
+  get panelAlertMessage(): string {
+    return this._panelAlert.message;
   }
 
   get isMultibar(): boolean {

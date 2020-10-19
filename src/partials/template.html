@@ -1,5 +1,5 @@
 <div id="progress-list-panel">
-  <div class="table-panel-scroll">
+  <div class="table-panel-scroll" ng-if="!ctrl.isPanelAlert">
     <div ng-repeat="item in items" ng-if="!ctrl.isMultibar">
       <progress-list-plugin-progress
         class="progress-list-item"
@@ -8,7 +8,6 @@
         on-mouse-leave="ctrl.onMouseLeave()"
       />
     </div>
-
     <div ng-repeat="item in items" ng-if="ctrl.isMultibar">
       <progress-list-plugin-multibar-progress
         class="progress-list-item"
@@ -17,5 +16,8 @@
         on-mouse-leave="ctrl.onMouseLeave()"
       />
     </div>
+  </div>
+  <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
+    <div ng-bind-html="ctrl.panelAlertMessage"></div> 
   </div>
 </div>
