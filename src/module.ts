@@ -72,7 +72,7 @@ class Ctrl extends MetricsPanelCtrl {
   // see isPanelAlert and panelAlertMessage
   private _panelAlert = {
     active: true,
-    // message prop will can bo formatted with html, 
+    // message prop can be formatted with html, 
     message: '<strong>loading...</strong>' // loading will be showed only once at the beginning
 
     // would be nice to add `type` property with values ['info', 'warning', 'error']
