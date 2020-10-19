@@ -73,7 +73,7 @@ class Ctrl extends MetricsPanelCtrl {
   private _panelAlert = {
     active: true,
     // message prop will can bo formatted with html, 
-    message: '<stromng>loading...</strong>' // loading will be showed only once at the beginning
+    message: '<strong>loading...</strong>' // loading will be showed only once at the beginning
 
     // would be nice to add `type` property with values ['info', 'warning', 'error']
     // and then move it https://github.com/chartwerk/grafana-panel-base/issues/1
