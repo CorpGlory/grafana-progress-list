@@ -137,10 +137,6 @@ class Ctrl extends MetricsPanelCtrl {
       items = _.sortBy(items, i => -i.aggregatedProgress);
     }
     this.$scope.items = items;
-    this._element.find('.table-panel-scroll').css({
-      'height': `${this.height}px`,
-      'max-height': `${this.height}px`
-    });
 
     if(this._tooltip !== undefined) {
       this._tooltip.destroy();

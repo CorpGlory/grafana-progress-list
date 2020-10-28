@@ -1,3 +1,8 @@
+.progress-list-panel {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .list-item {
   position: relative;
   height: 30px;
