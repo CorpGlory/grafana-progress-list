@@ -1,8 +1,6 @@
 import { GraphTooltip, TooltipMode } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
 import { Mapper, ProgressItem, StatType } from './mapper';
-import { initProgress } from './directives/progress';
-import { initMultibarProgress } from './directives/multibar_progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
@@ -87,9 +85,6 @@ class Ctrl extends MetricsPanelCtrl {
     this._panelConfig = new PanelConfig(this.panel);
     this._initStyles();
 
-    initProgress(this._panelConfig, 'progressListPluginProgress');
-    initMultibarProgress(this._panelConfig, 'progressListPluginMultibarProgress');
-
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
     this.items = [];
 
@@ -124,6 +119,7 @@ class Ctrl extends MetricsPanelCtrl {
       return;
     }
     try {
+      // TODO: set this.items also
       var items = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
@@ -149,6 +145,12 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   onHover(index: number, event: any, title?: any, value?: any) {
+    // if(title == undefined) {
+    //   title = this.items[index].title;
+    // }
+    // if(value == undefined) {
+    //   value = this.items[index].to;
+    // }
     this._tooltip.show(event.originalEvent, index, title, value);
   }
 
