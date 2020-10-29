@@ -25,7 +25,6 @@ export class GraphTooltip {
   private _visible = false;
 
   constructor(
-    private getSeriesFn: () => Serie[],
     private items: ProgressItem[],
     private tooltipMode: TooltipMode
   ) {
@@ -37,7 +36,7 @@ export class GraphTooltip {
     this.$tooltip.detach();
   }
 
-  show(pos: Position, index: number, title?: any, value?: any): void {
+  show(): void {
     this._visible = true;
     const seriesList = this.getSeriesFn();
     if (seriesList.length === 0) {

@@ -19,7 +19,6 @@ const ERROR_MAPPING = `
 const ERROR_NO_DATA = "no data";
 
 const DEFAULTS = {
-  multibar: false,
   keyColumn: '',
   // TODO: skip multiple columns
   skipColumn: '',
@@ -144,14 +143,14 @@ class Ctrl extends MetricsPanelCtrl {
 
   }
 
-  onHover(index: number, event: any, title?: any, value?: any) {
+  onHover(event: any, title?: any, value?: any) {
     // if(title == undefined) {
     //   title = this.items[index].title;
     // }
     // if(value == undefined) {
     //   value = this.items[index].to;
     // }
-    this._tooltip.show(event.originalEvent, index, title, value);
+    this._tooltip.show(event, 'asd', 'asda');
   }
 
   onMouseLeave() {
@@ -216,14 +215,6 @@ class Ctrl extends MetricsPanelCtrl {
   // the field will be rendered as html
   get panelAlertMessage(): string {
     return this._panelAlert.message;
-  }
-
-  get isMultibar(): boolean {
-    return this.panel.multibar;
-  }
-
-  set isMultibar(isMultibar: boolean) {
-    this.panel.multibar = isMultibar;
   }
 
 }
