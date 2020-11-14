@@ -136,9 +136,7 @@ class Ctrl extends MetricsPanelCtrl {
     if(this._tooltip !== undefined) {
       this._tooltip.destroy();
     }
-    this._tooltip = new GraphTooltip(
-      () => this._seriesList, items, this.panel.tooltipMode
-    );
+    this._tooltip = new GraphTooltip(this.panel.tooltipMode);
     this._panelAlert.active = false;
 
   }
@@ -150,7 +148,7 @@ class Ctrl extends MetricsPanelCtrl {
     // if(value == undefined) {
     //   value = this.items[index].to;
     // }
-    this._tooltip.show(event, 'asd', 'asda');
+    this._tooltip.show(event);
   }
 
   onMouseLeave() {

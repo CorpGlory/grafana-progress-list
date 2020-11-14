@@ -8,7 +8,7 @@ export enum TooltipMode {
   ALL_SERIES = 'all series'
 };
 
-type Position = {
+export type Position = {
   pageX: number,
   pageY: number
 };
@@ -24,10 +24,7 @@ export class GraphTooltip {
   private $tooltip: JQuery<HTMLElement>;
   private _visible = false;
 
-  constructor(
-    private items: ProgressItem[],
-    private tooltipMode: TooltipMode
-  ) {
+  constructor(private tooltipMode: TooltipMode) {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
@@ -36,30 +33,9 @@ export class GraphTooltip {
     this.$tooltip.detach();
   }
 
-  show(): void {
+  show(pos: Position): void {
     this._visible = true;
-    const seriesList = this.getSeriesFn();
-    if (seriesList.length === 0) {
-      return;
-    }
-
-    if(title !== undefined && value !== undefined) {
-      const showTitle = false;
-      this._renderAndShow(this._convertTitleAndValueToHtml(title, value), pos, showTitle);
-      return;
-    }
-
-    let currentValues: string[] = [];
-    if(this.tooltipMode === TooltipMode.ALL_SERIES) {
-      currentValues = _.map(
-        seriesList,
-        (serie: Serie, idx: number) => this._convertSerieToHtml(serie, this.items[idx], index === idx)
-      ).filter(value => value !== undefined);
-    } else {
-      currentValues = [this._convertSerieToHtml(seriesList[index], this.items[index], true)];
-    }
-
-    this._renderAndShow(currentValues.join('\n'), pos);
+    this._renderAndShow('hey <b>hey</b>', pos);
   }
 
   destroy(): void {
