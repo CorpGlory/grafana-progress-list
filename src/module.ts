@@ -1,4 +1,4 @@
-import { GraphTooltip, TooltipMode } from './graph_tooltip';
+import { GraphTooltip, TooltipMode, TooltipItem } from './graph_tooltip';
 import { PanelConfig } from './panel-config';
 import { Mapper, ProgressItem, StatType } from './mapper';
 
@@ -119,19 +119,19 @@ class Ctrl extends MetricsPanelCtrl {
     }
     try {
       // TODO: set this.items also
-      var items = this.mapper.mapMetricData(this._seriesList);
+      this.items = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
       this._panelAlert.message = ERROR_MAPPING;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      items = _.sortBy(items, i => i.aggregatedProgress);
+      this.items = _.sortBy(this.items, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      items = _.sortBy(items, i => -i.aggregatedProgress);
+      this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
     }
-    this.$scope.items = items;
+    this.$scope.items = this.items;
 
     if(this._tooltip !== undefined) {
       this._tooltip.destroy();
@@ -142,7 +142,15 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   onHover(event: { index: number, event: any }, title?: any, value?: any) {
-    this._tooltip.show(event.event, []);
+    let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
+      i == event.index,
+      item.title, // previously wwe showed serie.alias || serie.target
+      [{
+        value: item.formattedValue,
+        color: item.color
+      }]
+    ));
+    this._tooltip.show(event.event, tooltipItems);
   }
 
   onMouseLeave() {

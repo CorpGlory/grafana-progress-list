@@ -8,6 +8,8 @@
       <div 
         class="list-item-content" 
         style="width: {{ item.aggregatedProgress }}%;"
+        ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
+        ng-mouseleave="ctrl.onMouseLeave()"
       >
         <div
           ng-repeat="percentValue in item.percentValues track by $index"
@@ -19,8 +21,6 @@
             height: {{ item.titleParams.barHeight }}px;
             margin-top: {{ item.titleParams.titleTopMargin }}px;
           "
-          ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
-          ng-mouseleave="ctrl.onMouseLeave()"
           class="progress-bar-line"
         />
         <span

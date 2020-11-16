@@ -1,5 +1,3 @@
-import { ProgressItem } from './mapper';
-
 import * as _ from 'lodash';
 
 
@@ -19,11 +17,35 @@ export type Serie = {
   alias?: string
 };
 
-export type TooltipItem = {
-  activate: boolean,
-  name: string,
-  value: string,
-  color: string
+export class TooltipItem {
+  constructor(
+    public active: boolean, 
+    public name: string,
+    public vcs: { value: string, color: string }[]
+  ) {
+  }
+
+  toHtml(): string {
+    return `
+      <div class="graph-tooltip-list-item">
+        <div class="graph-tooltip-series-name">
+          ${this.active ? '<b>' : ''} 
+          ${this.name}
+          ${this.active ? '</b>' : ''}
+        </div>
+        ${this._valuesToHtml()}
+      </div>
+    `;
+  }
+  
+  private _valuesToHtml(): string {
+    return this.vcs.map(vc => `
+      <div class="graph-tooltip-value">
+        ${vc.value}
+      </div>
+    `).join('');
+  }
+
 }
 
 export class GraphTooltip {
@@ -43,12 +65,7 @@ export class GraphTooltip {
   show(pos: Position, items: TooltipItem[] ): void {
     this._visible = true;
     // TODO: use more vue/react approach here
-    let html = _.reduce(items, (sum, item) => sum + `
-      ${item.activate ? 
-        '<b>' + item.name + ":" + item.value + '</b>' :
-        item.name + ":" + item.value
-      } <br/>
-    `, '');
+    let html = items.map(i => i.toHtml()).join('');
     this._renderAndShow(html, pos);
   }
 
@@ -64,27 +81,5 @@ export class GraphTooltip {
     // TODO: move this "20" to a constant
     // TODO: check how this work when `pos` is close to the page bottom edge
     (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
-  }
-
-  private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          ${isBold ? '<b>' : ''} ${serie.alias || serie.target} ${isBold ? '</b>' : ''}
-        </div>
-        <div class="graph-tooltip-value">${item.currentFormattedValue}</div>
-      </div>
-    `;
-  }
-
-  private _convertTitleAndValueToHtml(title: string, value: number): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          <b>${title}</b>
-        </div>
-        <div class="graph-tooltip-value">${value}</div>
-      </div>
-    `;
   }
 }

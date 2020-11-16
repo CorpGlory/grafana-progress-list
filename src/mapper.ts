@@ -169,7 +169,7 @@ export class ProgressItem {
   get formattedValue(): string {
     const value =
       this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-      this.aggregatedProgress :
+      this.aggregatedProgress:
       this._aggregatedValue;
     return getFormattedValue(
       value,
@@ -289,7 +289,8 @@ export class Mapper {
       );
 
       const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
-
+      
+      // TODO: it's wrong, we return a bad type here
       return seriesList[0].rows.map(
         row => new MultiProgressItem(
           this._panelConfig,
