@@ -141,14 +141,8 @@ class Ctrl extends MetricsPanelCtrl {
 
   }
 
-  onHover(event: any, title?: any, value?: any) {
-    // if(title == undefined) {
-    //   title = this.items[index].title;
-    // }
-    // if(value == undefined) {
-    //   value = this.items[index].to;
-    // }
-    this._tooltip.show(event);
+  onHover(event: { index: number, event: any }, title?: any, value?: any) {
+    this._tooltip.show(event.event, []);
   }
 
   onMouseLeave() {

@@ -19,7 +19,7 @@
             height: {{ item.titleParams.barHeight }}px;
             margin-top: {{ item.titleParams.titleTopMargin }}px;
           "
-          ng-mousemove="ctrl.onHover({ index: $index })"
+          ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
           ng-mouseleave="ctrl.onMouseLeave()"
           class="progress-bar-line"
         />

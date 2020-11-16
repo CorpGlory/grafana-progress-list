@@ -19,6 +19,13 @@ export type Serie = {
   alias?: string
 };
 
+export type TooltipItem = {
+  activate: boolean,
+  name: string,
+  value: string,
+  color: string
+}
+
 export class GraphTooltip {
 
   private $tooltip: JQuery<HTMLElement>;
@@ -33,9 +40,16 @@ export class GraphTooltip {
     this.$tooltip.detach();
   }
 
-  show(pos: Position): void {
+  show(pos: Position, items: TooltipItem[] ): void {
     this._visible = true;
-    this._renderAndShow('hey <b>hey</b>', pos);
+    // TODO: use more vue/react approach here
+    let html = _.reduce(items, (sum, item) => sum + `
+      ${item.activate ? 
+        '<b>' + item.name + ":" + item.value + '</b>' :
+        item.name + ":" + item.value
+      } <br/>
+    `, '');
+    this._renderAndShow(html, pos);
   }
 
   destroy(): void {
