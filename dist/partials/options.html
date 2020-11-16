@@ -1,5 +1,16 @@
 <div class="editor-row options-tab">
-  <div class="section gf-form-group">
+  <div class="gf-form">
+    <gf-form-switch
+      class="gf-form"
+      label="Multibar"
+      label-class="query-keyword width-8"
+      checked="ctrl.isMultibar"
+    />
+  </div>
+
+  <br/>
+  
+  <div class="section gf-form-group" ng-if="ctrl.isMultibar">
     <div class="gf-form">
       <label class="gf-form-label width-8">Key column</label>
       <div class="gf-form-select-wrapper width-14">
@@ -23,9 +34,11 @@
         />
       </div>
     </div>
+  </div>
 
-    <br/>
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Mapping</h5>
+
     <div class="gf-form">
       <label class="gf-form-label width-8">Stat</label>
       <div class="gf-form-select-wrapper width-14">
@@ -101,9 +114,9 @@
     </div>
 
     <br/>
-    <h5 class="section-heading">Appearance</h5>
+    <h5 class="section-heading">Sorting</h5>
     <div class="gf-form">
-      <label class="gf-form-label width-8">Sorting</label>
+      <label class="gf-form-label width-8">Type</label>
       <div class="gf-form-select-wrapper width-14">
         <select
           class="gf-form-input"
@@ -119,7 +132,7 @@
     Based ob singlestat editor plugin
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
-  <div class="section gf-form-group">
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Value Labels</h5>
     <div class="gf-form-inline"></div>
     <div class="gf-form">
@@ -206,7 +219,7 @@
     https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
   -->
   <!-- TODO: support colors customizing for multibar mode -->
-  <div class="section gf-form-group">
+  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
     <h5 class="section-heading">Coloring<h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>

@@ -1,35 +1,20 @@
-<div class="progress-list-panel">
-  <div ng-if="!ctrl.isPanelAlert">
-    <div ng-repeat="item in items" class="list-item progress-item">
-      <div class="list-item-title"
-        ng-bind-html="item.title"
-        style="margin-top: 10px; margin-bottom: -8px;"
-      ></div>
-      <div 
-        class="list-item-content" 
-        style="width: {{ item.aggregatedProgress }}%;"
-      >
-        <div
-          ng-repeat="percentValue in item.percentValues track by $index"
-          style="
-            width: {{ percentValue }}%;
-            display: inline-block;
-            background-color: {{ item.colors[$index] }};
-            opacity: {{ item.opacity }};
-            height: {{ item.titleParams.barHeight }}px;
-            margin-top: {{ item.titleParams.titleTopMargin }}px;
-          "
-          ng-mousemove="ctrl.onHover({ index: $index })"
-          ng-mouseleave="ctrl.onMouseLeave()"
-          class="progress-bar-line"
-        />
-        <span
-          style="margin-top: {{ item.titleParams.valueTopMargin }}px;"
-          class="list-item-value progress-bar-value"
-        >
-          {{ item.formattedValue }}
-        </span>
-      </div>
+<div id="progress-list-panel">
+  <div class="table-panel-scroll" ng-if="!ctrl.isPanelAlert">
+    <div ng-repeat="item in items" ng-if="!ctrl.isMultibar">
+      <progress-list-plugin-progress
+        class="progress-list-item"
+        item="item"
+        on-hover="ctrl.onHover($index, event)"
+        on-mouse-leave="ctrl.onMouseLeave()"
+      />
+    </div>
+    <div ng-repeat="item in items" ng-if="ctrl.isMultibar">
+      <progress-list-plugin-multibar-progress
+        class="progress-list-item"
+        item="item"
+        on-hover="ctrl.onHover($index, event, title, value)"
+        on-mouse-leave="ctrl.onMouseLeave()"
+      />
     </div>
   </div>
   <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
