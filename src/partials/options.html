@@ -4,7 +4,7 @@
     <div class="section gf-form-group">
       <div class="gf-form">
         <label class="gf-form-label width-8">Key column</label>
-        <div class="gf-form-select-wrapper width-14">
+        <div class="gf-form-select-wrapper width-12">
           <select
             class="gf-form-input"
             ng-model="ctrl.panel.keyColumn"
@@ -16,7 +16,7 @@
 
       <div class="gf-form">
         <label class="gf-form-label width-8">Skip column</label>
-        <div class="gf-form-select-wrapper width-14">
+        <div class="gf-form-select-wrapper width-12">
           <select
             class="gf-form-input"
             ng-model="ctrl.panel.skipColumn"
@@ -30,7 +30,7 @@
       <h5 class="section-heading">Mapping</h5>
       <div class="gf-form">
         <label class="gf-form-label width-8">Stat</label>
-        <div class="gf-form-select-wrapper width-14">
+        <div class="gf-form-select-wrapper width-12">
           <select
             class="gf-form-input"
             ng-model="ctrl.panel.statNameOptionValue"
@@ -42,7 +42,7 @@
 
       <div class="gf-form">
         <label class="gf-form-label width-8">Progress Type</label>
-        <div class="gf-form-select-wrapper width-14">
+        <div class="gf-form-select-wrapper width-12">
           <select
             class="gf-form-input"
             ng-model="ctrl.panel.statProgressType"
@@ -69,7 +69,7 @@
         <label class="gf-form-label width-8">Null Value</label>
         <input
           type="number"
-          class="gf-form-input width-14"
+          class="gf-form-input width-12"
           placeholder="error" data-placement="right"
           bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
           ng-model="ctrl.panel.nullMapping"
@@ -81,7 +81,7 @@
       <div class="gf-form">
         <label class="gf-form-label width-8">Mapping type</label>
         <select
-          class="gf-form-input width-14"
+          class="gf-form-input width-12"
           ng-model="ctrl.panel.mappingType"
           ng-options="type for type in ctrl.mappingTypeOptions"
           ng-change="ctrl.refresh()"
@@ -106,7 +106,7 @@
       <h5 class="section-heading">Appearance</h5>
       <div class="gf-form">
         <label class="gf-form-label width-8">Sorting</label>
-        <div class="gf-form-select-wrapper width-14">
+        <div class="gf-form-select-wrapper width-12">
           <select
             class="gf-form-input"
             ng-model="ctrl.panel.sortingOrder"
@@ -123,7 +123,6 @@
     -->
     <div class="section gf-form-group">
       <h5 class="section-heading">Value Labels</h5>
-      <div class="gf-form-inline"></div>
       <div class="gf-form">
         <label class="gf-form-label width-6">Type</label>
         <div class="gf-form-select-wrapper width-10">
@@ -137,7 +136,7 @@
       </div>
       <div class="gf-form-inline">
         <div class="gf-form">
-          <label class="gf-form-label width-6">Prefix</label>
+          <label class="gf-form-label width-8">Prefix</label>
           <input
             type="text" class="gf-form-input width-10"
             ng-model="ctrl.panel.prefix"
@@ -147,7 +146,7 @@
         </div>
       </div>
       <div class="gf-form">
-        <label class="gf-form-label width-6">Postfix</label>
+        <label class="gf-form-label width-8">Postfix</label>
         <input
           type="text" class="gf-form-input width-10"
           ng-model="ctrl.panel.postfix"
@@ -156,7 +155,7 @@
         />
       </div>
       <div class="gf-form">
-        <label class="gf-form-label width-6">Decimals</label>
+        <label class="gf-form-label width-8">Decimals</label>
         <input
           type="number"
           class="gf-form-input width-10"
@@ -172,7 +171,7 @@
       <div class="section gf-form-group">
         <h5 class="section-heading">Key Labels</h5>
         <div class="gf-form">
-          <label class="gf-form-label width-6">Title Type</label>
+          <label class="gf-form-label width-8">Title Type</label>
           <div class="gf-form-select-wrapper width-12">
             <select
               class="gf-form-input"
