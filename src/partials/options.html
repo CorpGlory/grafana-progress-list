@@ -1,4 +1,3 @@
-
 <div class="editor-row options-tab">
   <div class="section gf-form-group">
     <div class="gf-form">
@@ -67,12 +66,14 @@
     </div>
 
     <div class="gf-form">
-      <label class="gf-form-label width-8">Null Value</label>
+      <label class="gf-form-label width-8">
+        Null Value
+        <tip>Map NULL values to constant. Default behaviour is to throw error.</tip>
+      </label>
       <input
         type="number"
         class="gf-form-input width-12"
         placeholder="error" data-placement="right"
-        bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
         ng-model="ctrl.panel.nullMapping"
         ng-change="ctrl.render()"
         ng-model-onblur
@@ -93,7 +94,7 @@
     <h5 class="section-heading" ng-if="!ctrl.isMultibar">Tooltip</h5>
     <div class="gf-form" ng-if="!ctrl.isMultibar">
       <label class="gf-form-label width-8">Tooltip Mode</label>
-      <div class="gf-form-select-wrapper width-14">
+      <div class="gf-form-select-wrapper width-12">
         <select
           class="gf-form-input"
           ng-model="ctrl.panel.tooltipMode"
@@ -103,6 +104,7 @@
       </div>
     </div>
 
+    <br/>
     <h5 class="section-heading">Appearance</h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Sorting</label>
@@ -115,13 +117,8 @@
         ></select>
       </div>
     </div>
-  </div>
 
-  <!--
-    Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
-  -->
-  <div class="section gf-form-group">
+    <br/>
     <h5 class="section-heading">Value Labels</h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
@@ -178,7 +175,7 @@
             ng-model="ctrl.panel.titleViewType"
             ng-options="n for n in ctrl.titleViewTypeOptions"
             ng-change="ctrl.render()"
-          ></select> 
+          ></select>
         </div>
       </div>
       <div class="gf-form-inline">
@@ -200,14 +197,8 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!--
-    Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
-  -->
-  <!-- TODO: support colors customizing for multibar mode -->
-  <div class="section gf-form-group">
+    
+    <br/>
     <h5 class="section-heading">Coloring</h5>
     <div class="gf-form">
       <label class="gf-form-label width-8">Type</label>
@@ -217,7 +208,7 @@
           ng-model="ctrl.panel.coloringType"
           ng-options="n for n in ctrl.coloringTypeOptions"
           ng-change="ctrl.render()"
-        />
+        ></select>
       </div>
     </div>
 
