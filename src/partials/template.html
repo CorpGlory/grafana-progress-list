@@ -1,6 +1,11 @@
 <div class="progress-list-panel">
   <div ng-if="!ctrl.isPanelAlert">
-    <div ng-repeat="item in items" class="list-item">
+    <div 
+      ng-repeat="item in items"
+      class="list-item"
+      ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
+      ng-mouseleave="ctrl.onMouseLeave()"
+    >
       <div class="list-item-title"
         ng-bind-html="item.title"
         style="margin-top: 10px; margin-bottom: -8px;"
@@ -8,8 +13,6 @@
       <div
         class="list-item-content"
         style="width: {{ item.aggregatedProgress }}%;"
-        ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
-        ng-mouseleave="ctrl.onMouseLeave()"
       >
         <div
           ng-repeat="percentValue in item.percentValues track by $index"

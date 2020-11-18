@@ -1,5 +1,5 @@
 import { GraphTooltip, TooltipMode, TooltipItem } from './graph_tooltip';
-import { PanelConfig } from './panel-config';
+import { PanelConfig } from './panel_config';
 import { Mapper, ProgressItem, StatType } from './mapper';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';

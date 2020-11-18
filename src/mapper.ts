@@ -1,4 +1,4 @@
-import { PanelConfig } from './panel-config';
+import { PanelConfig } from './panel_config';
 import { getFormattedValue } from './value_formatter';
 
 import { TitleViewOptions } from './module';
