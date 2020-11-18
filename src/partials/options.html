@@ -90,8 +90,8 @@
   </div>
 
   <br/>
-  <h5 class="section-heading" ng-if="!ctrl.isMultibar">Tooltip</h5>
-  <div class="gf-form" ng-if="!ctrl.isMultibar">
+  <h5 class="section-heading">Tooltip</h5>
+  <div class="gf-form">
     <label class="gf-form-label width-8">Tooltip Mode</label>
     <div class="gf-form-select-wrapper width-12">
       <select
@@ -130,7 +130,7 @@
       ></select>
     </div>
   </div>
-  
+
   <div class="gf-form">
     <label class="gf-form-label width-8">Prefix</label>
     <input
@@ -140,7 +140,7 @@
       ng-model-onblur
     />
   </div>
-  
+
   <div class="gf-form">
     <label class="gf-form-label width-8">Postfix</label>
     <input
@@ -243,13 +243,13 @@
     <div class="gf-form">
       <label class="gf-form-label width-8">Colors</label>
       <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
+        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()"></spectrum-picker>
       </span>
       <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
+        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()"></spectrum-picker>
       </span>
       <span class="gf-form-label">
-        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
+        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()"></spectrum-picker>
       </span>
       <span class="gf-form-label">
           <a ng-click="ctrl.invertColorOrder()"> Invert </a>
