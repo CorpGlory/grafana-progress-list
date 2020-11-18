@@ -58,33 +58,30 @@ export class GraphTooltip {
   private $tooltip: JQuery<HTMLElement>;
   private _visible = false;
 
-  constructor(private tooltipMode: TooltipMode) {
+  constructor() {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
-  clear(): void {
-    this._visible = false;
-    this.$tooltip.detach();
-  }
-
-  show(pos: Position, items: TooltipItem[] ): void {
+  show(pos: Position, items: TooltipItem[], mode: TooltipMode): void {
     this._visible = true;
     // TODO: use more vue/react approach here
-    let html = items.map(i => i.toHtml()).join('');
-    this._renderAndShow(html, pos);
+    // TODO: build this string faster
+    let html = mode == TooltipMode.SINGLE
+                         ? `<div class="graph-tooltip-time"></div>` 
+                         : '';
+        html += items.map(i => i.toHtml()).join('');
+
+    // TODO: move this "20" to a constant
+    // TODO: check how this work when `pos` is close to the page bottom edge
+    (this.$tooltip.html(html) as any).place_tt(pos.pageX + 20, pos.pageY).show();
   }
 
-  destroy(): void {
+  hide(): void {
     this._visible = false;
-    this.$tooltip.remove();
+    this.$tooltip.hide();
   }
 
   get visible(): boolean { return this._visible; }
 
-  private _renderAndShow(innerHtml: string, pos: Position, showTitle = true): void {
-    const title = showTitle ? `<div class="graph-tooltip-time">Current value</div>` : '';
-    // TODO: move this "20" to a constant
-    // TODO: check how this work when `pos` is close to the page bottom edge
-    (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
-  }
+  
 }

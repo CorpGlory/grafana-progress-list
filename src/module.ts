@@ -18,6 +18,11 @@ const ERROR_MAPPING = `
 `;
 const ERROR_NO_DATA = "no data";
 
+export type HoverEvent = {
+  index: number,
+  event: any
+}
+
 const DEFAULTS = {
   keyColumn: '',
   // TODO: skip multiple columns
@@ -65,6 +70,10 @@ class Ctrl extends MetricsPanelCtrl {
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(TooltipMode);
+
+  // field for updating tooltip on rendering and storing previous state
+  private _lastHoverEvent: HoverEvent;
+
   // used to show status messages replacing rendered graphics
   // see isPanelAlert and panelAlertMessage
   private _panelAlert = {
@@ -86,6 +95,7 @@ class Ctrl extends MetricsPanelCtrl {
 
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
     this.items = [];
+    this._tooltip = new GraphTooltip();
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
@@ -132,16 +142,22 @@ class Ctrl extends MetricsPanelCtrl {
       this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
     }
     this.$scope.items = this.items;
-
-    if(this._tooltip !== undefined) {
-      this._tooltip.destroy();
+    
+    if(this._tooltip.visible) {
+      if(this._lastHoverEvent === undefined) {
+        throw new Error(
+          'Need to show tooltip because it`s visible, but don`t have previous state'
+        );
+      }
+      this.onHover(this._lastHoverEvent);
     }
-    this._tooltip = new GraphTooltip(this.panel.tooltipMode);
+
     this._panelAlert.active = false;
 
   }
 
-  onHover(event: { index: number, event: any }) {
+  onHover(event: HoverEvent) {
+    this._lastHoverEvent = event;
     let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
       i == event.index,
       item.title, // previously wwe showed serie.alias || serie.target
@@ -150,11 +166,11 @@ class Ctrl extends MetricsPanelCtrl {
         color: item.color
       }]
     ));
-    this._tooltip.show(event.event, tooltipItems);
+    this._tooltip.show(event.event, tooltipItems, this.panel.tooltipMode);
   }
 
   onMouseLeave() {
-    this._tooltip.clear();
+    this._tooltip.hide();
   }
 
   _onDataReceived(seriesList: any) {
