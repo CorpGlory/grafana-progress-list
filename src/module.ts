@@ -141,7 +141,7 @@ class Ctrl extends MetricsPanelCtrl {
 
   }
 
-  onHover(event: { index: number, event: any }, title?: any, value?: any) {
+  onHover(event: { index: number, event: any }) {
     let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
       i == event.index,
       item.title, // previously wwe showed serie.alias || serie.target

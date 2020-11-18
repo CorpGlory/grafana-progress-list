@@ -1,12 +1,12 @@
 <div class="progress-list-panel">
   <div ng-if="!ctrl.isPanelAlert">
-    <div ng-repeat="item in items" class="list-item progress-item">
+    <div ng-repeat="item in items" class="list-item">
       <div class="list-item-title"
         ng-bind-html="item.title"
         style="margin-top: 10px; margin-bottom: -8px;"
       ></div>
-      <div 
-        class="list-item-content" 
+      <div
+        class="list-item-content"
         style="width: {{ item.aggregatedProgress }}%;"
         ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
         ng-mouseleave="ctrl.onMouseLeave()"
@@ -22,17 +22,18 @@
             margin-top: {{ item.titleParams.titleTopMargin }}px;
           "
           class="progress-bar-line"
-        />
+        >
         <span
           style="margin-top: {{ item.titleParams.valueTopMargin }}px;"
           class="list-item-value progress-bar-value"
         >
           {{ item.formattedValue }}
         </span>
+        </div>
       </div>
     </div>
-  </div>
-  <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
-    <div ng-bind-html="ctrl.panelAlertMessage"></div> 
+    <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
+      <div ng-bind-html="ctrl.panelAlertMessage"></div>
+    </div>
   </div>
 </div>

@@ -17,11 +17,16 @@ export type Serie = {
   alias?: string
 };
 
+export type TooltipValue = {
+  value: string,
+  color: string
+}
+
 export class TooltipItem {
   constructor(
     public active: boolean, 
     public name: string,
-    public vcs: { value: string, color: string }[]
+    public values: TooltipValue[]
   ) {
   }
 
@@ -39,9 +44,9 @@ export class TooltipItem {
   }
   
   private _valuesToHtml(): string {
-    return this.vcs.map(vc => `
+    return this.values.map(v => `
       <div class="graph-tooltip-value">
-        ${vc.value}
+        ${v.value}
       </div>
     `).join('');
   }

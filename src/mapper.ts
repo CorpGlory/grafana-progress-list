@@ -168,9 +168,9 @@ export class ProgressItem {
 
   get formattedValue(): string {
     const value =
-      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-      this.aggregatedProgress:
-      this._aggregatedValue;
+      this._panelConfig.getValue('valueLabelType') === 'percentage'
+        ? this.aggregatedProgress
+        : this._aggregatedValue;
     return getFormattedValue(
       value,
       this._panelConfig.getValue('prefix'),

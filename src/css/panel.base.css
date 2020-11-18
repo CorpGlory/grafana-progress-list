@@ -19,10 +19,6 @@
   right: 0;
 }
 
-.list-item-content .progress-item {
-  position: relative;
-}
-
 .list-item-content .progress-bar-line {
   z-index: 2;
   top: 0px;
