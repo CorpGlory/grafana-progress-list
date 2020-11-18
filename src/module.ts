@@ -13,7 +13,7 @@ export enum TitleViewOptions {
 };
 
 const ERROR_MAPPING = `
-  Can't map the received metrics, 
+  Can't map the received metrics,
   see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
 `;
 const ERROR_NO_DATA = "no data";
@@ -69,7 +69,7 @@ class Ctrl extends MetricsPanelCtrl {
   // see isPanelAlert and panelAlertMessage
   private _panelAlert = {
     active: true,
-    // message prop can be formatted with html, 
+    // message prop can be formatted with html,
     message: '<strong>loading...</strong>' // loading will be showed only once at the beginning
 
     // would be nice to add `type` property with values ['info', 'warning', 'error']

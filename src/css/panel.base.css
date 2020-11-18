@@ -5,7 +5,7 @@
 
 .list-item {
   position: relative;
-  height: 30px;
+  height: 34px;
 }
 
 .list-item-content {
@@ -25,8 +25,8 @@
   background: darkgreen;
 }
 
-.list-item-content .list-item-title {
-  z-index: 1;
+.list-item-title {
+  margin-bottom: -8px;
 }
 
 .options-tab .section {
