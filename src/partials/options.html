@@ -130,17 +130,17 @@
       ></select>
     </div>
   </div>
-  <div class="gf-form-inline">
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Prefix</label>
-      <input
-        type="text" class="gf-form-input width-12"
-        ng-model="ctrl.panel.prefix"
-        ng-change="ctrl.render()"
-        ng-model-onblur
-      />
-    </div>
+  
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Prefix</label>
+    <input
+      type="text" class="gf-form-input width-12"
+      ng-model="ctrl.panel.prefix"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
   </div>
+  
   <div class="gf-form">
     <label class="gf-form-label width-8">Postfix</label>
     <input
@@ -150,13 +150,16 @@
       ng-model-onblur
     />
   </div>
+
   <div class="gf-form">
-    <label class="gf-form-label width-8">Decimals</label>
+    <label class="gf-form-label width-8">
+      Decimals
+      <tip>Override automatic decimal precision</tip>
+    </label>
     <input
       type="number"
       class="gf-form-input width-12"
       placeholder="auto" data-placement="right"
-      bs-tooltip="'Override automatic decimal precision'"
       ng-model="ctrl.panel.decimals"
       ng-change="ctrl.render()"
       ng-model-onblur
@@ -164,38 +167,37 @@
   </div>
 
   <br>
-  <div class="section gf-form-group">
-    <h5 class="section-heading">Key Labels</h5>
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Title Type</label>
-      <div class="gf-form-select-wrapper width-12">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.titleViewType"
-          ng-options="n for n in ctrl.titleViewTypeOptions"
-          ng-change="ctrl.render()"
-        ></select>
-      </div>
-    </div>
-    <div class="gf-form-inline">
-      <div class="gf-form">
-        <label class="gf-form-label width-8">
-          Alias
-          <tip>
-            You can insert HTML here.
-            Use $__key variable to access the original key
-          </tip>
-        </label>
-        <!-- TODO: better style -->
-        <textarea
-          class="gf-form-input"
-          ng-model="ctrl.panel.alias"
-          ng-change="ctrl.render()"
-          ng-model-onblur
-        />
-      </div>
+  <h5 class="section-heading">Key Labels</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Title Type</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.titleViewType"
+        ng-options="n for n in ctrl.titleViewTypeOptions"
+        ng-change="ctrl.render()"
+      ></select>
     </div>
   </div>
+  <div class="gf-form-inline">
+    <div class="gf-form">
+      <label class="gf-form-label width-8">
+        Alias
+        <tip>
+          You can insert HTML here.
+          Use $__key variable to access the original key
+        </tip>
+      </label>
+      <!-- TODO: better style -->
+      <textarea
+        class="gf-form-input"
+        ng-model="ctrl.panel.alias"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      ></textarea>
+    </div>
+  </div>
+  
   
   <br/>
   <h5 class="section-heading">Coloring</h5>
@@ -240,7 +242,7 @@
       />
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-6">Colors</label>
+      <label class="gf-form-label width-8">Colors</label>
       <span class="gf-form-label">
         <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
       </span>
@@ -279,7 +281,7 @@
     </div>
 
     <div class="gf-form">
-      <label class="gf-form-label width-11">Default
+      <label class="gf-form-label width-8">Default
         <tip>Color for all other keys</tip>
       </label>
       <span class="gf-form-label">
