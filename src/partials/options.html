@@ -201,18 +201,6 @@
   <br/>
   <h5 class="section-heading">Coloring</h5>
   <div class="gf-form">
-    <label class="gf-form-label width-8">Type</label>
-    <div class="gf-form-select-wrapper width-11">
-      <select
-        class="gf-form-input"
-        ng-model="ctrl.panel.coloringType"
-        ng-options="n for n in ctrl.coloringTypeOptions"
-        ng-change="ctrl.render()"
-      ></select>
-    </div>
-  </div>
-
-  <div class="gf-form">
     <label class="gf-form-label width-8">Opacity</label>
     <input
       type="number"
@@ -223,6 +211,18 @@
       ng-model="ctrl.panel.opacity"
       ng-blur="ctrl.render()"
     />
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Type</label>
+    <div class="gf-form-select-wrapper width-11">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.coloringType"
+        ng-options="n for n in ctrl.coloringTypeOptions"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
   </div>
 
   <div ng-if="ctrl.panel.coloringType == 'thresholds'">
