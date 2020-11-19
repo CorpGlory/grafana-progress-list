@@ -142,7 +142,7 @@ class Ctrl extends MetricsPanelCtrl {
       this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
     }
     this.$scope.items = this.items;
-    
+
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
         throw new Error(
@@ -151,9 +151,7 @@ class Ctrl extends MetricsPanelCtrl {
       }
       this.onHover(this._lastHoverEvent);
     }
-
     this._panelAlert.active = false;
-
   }
 
   onHover(event: HoverEvent) {

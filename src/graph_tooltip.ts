@@ -65,11 +65,20 @@ export class GraphTooltip {
   show(pos: Position, items: TooltipItem[], mode: TooltipMode): void {
     this._visible = true;
     // TODO: use more vue/react approach here
-    // TODO: build this string faster
-    let html = mode == TooltipMode.SINGLE
-                         ? `<div class="graph-tooltip-time"></div>` 
-                         : '';
-        html += items.map(i => i.toHtml()).join('');
+    // TODO: maybe wrap this rendering logic into classes
+    if(mode == TooltipMode.SINGLE) {
+      let activeItem = _.find(items, item => item.active);
+      var html = `<div class="graph-tooltip-time">Current value</div>`;
+      if(activeItem === undefined) {
+        throw new Error(
+          'Can`t find any active item to show current value in tooltip'
+        );
+      }
+      html += activeItem.toHtml();
+    } else {
+      // TODO: build this string faster
+      var html = items.map(i => i.toHtml()).join('');
+    }
 
     // TODO: move this "20" to a constant
     // TODO: check how this work when `pos` is close to the page bottom edge
