@@ -1,14 +1,13 @@
-import { ProgressItem } from './mapper';
-
 import * as _ from 'lodash';
 
 
 export enum TooltipMode {
+  NONE = 'none',
   SINGLE = 'single',
   ALL_SERIES = 'all series'
 };
 
-type Position = {
+export type Position = {
   pageX: number,
   pageY: number
 };
@@ -19,83 +18,85 @@ export type Serie = {
   alias?: string
 };
 
+export type TooltipValue = {
+  value: string,
+  color: string
+}
+
+export class TooltipItem {
+  constructor(
+    public active: boolean, 
+    public name: string,
+    public values: TooltipValue[]
+  ) {
+  }
+
+  toHtml(): string {
+    return `
+      <div class="graph-tooltip-list-item">
+        <div class="graph-tooltip-series-name">
+          ${this.active ? '<b>' : ''} 
+          ${this.name}
+          ${this.active ? '</b>' : ''}
+        </div>
+        ${this._valuesToHtml()}
+      </div>
+    `;
+  }
+  
+  private _valuesToHtml(): string {
+    return this.values.map(v => `
+      <div class="graph-tooltip-value">
+        ${v.value}
+      </div>
+    `).join('');
+  }
+
+}
+
 export class GraphTooltip {
 
   private $tooltip: JQuery<HTMLElement>;
   private _visible = false;
 
-  constructor(
-    private getSeriesFn: () => Serie[],
-    private items: ProgressItem[],
-    private tooltipMode: TooltipMode
-  ) {
+  constructor() {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
-  clear(): void {
-    this._visible = false;
-    this.$tooltip.detach();
-  }
-
-  show(pos: Position, index: number, title?: any, value?: any): void {
+  show(pos: Position, items: TooltipItem[], mode: TooltipMode): void {
+    if(mode == TooltipMode.NONE) {
+      return;
+    }
     this._visible = true;
-    const seriesList = this.getSeriesFn();
-    if (seriesList.length === 0) {
-      return;
-    }
-
-    if(title !== undefined && value !== undefined) {
-      const showTitle = false;
-      this._renderAndShow(this._convertTitleAndValueToHtml(title, value), pos, showTitle);
-      return;
-    }
-
-    let currentValues: string[] = [];
-    if(this.tooltipMode === TooltipMode.ALL_SERIES) {
-      currentValues = _.map(
-        seriesList,
-        (serie: Serie, idx: number) => this._convertSerieToHtml(serie, this.items[idx], index === idx)
-      ).filter(value => value !== undefined);
+    // TODO: use more vue/react approach here
+    // TODO: maybe wrap this rendering logic into classes
+    if(mode == TooltipMode.SINGLE) {
+      let activeItem = _.find(items, item => item.active);
+      var html = `<div class="graph-tooltip-time">Current value</div>`;
+      if(activeItem === undefined) {
+        throw new Error(
+          'Can`t find any active item to show current value in tooltip'
+        );
+      }
+      html += activeItem.toHtml();
+    } else if (mode == TooltipMode.ALL_SERIES) {
+      // TODO: build this string faster
+      var html = items.map(i => i.toHtml()).join('');
     } else {
-      currentValues = [this._convertSerieToHtml(seriesList[index], this.items[index], true)];
+      throw new Error('unknown tooltip type');
     }
 
-    this._renderAndShow(currentValues.join('\n'), pos);
+    // TODO: move this "20" to a constant
+    // TODO: check how this work when `pos` is close to the page bottom edge
+    (this.$tooltip.html(html) as any).place_tt(pos.pageX + 20, pos.pageY).show();
   }
 
-  destroy(): void {
+  hide(): void {
     this._visible = false;
-    this.$tooltip.remove();
+    this.$tooltip.hide();
   }
 
   get visible(): boolean { return this._visible; }
 
-  private _renderAndShow(innerHtml: string, pos: Position, showTitle = true): void {
-    const title = showTitle ? `<div class="graph-tooltip-time">Current value</div>` : '';
-    // TODO: move this "20" to a constant
-    // TODO: check how this work when `pos` is close to the page bottom edge
-    (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
-  }
-
-  private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          ${isBold ? '<b>' : ''} ${serie.alias || serie.target} ${isBold ? '</b>' : ''}
-        </div>
-        <div class="graph-tooltip-value">${item.currentFormattedValue}</div>
-      </div>
-    `;
-  }
-
-  private _convertTitleAndValueToHtml(title: string, value: number): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          <b>${title}</b>
-        </div>
-        <div class="graph-tooltip-value">${value}</div>
-      </div>
-    `;
-  }
+  
 }

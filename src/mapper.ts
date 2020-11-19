@@ -1,4 +1,4 @@
-import { PanelConfig } from './panel-config';
+import { PanelConfig } from './panel_config';
 import { getFormattedValue } from './value_formatter';
 
 import { TitleViewOptions } from './module';
@@ -168,9 +168,9 @@ export class ProgressItem {
 
   get formattedValue(): string {
     const value =
-      this._panelConfig.getValue('valueLabelType') === 'percentage' ?
-      this.aggregatedProgress :
-      this._aggregatedValue;
+      this._panelConfig.getValue('valueLabelType') === 'percentage'
+        ? this.aggregatedProgress
+        : this._aggregatedValue;
     return getFormattedValue(
       value,
       this._panelConfig.getValue('prefix'),
@@ -289,7 +289,8 @@ export class Mapper {
       );
 
       const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
-
+      
+      // TODO: it's wrong, we return a bad type here
       return seriesList[0].rows.map(
         row => new MultiProgressItem(
           this._panelConfig,

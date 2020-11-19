@@ -5,7 +5,7 @@
 
 .list-item {
   position: relative;
-  height: 30px;
+  height: 34px;
 }
 
 .list-item-content {
@@ -19,18 +19,14 @@
   right: 0;
 }
 
-.list-item-content .progress-item {
-  position: relative;
-}
-
 .list-item-content .progress-bar-line {
   z-index: 2;
   top: 0px;
   background: darkgreen;
 }
 
-.list-item-content .list-item-title {
-  z-index: 1;
+.list-item-title {
+  margin-bottom: -8px;
 }
 
 .options-tab .section {

@@ -1,8 +1,6 @@
-import { GraphTooltip, TooltipMode } from './graph_tooltip';
-import { PanelConfig } from './panel-config';
+import { GraphTooltip, TooltipMode, TooltipItem } from './graph_tooltip';
+import { PanelConfig } from './panel_config';
 import { Mapper, ProgressItem, StatType } from './mapper';
-import { initProgress } from './directives/progress';
-import { initMultibarProgress } from './directives/multibar_progress';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
@@ -15,13 +13,17 @@ export enum TitleViewOptions {
 };
 
 const ERROR_MAPPING = `
-  Can't map the received metrics, 
+  Can't map the received metrics,
   see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
 `;
 const ERROR_NO_DATA = "no data";
 
+export type HoverEvent = {
+  index: number,
+  event: any
+}
+
 const DEFAULTS = {
-  multibar: false,
   keyColumn: '',
   // TODO: skip multiple columns
   skipColumn: '',
@@ -68,11 +70,15 @@ class Ctrl extends MetricsPanelCtrl {
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(TooltipMode);
+
+  // field for updating tooltip on rendering and storing previous state
+  private _lastHoverEvent: HoverEvent;
+
   // used to show status messages replacing rendered graphics
   // see isPanelAlert and panelAlertMessage
   private _panelAlert = {
     active: true,
-    // message prop can be formatted with html, 
+    // message prop can be formatted with html,
     message: '<strong>loading...</strong>' // loading will be showed only once at the beginning
 
     // would be nice to add `type` property with values ['info', 'warning', 'error']
@@ -87,11 +93,9 @@ class Ctrl extends MetricsPanelCtrl {
     this._panelConfig = new PanelConfig(this.panel);
     this._initStyles();
 
-    initProgress(this._panelConfig, 'progressListPluginProgress');
-    initMultibarProgress(this._panelConfig, 'progressListPluginMultibarProgress');
-
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
     this.items = [];
+    this._tooltip = new GraphTooltip();
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
@@ -124,36 +128,47 @@ class Ctrl extends MetricsPanelCtrl {
       return;
     }
     try {
-      var items = this.mapper.mapMetricData(this._seriesList);
+      // TODO: set this.items also
+      this.items = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
       this._panelAlert.message = ERROR_MAPPING;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      items = _.sortBy(items, i => i.aggregatedProgress);
+      this.items = _.sortBy(this.items, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      items = _.sortBy(items, i => -i.aggregatedProgress);
+      this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
     }
-    this.$scope.items = items;
+    this.$scope.items = this.items;
 
-    if(this._tooltip !== undefined) {
-      this._tooltip.destroy();
+    if(this._tooltip.visible) {
+      if(this._lastHoverEvent === undefined) {
+        throw new Error(
+          'Need to show tooltip because it`s visible, but don`t have previous state'
+        );
+      }
+      this.onHover(this._lastHoverEvent);
     }
-    this._tooltip = new GraphTooltip(
-      () => this._seriesList, items, this.panel.tooltipMode
-    );
     this._panelAlert.active = false;
-
   }
 
-  onHover(index: number, event: any, title?: any, value?: any) {
-    this._tooltip.show(event.originalEvent, index, title, value);
+  onHover(event: HoverEvent) {
+    this._lastHoverEvent = event;
+    let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
+      i == event.index,
+      item.title, // previously wwe showed serie.alias || serie.target
+      [{
+        value: item.formattedValue,
+        color: item.color
+      }]
+    ));
+    this._tooltip.show(event.event, tooltipItems, this.panel.tooltipMode);
   }
 
   onMouseLeave() {
-    this._tooltip.clear();
+    this._tooltip.hide();
   }
 
   _onDataReceived(seriesList: any) {
@@ -214,14 +229,6 @@ class Ctrl extends MetricsPanelCtrl {
   // the field will be rendered as html
   get panelAlertMessage(): string {
     return this._panelAlert.message;
-  }
-
-  get isMultibar(): boolean {
-    return this.panel.multibar;
-  }
-
-  set isMultibar(isMultibar: boolean) {
-    this.panel.multibar = isMultibar;
   }
 
 }
