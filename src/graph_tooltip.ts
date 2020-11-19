@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 
 export enum TooltipMode {
+  NONE = 'none',
   SINGLE = 'single',
   ALL_SERIES = 'all series'
 };
@@ -63,6 +64,9 @@ export class GraphTooltip {
   }
 
   show(pos: Position, items: TooltipItem[], mode: TooltipMode): void {
+    if(mode == TooltipMode.NONE) {
+      return;
+    }
     this._visible = true;
     // TODO: use more vue/react approach here
     // TODO: maybe wrap this rendering logic into classes
@@ -75,9 +79,11 @@ export class GraphTooltip {
         );
       }
       html += activeItem.toHtml();
-    } else {
+    } else if (mode == TooltipMode.ALL_SERIES) {
       // TODO: build this string faster
       var html = items.map(i => i.toHtml()).join('');
+    } else {
+      throw new Error('unknown tooltip type');
     }
 
     // TODO: move this "20" to a constant
