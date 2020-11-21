@@ -1,11 +1,7 @@
 import * as _ from 'lodash';
 
+import { TooltipMode } from './panel_config';
 
-export enum TooltipMode {
-  NONE = 'none',
-  SINGLE = 'single',
-  ALL_SERIES = 'all series'
-};
 
 export type Position = {
   pageX: number,
@@ -98,5 +94,4 @@ export class GraphTooltip {
 
   get visible(): boolean { return this._visible; }
 
-  
 }
