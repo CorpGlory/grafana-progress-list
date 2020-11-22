@@ -27,13 +27,13 @@ class Ctrl extends MetricsPanelCtrl {
   public progressBars: ProgressBar[];
 
   private _panelConfig: PanelConfig.PanelConfig;
-  private _element: any;
 
   private _seriesList: any;
 
   private _tooltip: GraphTooltip;
 
   private statNameOptions = _.values(PanelConfig.StatType);
+  // TODO: review these ooptions and make types in PanelConfig
   private statProgressTypeOptions = [ 'max value', 'shared' ];
   private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
   private titleViewTypeOptions = _.values(PanelConfig.TitleViewOptions);
@@ -72,10 +72,6 @@ class Ctrl extends MetricsPanelCtrl {
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
     this.events.on('render', this._onRender.bind(this));
-  }
-
-  link(scope, element) {
-    this._element = element;
   }
 
   _initStyles() {
@@ -134,7 +130,7 @@ class Ctrl extends MetricsPanelCtrl {
 
   private _clearActiveProgressBar() {
     if(
-      this._lastHoverEvent !== undefined && 
+      this._lastHoverEvent !== undefined &&
       this._lastHoverEvent.index < this.progressBars.length
     ) {
       this.progressBars[this._lastHoverEvent.index].active = false;

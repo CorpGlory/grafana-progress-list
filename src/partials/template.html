@@ -7,7 +7,7 @@
       ng-mouseleave="ctrl.onMouseLeave()"
       ng-class="{ 'progress-bar-active': progressBar.active }"
     >
-      <div class="list-item-title" ng-bind-html="progressBar.title"></div>
+      <div class="progress-bar-title" ng-bind-html="progressBar.title"></div>
       <div
         class="list-item-content"
         style="width: {{ progressBar.aggregatedProgress }}%;"

@@ -33,7 +33,7 @@ export class Mapper {
     let kstat: KeyValue[] = [];
     let currentStat: KeyValue[] = [];
 
-  
+
     let keys = seriesList[0].columns.map(col => col.text);
 
     const keyColumn = this._panelConfig.getValue('keyColumn');
@@ -59,7 +59,7 @@ export class Mapper {
     );
 
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
-    
+
     // TODO: it's wrong, we return a bad type here
     return seriesList[0].rows.map(
       row => new ProgressBar(
@@ -70,7 +70,7 @@ export class Mapper {
         maxValue as number
       )
     );
-    
+
   }
 
   // TODO: enum statProgressType

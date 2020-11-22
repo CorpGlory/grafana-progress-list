@@ -68,7 +68,7 @@ function progressBar2Html(progressBar: ProgressBar): string {
   return `
     <div class="graph-tooltip-list-item">
       <div class="graph-tooltip-series-name">
-        ${progressBar.active ? '<b>' : ''} 
+        ${progressBar.active ? '<b>' : ''}
         ${progressBar.title}
         ${progressBar.active ? '</b>' : ''}
       </div>
