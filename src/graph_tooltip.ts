@@ -9,6 +9,7 @@ export type Position = {
   pageY: number
 };
 
+// TODO: check if we need this
 export type Serie = {
   datapoints: [number, number][],
   target: string,

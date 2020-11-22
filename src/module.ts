@@ -24,7 +24,7 @@ class Ctrl extends MetricsPanelCtrl {
   public mapper: Mapper;
 
   // TODO: rename progressBars
-  public items: ProgressBar[];
+  public progressBars: ProgressBar[];
 
   private _panelConfig: PanelConfig.PanelConfig;
   private _element: any;
@@ -66,7 +66,7 @@ class Ctrl extends MetricsPanelCtrl {
     this._initStyles();
 
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
-    this.items = [];
+    this.progressBars = [];
     this._tooltip = new GraphTooltip();
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
@@ -101,19 +101,19 @@ class Ctrl extends MetricsPanelCtrl {
     }
     try {
       // TODO: set this.items also
-      this.items = this.mapper.mapMetricData(this._seriesList);
+      this.progressBars = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
       this._panelAlert.message = ERROR_MAPPING;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      this.items = _.sortBy(this.items, i => i.aggregatedProgress);
+      this.progressBars = _.sortBy(this.progressBars, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
+      this.progressBars = _.sortBy(this.progressBars, i => -i.aggregatedProgress);
     }
-    this.$scope.items = this.items;
+    this.$scope.items = this.progressBars;
 
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
@@ -127,14 +127,11 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   onHover(event: HoverEvent) {
-    this._lastHoverEvent = event;
-    let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
+    this._lastHoverEvent = event; // TODO: use it to unset active previous progressbar
+    let tooltipItems: TooltipItem[] = _.map(this.progressBars, (item, i) => new TooltipItem(
       i == event.index,
       item.title, // previously wwe showed serie.alias || serie.target
-      [{
-        value: item.formattedValue,
-        color: item.colors[0] // TODO: use other colors here
-      }]
+      item.bars
     ));
     this._tooltip.show(event.event, tooltipItems, this.panel.tooltipMode);
   }
