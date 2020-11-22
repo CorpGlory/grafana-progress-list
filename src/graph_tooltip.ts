@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 
+import { Bar } from './progress_bar'
 import { TooltipMode } from './panel_config';
 
 
@@ -14,16 +15,11 @@ export type Serie = {
   alias?: string
 };
 
-export type TooltipValue = {
-  value: string,
-  color: string
-}
-
 export class TooltipItem {
   constructor(
     public active: boolean, 
     public name: string,
-    public values: TooltipValue[]
+    public elems: Bar[]
   ) {
   }
 
@@ -41,9 +37,9 @@ export class TooltipItem {
   }
   
   private _valuesToHtml(): string {
-    return this.values.map(v => `
+    return this.elems.map(barElem => `
       <div class="graph-tooltip-value">
-        ${v.value}
+        ${barElem.value}
       </div>
     `).join('');
   }

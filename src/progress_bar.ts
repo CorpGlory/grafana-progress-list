@@ -4,11 +4,20 @@ import { getFormattedValue } from './value_formatter';
 import * as _ from 'lodash';
 
 
-type ProgressBarTitle = {
+type ProgressTitle = {
   barHeight: number,
   titleTopMargin: number,
   valueTopMargin: number
 };
+
+/**
+ * It's model for rendering bars in view (partial) and tooltip
+ */
+export type Bar = {
+  name: string,
+  value: number,
+  color: string
+}
 
 export class ProgressBar {
   constructor(
@@ -65,7 +74,7 @@ export class ProgressBar {
     );
   }
 
-  get titleParams(): ProgressBarTitle {
+  get titleParams(): ProgressTitle {
     const titleType = this._panelConfig.getValue('titleViewType');
 
     switch(titleType) {
