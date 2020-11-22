@@ -1,4 +1,4 @@
-import { GraphTooltip, TooltipItem } from './graph_tooltip';
+import { GraphTooltip } from './graph_tooltip';
 import * as PanelConfig from './panel_config';
 import { Mapper } from './mapper';
 import { ProgressBar } from './progress_bar';
@@ -44,7 +44,7 @@ class Ctrl extends MetricsPanelCtrl {
   private tooltipModeOptions = _.values(PanelConfig.TooltipMode);
 
   // field for updating tooltip on rendering and storing previous state
-  private _lastHoverEvent: HoverEvent;
+  private _lastHoverEvent?: HoverEvent;
 
   // used to show status messages replacing rendered graphics
   // see isPanelAlert and panelAlertMessage
@@ -113,7 +113,6 @@ class Ctrl extends MetricsPanelCtrl {
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
       this.progressBars = _.sortBy(this.progressBars, i => -i.aggregatedProgress);
     }
-    this.$scope.items = this.progressBars;
 
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
@@ -127,16 +126,23 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   onHover(event: HoverEvent) {
+    this._clearActiveProgressBar();
     this._lastHoverEvent = event; // TODO: use it to unset active previous progressbar
-    let tooltipItems: TooltipItem[] = _.map(this.progressBars, (item, i) => new TooltipItem(
-      i == event.index,
-      item.title, // previously wwe showed serie.alias || serie.target
-      item.bars
-    ));
-    this._tooltip.show(event.event, tooltipItems, this.panel.tooltipMode);
+    this.progressBars[event.index].active = true;
+    this._tooltip.show(event.event, this.progressBars, this.panel.tooltipMode);
+  }
+
+  private _clearActiveProgressBar() {
+    if(
+      this._lastHoverEvent !== undefined && 
+      this._lastHoverEvent.index < this.progressBars.length
+    ) {
+      this.progressBars[this._lastHoverEvent.index].active = false;
+    }
   }
 
   onMouseLeave() {
+    this._clearActiveProgressBar();
     this._tooltip.hide();
   }
 
@@ -172,6 +178,7 @@ class Ctrl extends MetricsPanelCtrl {
   _dataError(err) {
     console.log('got data error');
     console.log(err);
+    // TODO: reveiew this logic
     this.$scope.data = [];
     this.$scope.dataError = err;
   }

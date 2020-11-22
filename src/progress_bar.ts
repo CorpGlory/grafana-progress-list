@@ -127,15 +127,17 @@ export class ProgressBar {
 /** VIEW **/
 
 function mapValue2Color(value: number, _panelConfig: any) {
-  var colorType = this._panelConfig.getValue('coloringType');
+  var colorType = _panelConfig.getValue('coloringType');
   if(colorType === 'auto') {
     return 'auto'
   }
   if(colorType === 'thresholds') {
-    var thresholds = this._panelConfig.getValue('thresholds').split(',').map(parseFloat);
-    var colors = this._panelConfig.getValue('colors');
-    if(colors.length != thresholds.length) {
-      throw new Error('Bad colors/thresholds config: length mismatch');
+    // TODO: parse only once
+    var thresholds = _panelConfig.getValue('thresholds').split(',').map(parseFloat);
+    var colors = _panelConfig.getValue('colors');
+    if(colors.length <= thresholds.length) {
+      // we add one because a threshold is a cut of the range of values
+      throw new Error('Number of colors must be at least as number as threasholds + 1');
     }
     for(var i = thresholds.length; i > 0; i--) {
       if(value >= thresholds[i - 1]) {
@@ -145,10 +147,10 @@ function mapValue2Color(value: number, _panelConfig: any) {
     return colors[0];
   }
   if(colorType === 'key mapping') {
-    var colorKeyMappings = this._panelConfig.getValue('colorKeyMappings') as any[];
+    var colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
     var keyColorMapping = _.find(colorKeyMappings, k => k.key === this._key);
     if(keyColorMapping === undefined) {
-      return this._panelConfig.getValue('colorsKeyMappingDefault');
+      return _panelConfig.getValue('colorsKeyMappingDefault');
     }
     return keyColorMapping.color;
   }

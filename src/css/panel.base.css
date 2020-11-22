@@ -3,9 +3,13 @@
   overflow-y: auto;
 }
 
-.list-item {
+.progress-bar {
   position: relative;
   height: 34px;
+}
+
+.progress-bar-active {
+  font-weight: bold;
 }
 
 .list-item-content {

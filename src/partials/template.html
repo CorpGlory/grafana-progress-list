@@ -1,10 +1,11 @@
 <div class="progress-list-panel">
   <div ng-if="!ctrl.isPanelAlert">
     <div 
-      ng-repeat="progressBar in progressBars"
-      class="list-item"
+      ng-repeat="progressBar in ctrl.progressBars"
+      class="progress-bar"
       ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
       ng-mouseleave="ctrl.onMouseLeave()"
+      ng-class="{ 'progress-bar-active': progressBar.active }"
     >
       <div class="list-item-title" ng-bind-html="progressBar.title"></div>
       <div
