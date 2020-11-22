@@ -27,6 +27,9 @@
   z-index: 2;
   top: 0px;
   background: darkgreen;
+  border-right-width: 2px;
+  border-right-style: solid;
+  border-right-color: gray;
 }
 
 .progress-bar .progress-bar-title {
