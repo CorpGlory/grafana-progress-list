@@ -126,7 +126,7 @@ export class ProgressBar {
 
 /** VIEW **/
 
-function mapValue2Color(value: number, index: number, _panelConfig: any) {
+function mapValue2Color(value: number, index: number, _panelConfig: any): string {
   var colorType: ColoringType = _panelConfig.getValue('coloringType');
   var colors: string[] = _panelConfig.getValue('colors');
 
