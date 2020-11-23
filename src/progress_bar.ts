@@ -1,4 +1,4 @@
-import { PanelConfig, TitleViewOptions } from './panel_config';
+import { ColoringType, PanelConfig, TitleViewOptions } from './panel_config';
 import { getFormattedValue } from './value_formatter';
 
 import * as _ from 'lodash';
@@ -43,7 +43,7 @@ export class ProgressBar {
       this._bars.push({
         name: this._keys[i],
         value: this._values[i],
-        color: mapValue2Color(this._values[i], this._panelConfig)
+        color: mapValue2Color(this._values[i], i, this._panelConfig)
       });
     }
   }
@@ -126,15 +126,17 @@ export class ProgressBar {
 
 /** VIEW **/
 
-function mapValue2Color(value: number, _panelConfig: any) {
-  var colorType = _panelConfig.getValue('coloringType');
-  if(colorType === 'auto') {
-    return 'auto'
+function mapValue2Color(value: number, index: number, _panelConfig: any) {
+  var colorType: ColoringType = _panelConfig.getValue('coloringType');
+  var colors: string[] = _panelConfig.getValue('colors');
+
+  if(colorType === ColoringType.PALLETE) {
+    // TODO: pallete resolving
+    return colors[index % colors.length];
   }
-  if(colorType === 'thresholds') {
+  if(colorType === ColoringType.THRESHOLDS) {
     // TODO: parse only once
     var thresholds = _panelConfig.getValue('thresholds').split(',').map(parseFloat);
-    var colors = _panelConfig.getValue('colors');
     if(colors.length <= thresholds.length) {
       // we add one because a threshold is a cut of the range of values
       throw new Error('Number of colors must be at least as number as threasholds + 1');
@@ -146,7 +148,7 @@ function mapValue2Color(value: number, _panelConfig: any) {
     }
     return colors[0];
   }
-  if(colorType === 'key mapping') {
+  if(colorType === ColoringType.KEY_MAPPING) {
     var colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
     var keyColorMapping = _.find(colorKeyMappings, k => k.key === this._key);
     if(keyColorMapping === undefined) {

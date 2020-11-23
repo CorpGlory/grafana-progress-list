@@ -13,8 +13,10 @@ export type HoverEvent = {
 }
 
 const ERROR_MAPPING = `
-  Can't map the received metrics,
-  see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
+  Can't map the received metrics, see 
+  <strong>
+    <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a>
+  </strong>
 `;
 const ERROR_NO_DATA = "no data";
 
@@ -35,7 +37,9 @@ class Ctrl extends MetricsPanelCtrl {
   private statNameOptions = _.values(PanelConfig.StatType);
   // TODO: review these ooptions and make types in PanelConfig
   private statProgressTypeOptions = [ 'max value', 'shared' ];
-  private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
+  
+  private coloringTypeOptions = _.values(PanelConfig.ColoringType);
+
   private titleViewTypeOptions = _.values(PanelConfig.TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];

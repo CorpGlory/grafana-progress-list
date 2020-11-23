@@ -10,6 +10,12 @@ export enum TitleViewOptions {
   INLINE = 'Inline'
 };
 
+export enum ColoringType {
+  PALLETE = 'pallete',
+  THRESHOLDS = 'thresholds',
+  KEY_MAPPING = 'key mapping'
+}
+
 export enum TooltipMode {
   NONE = 'none',
   SINGLE = 'single',
@@ -23,7 +29,7 @@ export const DEFAULTS = {
   statNameOptionValue: StatType.CURRENT,
   statProgressType: 'shared',
   statProgressMaxValue: null,
-  coloringType: 'auto',
+  coloringType: ColoringType.PALLETE,
   titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
   valueLabelType: 'percentage',
@@ -46,6 +52,11 @@ export class PanelConfig {
   private _panel: any;
   public constructor(panel: any) {
     this._panel = panel;
+
+    // migrations
+    if(this.getValue('coloringType') === 'auto') {
+      this.setValue('coloringType', ColoringType.PALLETE);
+    }
   }
 
   public getValue(key: string): any {
