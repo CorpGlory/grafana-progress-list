@@ -1,39 +1,39 @@
 <div class="progress-list-panel">
   <div ng-if="!ctrl.isPanelAlert">
     <div 
-      ng-repeat="item in items"
-      class="list-item"
+      ng-repeat="progressBar in ctrl.progressBars"
+      class="progress-bar"
       ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
       ng-mouseleave="ctrl.onMouseLeave()"
+      ng-class="{ 'progress-bar-active': progressBar.active }"
     >
-      <div class="list-item-title" ng-bind-html="item.title"></div>
+      <div class="progress-bar-title" ng-bind-html="progressBar.title"></div>
       <div
         class="list-item-content"
-        style="width: {{ item.aggregatedProgress }}%;"
+        style="width: {{ progressBar.aggregatedProgress }}%;"
       >
         <div
-          ng-repeat="percentValue in item.percentValues track by $index"
+          ng-repeat="percentValue in progressBar.percentValues track by $index"
           style="
             width: {{ percentValue }}%;
             display: inline-block;
-            background-color: {{ item.colors[$index] }};
-            opacity: {{ item.opacity }};
-            height: {{ item.titleParams.barHeight }}px;
-            margin-top: {{ item.titleParams.titleTopMargin }}px;
+            background-color: {{ progressBar.colors[$index] }};
+            opacity: {{ progressBar.opacity }};
+            height: {{ progressBar.titleParams.barHeight }}px;
+            margin-top: {{ progressBar.titleParams.titleTopMargin }}px;
           "
           class="progress-bar-line"
-        >
+        ></div>
         <span
-          style="margin-top: {{ item.titleParams.valueTopMargin }}px;"
+          style="margin-top: {{ progressBar.titleParams.valueTopMargin }}px;"
           class="list-item-value progress-bar-value"
         >
-          {{ item.formattedValue }}
+          {{ progressBar.formattedValue }}
         </span>
-        </div>
       </div>
     </div>
-    <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
-      <div ng-bind-html="ctrl.panelAlertMessage"></div>
-    </div>
+  </div>
+  <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
+    <div ng-bind-html="ctrl.panelAlertMessage"></div>
   </div>
 </div>

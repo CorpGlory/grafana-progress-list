@@ -1,78 +1,54 @@
-import { GraphTooltip, TooltipMode, TooltipItem } from './graph_tooltip';
-import { PanelConfig } from './panel_config';
-import { Mapper, ProgressItem, StatType } from './mapper';
+import { GraphTooltip } from './graph_tooltip';
+import * as PanelConfig from './panel_config';
+import { Mapper } from './mapper';
+import { ProgressBar } from './progress_bar';
 
 import { MetricsPanelCtrl, loadPluginCss } from 'grafana/app/plugins/sdk';
 
 import * as _ from 'lodash';
-
-
-export enum TitleViewOptions {
-  SEPARATE_TITLE_LINE = 'Separate title line',
-  INLINE = 'Inline'
-};
-
-const ERROR_MAPPING = `
-  Can't map the received metrics,
-  see <strong> <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a> </strong>
-`;
-const ERROR_NO_DATA = "no data";
 
 export type HoverEvent = {
   index: number,
   event: any
 }
 
-const DEFAULTS = {
-  keyColumn: '',
-  // TODO: skip multiple columns
-  skipColumn: '',
-  statNameOptionValue: StatType.CURRENT,
-  statProgressType: 'shared',
-  statProgressMaxValue: null,
-  coloringType: 'auto',
-  titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
-  sortingOrder: 'none',
-  valueLabelType: 'percentage',
-  mappingType: 'datapoint to datapoint',
-  alias: '',
-  prefix: '',
-  postfix: '',
-  thresholds: '10, 30',
-  // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
-  colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
-  colorsKeyMappingDefault: 'rgba(245, 54, 54, 0.9)',
-  colorKeyMappings: [],
-  nullMapping: undefined,
-  tooltipMode: TooltipMode.ALL_SERIES,
-  opacity: 0.5
-};
+const ERROR_MAPPING = `
+  Can't map the received metrics, see 
+  <strong>
+    <a href="https://github.com/CorpGlory/grafana-progress-list/wiki">wiki</a>
+  </strong>
+`;
+const ERROR_NO_DATA = "no data";
 
 class Ctrl extends MetricsPanelCtrl {
   static templateUrl = 'partials/template.html';
 
   public mapper: Mapper;
-  public items: ProgressItem[];
 
-  private _panelConfig: PanelConfig;
-  private _element: any;
+  // TODO: rename progressBars
+  public progressBars: ProgressBar[];
+
+  private _panelConfig: PanelConfig.PanelConfig;
 
   private _seriesList: any;
 
   private _tooltip: GraphTooltip;
 
-  private statNameOptions = _.values(StatType);
+  private statNameOptions = _.values(PanelConfig.StatType);
+  // TODO: review these ooptions and make types in PanelConfig
   private statProgressTypeOptions = [ 'max value', 'shared' ];
-  private coloringTypeOptions = [ 'auto', 'thresholds', 'key mapping' ];
-  private titleViewTypeOptions = _.values(TitleViewOptions);
+  
+  private coloringTypeOptions = _.values(PanelConfig.ColoringType);
+
+  private titleViewTypeOptions = _.values(PanelConfig.TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
-  private tooltipModeOptions = _.values(TooltipMode);
+  private tooltipModeOptions = _.values(PanelConfig.TooltipMode);
 
   // field for updating tooltip on rendering and storing previous state
-  private _lastHoverEvent: HoverEvent;
+  private _lastHoverEvent?: HoverEvent;
 
   // used to show status messages replacing rendered graphics
   // see isPanelAlert and panelAlertMessage
@@ -88,22 +64,18 @@ class Ctrl extends MetricsPanelCtrl {
   constructor($scope: any, $injector: any, public templateSrv: any) {
     super($scope, $injector);
 
-    _.defaults(this.panel, DEFAULTS);
+    _.defaults(this.panel, PanelConfig.DEFAULTS);
 
-    this._panelConfig = new PanelConfig(this.panel);
+    this._panelConfig = new PanelConfig.PanelConfig(this.panel);
     this._initStyles();
 
     this.mapper = new Mapper(this._panelConfig, this.templateSrv);
-    this.items = [];
+    this.progressBars = [];
     this._tooltip = new GraphTooltip();
 
     this.events.on('init-edit-mode', this._onInitEditMode.bind(this));
     this.events.on('data-received', this._onDataReceived.bind(this));
     this.events.on('render', this._onRender.bind(this));
-  }
-
-  link(scope, element) {
-    this._element = element;
   }
 
   _initStyles() {
@@ -129,19 +101,18 @@ class Ctrl extends MetricsPanelCtrl {
     }
     try {
       // TODO: set this.items also
-      this.items = this.mapper.mapMetricData(this._seriesList);
+      this.progressBars = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
       this._panelAlert.message = ERROR_MAPPING;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
-      this.items = _.sortBy(this.items, i => i.aggregatedProgress);
+      this.progressBars = _.sortBy(this.progressBars, i => i.aggregatedProgress);
     }
     if(this._panelConfig.getValue('sortingOrder') === 'decreasing') {
-      this.items = _.sortBy(this.items, i => -i.aggregatedProgress);
+      this.progressBars = _.sortBy(this.progressBars, i => -i.aggregatedProgress);
     }
-    this.$scope.items = this.items;
 
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
@@ -155,19 +126,23 @@ class Ctrl extends MetricsPanelCtrl {
   }
 
   onHover(event: HoverEvent) {
-    this._lastHoverEvent = event;
-    let tooltipItems: TooltipItem[] = _.map(this.items, (item, i) => new TooltipItem(
-      i == event.index,
-      item.title, // previously wwe showed serie.alias || serie.target
-      [{
-        value: item.formattedValue,
-        color: item.color
-      }]
-    ));
-    this._tooltip.show(event.event, tooltipItems, this.panel.tooltipMode);
+    this._clearActiveProgressBar();
+    this._lastHoverEvent = event; // TODO: use it to unset active previous progressbar
+    this.progressBars[event.index].active = true;
+    this._tooltip.show(event.event, this.progressBars, this.panel.tooltipMode);
+  }
+
+  private _clearActiveProgressBar() {
+    if(
+      this._lastHoverEvent !== undefined &&
+      this._lastHoverEvent.index < this.progressBars.length
+    ) {
+      this.progressBars[this._lastHoverEvent.index].active = false;
+    }
   }
 
   onMouseLeave() {
+    this._clearActiveProgressBar();
     this._tooltip.hide();
   }
 
@@ -203,6 +178,7 @@ class Ctrl extends MetricsPanelCtrl {
   _dataError(err) {
     console.log('got data error');
     console.log(err);
+    // TODO: reveiew this logic
     this.$scope.data = [];
     this.$scope.dataError = err;
   }

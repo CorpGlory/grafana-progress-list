@@ -1,58 +1,20 @@
 import * as _ from 'lodash';
 
+import { Bar, ProgressBar } from './progress_bar'
+import { TooltipMode } from './panel_config';
 
-export enum TooltipMode {
-  NONE = 'none',
-  SINGLE = 'single',
-  ALL_SERIES = 'all series'
-};
 
 export type Position = {
   pageX: number,
   pageY: number
 };
 
+// TODO: check if we need this
 export type Serie = {
   datapoints: [number, number][],
   target: string,
   alias?: string
 };
-
-export type TooltipValue = {
-  value: string,
-  color: string
-}
-
-export class TooltipItem {
-  constructor(
-    public active: boolean, 
-    public name: string,
-    public values: TooltipValue[]
-  ) {
-  }
-
-  toHtml(): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          ${this.active ? '<b>' : ''} 
-          ${this.name}
-          ${this.active ? '</b>' : ''}
-        </div>
-        ${this._valuesToHtml()}
-      </div>
-    `;
-  }
-  
-  private _valuesToHtml(): string {
-    return this.values.map(v => `
-      <div class="graph-tooltip-value">
-        ${v.value}
-      </div>
-    `).join('');
-  }
-
-}
 
 export class GraphTooltip {
 
@@ -63,7 +25,7 @@ export class GraphTooltip {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
-  show(pos: Position, items: TooltipItem[], mode: TooltipMode): void {
+  show(pos: Position, progressBars: ProgressBar[], mode: TooltipMode): void {
     if(mode == TooltipMode.NONE) {
       return;
     }
@@ -71,17 +33,17 @@ export class GraphTooltip {
     // TODO: use more vue/react approach here
     // TODO: maybe wrap this rendering logic into classes
     if(mode == TooltipMode.SINGLE) {
-      let activeItem = _.find(items, item => item.active);
+      let activeItem = _.find(progressBars, item => item.active);
       var html = `<div class="graph-tooltip-time">Current value</div>`;
       if(activeItem === undefined) {
         throw new Error(
           'Can`t find any active item to show current value in tooltip'
         );
       }
-      html += activeItem.toHtml();
+      html += progressBar2Html(activeItem);
     } else if (mode == TooltipMode.ALL_SERIES) {
       // TODO: build this string faster
-      var html = items.map(i => i.toHtml()).join('');
+      var html = progressBars.map(progressBar2Html).join('');
     } else {
       throw new Error('unknown tooltip type');
     }
@@ -98,5 +60,27 @@ export class GraphTooltip {
 
   get visible(): boolean { return this._visible; }
 
-  
+}
+
+/** VIEW **/
+
+function progressBar2Html(progressBar: ProgressBar): string {
+  return `
+    <div class="graph-tooltip-list-item">
+      <div class="graph-tooltip-series-name">
+        ${progressBar.active ? '<b>' : ''}
+        ${progressBar.title}
+        ${progressBar.active ? '</b>' : ''}
+      </div>
+      ${progressBarBars2Html(progressBar.bars)}
+    </div>
+  `;
+}
+
+function progressBarBars2Html(bars: Bar[]): string {
+  return bars.map(bar => `
+    <div class="graph-tooltip-value">
+      ${bar.value}
+    </div>
+  `).join('');
 }
