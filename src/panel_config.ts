@@ -27,7 +27,6 @@ export const DEFAULTS = {
   // TODO: skip multiple columns
   skipColumn: '',
   statNameOptionValue: StatType.CURRENT,
-  statProgressType: 'shared',
   statProgressMaxValue: null,
   coloringType: ColoringType.PALLETE,
   titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,

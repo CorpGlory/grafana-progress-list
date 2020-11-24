@@ -49,13 +49,12 @@ export class Mapper {
     }
 
     
-    const rowMaxes =  seriesList[0].rows.map(
+    const firstRowMaxes =  seriesList[0].rows.map(
       row => _.sum(
         row.filter((value, idx) => !_.includes(skipIndexes, idx))
       )
     );
-    const maxValue = _.max(rowMaxes);
-
+    const maxValue = _.max(firstRowMaxes);
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
 
     // TODO: it's wrong, we return a bad type here
