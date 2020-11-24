@@ -42,21 +42,19 @@ export class Mapper {
       keyIndex = keys.findIndex(key => key === keyColumn);
     }
 
-    const title = keys[keyIndex];
-
     let skipIndexes: number[] = [keyIndex];
     const skipColumn = this._panelConfig.getValue('skipColumn');
     if(skipColumn !== '') {
       skipIndexes.push(keys.findIndex(key => key === skipColumn));
     }
 
-    const maxValue = _.max(
-      seriesList[0].rows.map(
-        row => _.sum(
-          row.filter((value, idx) => !_.includes(skipIndexes, idx))
-        )
+    
+    const rowMaxes =  seriesList[0].rows.map(
+      row => _.sum(
+        row.filter((value, idx) => !_.includes(skipIndexes, idx))
       )
     );
+    const maxValue = _.max(rowMaxes);
 
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
 
@@ -71,35 +69,6 @@ export class Mapper {
       )
     );
 
-  }
-
-  // TODO: enum statProgressType
-  _getMaxValue(
-    kstat: KeyValue[],
-    statProgressType: string,
-    statProgressMaxValue: number | null
-  ): number {
-    if(statProgressType === 'shared') {
-      let total = 0;
-      for(let i = 0; i < kstat.length; i++) {
-        total += kstat[i][1];
-      }
-      return total;
-    }
-
-    if(statProgressType === 'max value') {
-      let max = -Infinity;
-      if(statProgressMaxValue !== null) {
-        max = statProgressMaxValue;
-      } else {
-        for(let i = 0; i < kstat.length; i++) {
-          max = Math.max(kstat[i][1], max);
-        }
-      }
-      return max;
-    }
-
-    return -1;
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {

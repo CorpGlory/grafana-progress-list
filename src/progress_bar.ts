@@ -46,35 +46,23 @@ export class ProgressBar {
         color: mapValue2Color(this._values[i], i, this._panelConfig)
       });
     }
+
+    // bad code starts:
+
   }
 
-  get active(): boolean {
-    return this._active;
-  }
+  get active(): boolean { return this._active; }
+  set active(value: boolean) { this._active = value;}
 
-  set active(value: boolean) {
-    this._active = value;
-  }
+  get title(): string { return this._title; }
 
-  get title(): string {
-    return this._title;
-  }
+  get keys(): string[] { return this._keys; }
 
-  get keys(): string[] {
-    return this._keys;
-  }
+  get values(): number[] { return this._values; }
 
-  get values(): number[] {
-    return this._values;
-  }
+  get bars(): Bar[] { return this._bars; }
 
-  get bars(): Bar[] {
-    return this._bars;
-  }
-
-  get sumOfValues(): number {
-    return _.sum(this.values);
-  }
+  get sumOfValues(): number { return _.sum(this.values); }
 
   get percentValues(): number[] {
     // TODO: this.sumOfValues * 1.1 is a hack to make sure bars don't wrap
@@ -131,7 +119,6 @@ function mapValue2Color(value: number, index: number, _panelConfig: any) {
   var colors: string[] = _panelConfig.getValue('colors');
 
   if(colorType === ColoringType.PALLETE) {
-    // TODO: pallete resolving
     return colors[index % colors.length];
   }
   if(colorType === ColoringType.THRESHOLDS) {
