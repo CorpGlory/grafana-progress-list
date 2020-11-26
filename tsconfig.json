@@ -3,7 +3,9 @@
     "strictNullChecks": true,
     "module": "none",
     "target": "es6",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "inlineSourceMap": false,
+    "sourceMap": true
   },
   "include": [
     "./src/**/*.ts"
