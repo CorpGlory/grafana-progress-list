@@ -85,6 +85,10 @@ export class ProgressBar {
     );
   }
 
+  get colors(): string[] {
+    return _.map(this._bars, bar => bar.color);
+  }
+
   // it should go somewhere to view
   get titleParams(): ProgressTitle {
     const titleType = this._panelConfig.getValue('titleViewType');
