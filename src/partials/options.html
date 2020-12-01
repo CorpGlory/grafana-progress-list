@@ -163,7 +163,7 @@
       </label>
       <!-- TODO: better style -->
       <textarea
-        class="gf-form-input"
+        class="gf-form-input width-12"
         ng-model="ctrl.panel.alias"
         ng-change="ctrl.render()"
         ng-model-onblur
@@ -180,7 +180,7 @@
       min="0"
       max="1"
       step="0.1"
-      class="gf-form-input width-11"
+      class="gf-form-input width-12"
       ng-model="ctrl.panel.opacity"
       ng-blur="ctrl.render()"
     />
@@ -188,7 +188,7 @@
 
   <div class="gf-form">
     <label class="gf-form-label width-8">Type</label>
-    <div class="gf-form-select-wrapper width-11">
+    <div class="gf-form-select-wrapper width-12">
       <select
         class="gf-form-input"
         ng-model="ctrl.panel.coloringType"
@@ -207,7 +207,7 @@
       </label>
       <input
         type="text"
-        class="gf-form-input width-11"
+        class="gf-form-input width-12"
         ng-model="ctrl.panel.thresholds"
         ng-blur="ctrl.render()"
         placeholder="50,80"
