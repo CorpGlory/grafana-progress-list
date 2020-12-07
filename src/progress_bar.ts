@@ -43,7 +43,7 @@ export class ProgressBar {
       this._bars.push({
         name: this._keys[i],
         value: this._values[i],
-        color: mapValue2Color(this._values[i], i, this._panelConfig)
+        color: mapValue2Color(this._values[i], this._title, i, this._panelConfig)
       });
     }
 
@@ -118,7 +118,7 @@ export class ProgressBar {
 
 /** VIEW **/
 
-function mapValue2Color(value: number, index: number, _panelConfig: any): string {
+function mapValue2Color(value: number, title: string, index: number, _panelConfig: any): string {
   var colorType: ColoringType = _panelConfig.getValue('coloringType');
   var colors: string[] = _panelConfig.getValue('colors');
 
@@ -140,8 +140,8 @@ function mapValue2Color(value: number, index: number, _panelConfig: any): string
     return colors[0];
   }
   if(colorType === ColoringType.KEY_MAPPING) {
-    var colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
-    var keyColorMapping = _.find(colorKeyMappings, k => k.key === this._key);
+    const colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
+    const keyColorMapping = _.find(colorKeyMappings, k => k.key === title);
     if(keyColorMapping === undefined) {
       return _panelConfig.getValue('colorsKeyMappingDefault');
     }
