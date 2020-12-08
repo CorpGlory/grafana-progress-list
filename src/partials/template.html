@@ -7,7 +7,11 @@
       ng-mouseleave="ctrl.onMouseLeave()"
       ng-class="{ 'progress-bar-active': progressBar.active }"
     >
-      <div class="progress-bar-title" ng-bind-html="progressBar.title"></div>
+      <div
+        class="progress-bar-title"
+        ng-bind-html="progressBar.title"
+        style="position: {{ progressBar.titleParams.position }};"
+      ></div>
       <div
         class="list-item-content"
         style="width: {{ progressBar.aggregatedProgress }}%;"
@@ -20,7 +24,6 @@
             background-color: {{ progressBar.colors[$index] }};
             opacity: {{ progressBar.opacity }};
             height: {{ progressBar.titleParams.barHeight }}px;
-            margin-top: {{ progressBar.titleParams.titleTopMargin }}px;
           "
           class="progress-bar-line"
         ></div>

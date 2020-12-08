@@ -6,8 +6,8 @@ import * as _ from 'lodash';
 
 type ProgressTitle = {
   barHeight: number,
-  titleTopMargin: number,
-  valueTopMargin: number
+  valueTopMargin: number,
+  position: string
 };
 
 /**
@@ -96,14 +96,14 @@ export class ProgressBar {
       case TitleViewOptions.SEPARATE_TITLE_LINE:
         return {
           barHeight: 8,
-          titleTopMargin: 0,
-          valueTopMargin: -12
+          valueTopMargin: -12,
+          position: 'static'
         };
       case TitleViewOptions.INLINE:
         return {
           barHeight: 20,
-          titleTopMargin: -20,
-          valueTopMargin: -18
+          valueTopMargin: 0,
+          position: 'absolute'
         };
       default:
         throw new Error(`Wrong titleType: ${titleType}`);
@@ -147,5 +147,5 @@ function mapValue2Color(value: number, title: string, index: number, _panelConfi
       return keyColorMapping.color;
     default:
       throw new Error('Unknown color type ' + colorType);
-  }  
+  }
 }
