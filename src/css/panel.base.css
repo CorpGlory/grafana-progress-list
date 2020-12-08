@@ -5,7 +5,7 @@
 
 .progress-bar {
   position: relative;
-  height: 34px;
+  margin-bottom: 8px;
 }
 
 .progress-bar-active {
@@ -13,8 +13,12 @@
 }
 
 .progress-bar .list-item-content {
-  display: block;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0px;
   width: 99%;
+  /* render el, not css */
+  background-color: gray;
 }
 
 .progress-bar .list-item-content .list-item-value {
@@ -33,7 +37,8 @@
 }
 
 .progress-bar .progress-bar-title {
-  margin-bottom: -8px;
+  display: flex;
+  justify-content: space-between;
   z-index: 1;
 }
 
