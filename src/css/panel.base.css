@@ -5,6 +5,7 @@
 
 .progress-bar {
   position: relative;
+  height: 30px;
   margin-bottom: 8px;
 }
 
@@ -17,14 +18,10 @@
   justify-content: flex-start;
   margin-top: 0px;
   width: 99%;
-  /* render el, not css */
-  background-color: gray;
 }
 
-.progress-bar .list-item-content .list-item-value {
-  position: absolute;
-  z-index: 3;
-  right: 0;
+.progress-bar .progress-bar-value {
+  margin-right: 8px;
 }
 
 .progress-bar .list-item-content .progress-bar-line {
@@ -36,10 +33,15 @@
   border-right-color: gray;
 }
 
-.progress-bar .progress-bar-title {
+.progress-bar .progress-bar-title-row {
   display: flex;
   justify-content: space-between;
-  z-index: 1;
+  z-index: 4;
+  width: 100%;
+}
+
+.progress-bar .progress-bar-title {
+  margin-bottom: 0px;
 }
 
 .options-tab .section {

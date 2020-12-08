@@ -1,0 +1,7 @@
+.progress-bar .list-item-content {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.progress-bar .progress-bar-title {
+  text-shadow: 4px 4px 4px black, 0 0 4px black, 0 0 4px black;
+}

@@ -8,17 +8,16 @@
       ng-class="{ 'progress-bar-active': progressBar.active }"
     >
       <div
-        class="progress-bar-title"
+        class="progress-bar-title-row"
         style="position: {{ progressBar.titleParams.position }};"
       >
-        <p style="margin-bottom: 0px;">{{ progressBar.title }}</p>
-        <span class="list-item-value progress-bar-value">
+        <p class="progress-bar-title">{{ progressBar.title }}</p>
+        <span class="progress-bar-value">
           {{ progressBar.formattedValue }}
         </span>
       </div>
       <div
         class="list-item-content"
-        style="width: {{ progressBar.aggregatedProgress }}%;"
       >
         <div
           ng-repeat="percentValue in progressBar.percentValues track by $index"
