@@ -43,7 +43,7 @@ export class ProgressBar {
       this._bars.push({
         name: this._keys[i],
         value: this._values[i],
-        color: mapValue2Color(this._values[i], this._title, i, this._panelConfig)
+        color: mapValue2Color(this._values[i], this._keys[i], i, this._panelConfig)
       });
     }
 
@@ -118,7 +118,7 @@ export class ProgressBar {
 
 /** VIEW **/
 
-function mapValue2Color(value: number, title: string, index: number, _panelConfig: any): string {
+function mapValue2Color(value: number, key: string, index: number, _panelConfig: any): string {
   const colorType: ColoringType = _panelConfig.getValue('coloringType');
   const colors: string[] = _panelConfig.getValue('colors');
 
@@ -140,12 +140,12 @@ function mapValue2Color(value: number, title: string, index: number, _panelConfi
       return colors[0];
     case ColoringType.KEY_MAPPING:
       const colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
-      const keyColorMapping = _.find(colorKeyMappings, k => k.key === title);
+      const keyColorMapping = _.find(colorKeyMappings, k => k.key === key);
       if(keyColorMapping === undefined) {
         return _panelConfig.getValue('colorsKeyMappingDefault');
       }
       return keyColorMapping.color;
     default:
       throw new Error('Unknown color type ' + colorType);
-  }  
+  }
 }
