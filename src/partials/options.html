@@ -198,7 +198,7 @@
     </div>
   </div>
 
-  <div ng-if="ctrl.panel.coloringType == 'thresholds' || ctrl.panel.coloringType == 'pallete'">
+  <div ng-if="ctrl.panel.coloringType == 'thresholds'">
     <div class="gf-form">
       <label class="gf-form-label width-8">Thresholds
         <tip>
@@ -213,6 +213,9 @@
         placeholder="50,80"
       />
     </div>
+  </div>
+
+  <div ng-if="ctrl.panel.coloringType == 'thresholds' || ctrl.panel.coloringType == 'pallete'">
     <div class="gf-form">
       <label class="gf-form-label width-8">Colors</label>
       <span class="gf-form-label">
@@ -253,7 +256,8 @@
     </div>
 
     <div class="gf-form">
-      <label class="gf-form-label width-8">Default
+      <label class="gf-form-label width-11">
+        Default
         <tip>Color for all other keys</tip>
       </label>
       <span class="gf-form-label">
@@ -267,7 +271,7 @@
       <div class="gf-form-button-row">
         <button class="btn btn-inverse" ng-click="ctrl.addColorKeyMapping()">
           <i class="fa fa-plus"></i>
-          Add a key color mapping
+          &nbsp;Add a key color mapping
         </button>
       </div>
     </div>

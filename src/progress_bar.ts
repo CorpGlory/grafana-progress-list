@@ -43,7 +43,7 @@ export class ProgressBar {
       this._bars.push({
         name: this._keys[i],
         value: this._values[i],
-        color: mapValue2Color(this._values[i], i, this._panelConfig)
+        color: mapValue2Color(this._values[i], this._keys[i], i, this._panelConfig)
       });
     }
 
@@ -118,34 +118,34 @@ export class ProgressBar {
 
 /** VIEW **/
 
-function mapValue2Color(value: number, index: number, _panelConfig: any): string {
-  var colorType: ColoringType = _panelConfig.getValue('coloringType');
-  var colors: string[] = _panelConfig.getValue('colors');
+function mapValue2Color(value: number, key: string, index: number, _panelConfig: any): string {
+  const colorType: ColoringType = _panelConfig.getValue('coloringType');
+  const colors: string[] = _panelConfig.getValue('colors');
 
-  if(colorType === ColoringType.PALLETE) {
-    return colors[index % colors.length];
-  }
-  if(colorType === ColoringType.THRESHOLDS) {
-    // TODO: parse only once
-    var thresholds = _panelConfig.getValue('thresholds').split(',').map(parseFloat);
-    if(colors.length <= thresholds.length) {
-      // we add one because a threshold is a cut of the range of values
-      throw new Error('Number of colors must be at least as number as threasholds + 1');
-    }
-    for(var i = thresholds.length; i > 0; i--) {
-      if(value >= thresholds[i - 1]) {
-        return colors[i];
+  switch(colorType) {
+    case ColoringType.PALLETE:
+      return colors[index % colors.length];
+    case ColoringType.THRESHOLDS:
+      // TODO: parse only once
+      const thresholds = _panelConfig.getValue('thresholds').split(',').map(parseFloat);
+      if(colors.length <= thresholds.length) {
+        // we add one because a threshold is a cut of the range of values
+        throw new Error('Number of colors must be at least as number as threasholds + 1');
       }
-    }
-    return colors[0];
+      for(let i = thresholds.length; i > 0; i--) {
+        if(value >= thresholds[i - 1]) {
+          return colors[i];
+        }
+      }
+      return colors[0];
+    case ColoringType.KEY_MAPPING:
+      const colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
+      const keyColorMapping = _.find(colorKeyMappings, k => k.key === key);
+      if(keyColorMapping === undefined) {
+        return _panelConfig.getValue('colorsKeyMappingDefault');
+      }
+      return keyColorMapping.color;
+    default:
+      throw new Error('Unknown color type ' + colorType);
   }
-  if(colorType === ColoringType.KEY_MAPPING) {
-    var colorKeyMappings = _panelConfig.getValue('colorKeyMappings') as any[];
-    var keyColorMapping = _.find(colorKeyMappings, k => k.key === this._key);
-    if(keyColorMapping === undefined) {
-      return _panelConfig.getValue('colorsKeyMappingDefault');
-    }
-    return keyColorMapping.color;
-  }
-  throw new Error('Unknown color type ' + colorType);
 }
