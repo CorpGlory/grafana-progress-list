@@ -1,7 +1,7 @@
-.progress-bar .list-item-content {
+.progress-bar .progress-bar-line-row {
   background-color: rgba(255,255,255,0.1);
 }
 
-.progress-bar .progress-bar-title {
-  text-shadow: 4px 4px 4px black, 0 0 4px black, 0 0 4px black;
+.progress-bar-active {
+  color: white;
 }

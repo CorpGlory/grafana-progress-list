@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 
 type ProgressTitle = {
   barHeight: number,
-  valueTopMargin: number,
+  titleHeight: number,
   position: string
 };
 
@@ -96,13 +96,13 @@ export class ProgressBar {
       case TitleViewOptions.SEPARATE_TITLE_LINE:
         return {
           barHeight: 8,
-          valueTopMargin: -12,
+          titleHeight: 16,
           position: 'static'
         };
       case TitleViewOptions.INLINE:
         return {
-          barHeight: 20,
-          valueTopMargin: 0,
+          barHeight: 24,
+          titleHeight: 24,
           position: 'absolute'
         };
       default:

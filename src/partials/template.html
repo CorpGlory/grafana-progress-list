@@ -9,26 +9,30 @@
     >
       <div
         class="progress-bar-title-row"
-        style="position: {{ progressBar.titleParams.position }};"
+        style="
+          position: {{ progressBar.titleParams.position }};
+          height: {{ progressBar.titleParams.titleHeight }}px;
+        "
       >
         <p class="progress-bar-title">{{ progressBar.title }}</p>
-        <span class="progress-bar-value">
-          {{ progressBar.formattedValue }}
-        </span>
+        <p class="progress-bar-value">{{ progressBar.formattedValue }}</p>
       </div>
-      <div
-        class="list-item-content"
-      >
+      <div class="progress-bar-line-row">
         <div
-          ng-repeat="percentValue in progressBar.percentValues track by $index"
-          style="
-            width: {{ percentValue }}%;
-            background-color: {{ progressBar.colors[$index] }};
-            opacity: {{ progressBar.opacity }};
-            height: {{ progressBar.titleParams.barHeight }}px;
-          "
-          class="progress-bar-line"
+          class="bars-container"
+          style="width: {{ progressBar.aggregatedProgress }}%;"
+        >
+          <div
+            ng-repeat="percentValue in progressBar.percentValues track by $index"
+            style="
+              width: {{ percentValue }}%;
+              background-color: {{ progressBar.colors[$index] }};
+              opacity: {{ progressBar.opacity }};
+              height: {{ progressBar.titleParams.barHeight }}px;
+            "
+            class="progress-bar-line"
         ></div>
+        </div>
       </div>
     </div>
   </div>
