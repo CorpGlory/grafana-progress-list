@@ -65,8 +65,6 @@ export class ProgressBar {
   get sumOfValues(): number { return _.sum(this.values); }
 
   get percentValues(): number[] {
-    // TODO: this.sumOfValues * 1.1 is a hack to make sure bars don't wrap
-    // (they are wrapped when total width > 98%)
     return this.values.map(
       value => Math.floor(value / this.sumOfValues * 100)
     );

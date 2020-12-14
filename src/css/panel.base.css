@@ -13,7 +13,7 @@
   display: flex;
   justify-content: flex-start;
   margin-top: 0px;
-  width: 99%;
+  width: calc(100% - 8px);
   border-radius: 2px;
 }
 
