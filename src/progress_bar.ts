@@ -6,9 +6,14 @@ import * as _ from 'lodash';
 
 type ProgressTitle = {
   barHeight: number,
-  titleTopMargin: number,
-  valueTopMargin: number
+  titleHeight: number,
+  position: Position
 };
+
+enum Position {
+  STATIC = 'static',
+  ABSOLUTE = 'absolute'
+}
 
 /**
  * It's model for rendering bars in view (partial) and tooltip
@@ -65,10 +70,8 @@ export class ProgressBar {
   get sumOfValues(): number { return _.sum(this.values); }
 
   get percentValues(): number[] {
-    // TODO: this.sumOfValues * 1.1 is a hack to make sure bars don't wrap
-    // (they are wrapped when total width > 98%)
     return this.values.map(
-      value => Math.floor(value / (this.sumOfValues * 1.1) * 100)
+      value => Math.floor(value / this.sumOfValues * 100)
     );
   }
 
@@ -96,14 +99,14 @@ export class ProgressBar {
       case TitleViewOptions.SEPARATE_TITLE_LINE:
         return {
           barHeight: 8,
-          titleTopMargin: 0,
-          valueTopMargin: -12
+          titleHeight: 16,
+          position: Position.STATIC
         };
       case TitleViewOptions.INLINE:
         return {
-          barHeight: 20,
-          titleTopMargin: -20,
-          valueTopMargin: -18
+          barHeight: 24,
+          titleHeight: 24,
+          position: Position.ABSOLUTE
         };
       default:
         throw new Error(`Wrong titleType: ${titleType}`);

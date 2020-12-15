@@ -7,29 +7,32 @@
       ng-mouseleave="ctrl.onMouseLeave()"
       ng-class="{ 'progress-bar-active': progressBar.active }"
     >
-      <div class="progress-bar-title" ng-bind-html="progressBar.title"></div>
       <div
-        class="list-item-content"
-        style="width: {{ progressBar.aggregatedProgress }}%;"
+        class="progress-bar-title-row"
+        style="
+          position: {{ progressBar.titleParams.position }};
+          height: {{ progressBar.titleParams.titleHeight }}px;
+        "
       >
+        <p class="progress-bar-title">{{ progressBar.title }}</p>
+        <p class="progress-bar-value">{{ progressBar.formattedValue }}</p>
+      </div>
+      <div class="progress-bar-line-row">
         <div
-          ng-repeat="percentValue in progressBar.percentValues track by $index"
-          style="
-            width: {{ percentValue }}%;
-            display: inline-block;
-            background-color: {{ progressBar.colors[$index] }};
-            opacity: {{ progressBar.opacity }};
-            height: {{ progressBar.titleParams.barHeight }}px;
-            margin-top: {{ progressBar.titleParams.titleTopMargin }}px;
-          "
-          class="progress-bar-line"
-        ></div>
-        <span
-          style="margin-top: {{ progressBar.titleParams.valueTopMargin }}px;"
-          class="list-item-value progress-bar-value"
+          class="bars-container"
+          style="width: {{ progressBar.aggregatedProgress }}%;"
         >
-          {{ progressBar.formattedValue }}
-        </span>
+          <div
+            ng-repeat="percentValue in progressBar.percentValues track by $index"
+            style="
+              width: {{ percentValue }}%;
+              background-color: {{ progressBar.colors[$index] }};
+              opacity: {{ progressBar.opacity }};
+              height: {{ progressBar.titleParams.barHeight }}px;
+            "
+            class="progress-bar-line"
+        ></div>
+        </div>
       </div>
     </div>
   </div>
