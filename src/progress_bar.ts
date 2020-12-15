@@ -7,8 +7,13 @@ import * as _ from 'lodash';
 type ProgressTitle = {
   barHeight: number,
   titleHeight: number,
-  position: string
+  position: Position
 };
+
+enum Position {
+  STATIC = 'static',
+  ABSOLUTE = 'absolute'
+}
 
 /**
  * It's model for rendering bars in view (partial) and tooltip
@@ -95,13 +100,13 @@ export class ProgressBar {
         return {
           barHeight: 8,
           titleHeight: 16,
-          position: 'static'
+          position: Position.STATIC
         };
       case TitleViewOptions.INLINE:
         return {
           barHeight: 24,
           titleHeight: 24,
-          position: 'absolute'
+          position: Position.ABSOLUTE
         };
       default:
         throw new Error(`Wrong titleType: ${titleType}`);
