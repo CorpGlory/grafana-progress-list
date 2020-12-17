@@ -1,0 +1,7 @@
+.progress-bar .progress-bar-line-row {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.progress-bar-active {
+  color: white;
+}

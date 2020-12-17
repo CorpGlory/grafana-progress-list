@@ -1,23 +1,42 @@
-<div id="progress-list-panel">
-  <div class="table-panel-scroll" ng-if="!ctrl.isPanelAlert">
-    <div ng-repeat="item in items" ng-if="!ctrl.isMultibar">
-      <progress-list-plugin-progress
-        class="progress-list-item"
-        item="item"
-        on-hover="ctrl.onHover($index, event)"
-        on-mouse-leave="ctrl.onMouseLeave()"
-      />
-    </div>
-    <div ng-repeat="item in items" ng-if="ctrl.isMultibar">
-      <progress-list-plugin-multibar-progress
-        class="progress-list-item"
-        item="item"
-        on-hover="ctrl.onHover($index, event, title, value)"
-        on-mouse-leave="ctrl.onMouseLeave()"
-      />
+<div class="progress-list-panel">
+  <div ng-if="!ctrl.isPanelAlert">
+    <div 
+      ng-repeat="progressBar in ctrl.progressBars"
+      class="progress-bar"
+      ng-mousemove="ctrl.onHover({ index: $index, event: $event })"
+      ng-mouseleave="ctrl.onMouseLeave()"
+      ng-class="{ 'progress-bar-active': progressBar.active }"
+    >
+      <div
+        class="progress-bar-title-row"
+        style="
+          position: {{ progressBar.titleParams.position }};
+          height: {{ progressBar.titleParams.titleHeight }}px;
+        "
+      >
+        <p class="progress-bar-title">{{ progressBar.title }}</p>
+        <p class="progress-bar-value">{{ progressBar.formattedValue }}</p>
+      </div>
+      <div class="progress-bar-line-row">
+        <div
+          class="bars-container"
+          style="width: {{ progressBar.aggregatedProgress }}%;"
+        >
+          <div
+            ng-repeat="percentValue in progressBar.percentValues track by $index"
+            style="
+              width: {{ percentValue }}%;
+              background-color: {{ progressBar.colors[$index] }};
+              opacity: {{ progressBar.opacity }};
+              height: {{ progressBar.titleParams.barHeight }}px;
+            "
+            class="progress-bar-line"
+        ></div>
+        </div>
+      </div>
     </div>
   </div>
   <div ng-if="ctrl.isPanelAlert" class="datapoints-warning flot-temp-elem">
-    <div ng-bind-html="ctrl.panelAlertMessage"></div> 
+    <div ng-bind-html="ctrl.panelAlertMessage"></div>
   </div>
 </div>

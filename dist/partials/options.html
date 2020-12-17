@@ -1,327 +1,279 @@
 <div class="editor-row options-tab">
   <div class="gf-form">
-    <gf-form-switch
-      class="gf-form"
-      label="Multibar"
-      label-class="query-keyword width-8"
-      checked="ctrl.isMultibar"
-    />
+    <label class="gf-form-label width-8">Key column</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.keyColumn"
+        ng-options="n for n in ctrl.columns"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Skip column</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.skipColumn"
+        ng-options="n for n in ctrl.skipColumns"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
   </div>
 
   <br/>
-  
-  <div class="section gf-form-group" ng-if="ctrl.isMultibar">
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Key column</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.keyColumn"
-          ng-options="n for n in ctrl.columns"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Skip column</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.skipColumn"
-          ng-options="n for n in ctrl.skipColumns"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
-    <h5 class="section-heading">Mapping</h5>
-
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Stat</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.statNameOptionValue"
-          ng-options="n for n in ctrl.statNameOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Progress Type</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.statProgressType"
-          ng-options="n for n in ctrl.statProgressTypeOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-
-    <div class="gf-form" ng-if="ctrl.panel.statProgressType == 'max value'">
-      <label class="gf-form-label width-8">Max Value</label>
-      <input
-        type="number"
-        class="gf-form-input width-14"
-        placeholder="auto" data-placement="right"
-        bs-tooltip="'Max value will be equal to max progreesss in auto mode'"
-        ng-model="ctrl.panel.statProgressMaxValue"
-        ng-change="ctrl.render()"
-        ng-model-onblur
-      />
-    </div>
-
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Null Value</label>
-      <input
-        type="number"
-        class="gf-form-input width-14"
-        placeholder="error" data-placement="right"
-        bs-tooltip="'Map NULL values to constant. Default behaviour is to throw error.'"
-        ng-model="ctrl.panel.nullMapping"
-        ng-change="ctrl.render()"
-        ng-model-onblur
-      />
-    </div>
-
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Mapping type</label>
+  <h5 class="section-heading">Mapping</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Stat</label>
+    <div class="gf-form-select-wrapper width-12">
       <select
-        class="gf-form-input width-14"
-        ng-model="ctrl.panel.mappingType"
-        ng-options="type for type in ctrl.mappingTypeOptions"
-        ng-change="ctrl.refresh()"
-      />
-    </div>
-
-    <br/>
-    <h5 class="section-heading" ng-if="!ctrl.isMultibar">Tooltip</h5>
-    <div class="gf-form" ng-if="!ctrl.isMultibar">
-      <label class="gf-form-label width-8">Tooltip Mode</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.tooltipMode"
-          ng-options="n for n in ctrl.tooltipModeOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-
-    <br/>
-    <h5 class="section-heading">Sorting</h5>
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Type</label>
-      <div class="gf-form-select-wrapper width-14">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.sortingOrder"
-          ng-options="n for n in ctrl.sortingOrderOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
+        class="gf-form-input"
+        ng-model="ctrl.panel.statNameOptionValue" 
+        ng-options="n for n in ctrl.statNameOptions"
+        ng-change="ctrl.render()"
+      ></select>
     </div>
   </div>
 
-  <!--
-    Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
-  -->
-  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
-    <h5 class="section-heading">Value Labels</h5>
-    <div class="gf-form-inline"></div>
-    <div class="gf-form">
-      <label class="gf-form-label width-6">Type</label>
-      <div class="gf-form-select-wrapper width-10">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.valueLabelType"
-          ng-options="n for n in ctrl.valueLabelTypeOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
-    </div>
-    <div class="gf-form-inline">
-      <div class="gf-form">
-        <label class="gf-form-label width-6">Prefix</label>
-        <input
-          type="text" class="gf-form-input width-10"
-          ng-model="ctrl.panel.prefix"
-          ng-change="ctrl.render()"
-          ng-model-onblur
-        />
-      </div>
-    </div>
-    <div class="gf-form">
-      <label class="gf-form-label width-6">Postfix</label>
-      <input
-        type="text" class="gf-form-input width-10"
-        ng-model="ctrl.panel.postfix"
-        ng-change="ctrl.render()"
-        ng-model-onblur
-      />
-    </div>
-    <div class="gf-form">
-      <label class="gf-form-label width-6">Decimals</label>
-      <input
-        type="number"
-        class="gf-form-input width-10"
-        placeholder="auto" data-placement="right"
-        bs-tooltip="'Override automatic decimal precision'"
-        ng-model="ctrl.panel.decimals"
-        ng-change="ctrl.render()"
-        ng-model-onblur
-      />
-    </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">
+      Null Value
+      <tip>Map NULL values to constant. Default behaviour is to throw error.</tip>
+    </label>
+    <input
+      type="number"
+      class="gf-form-input width-12"
+      placeholder="error" data-placement="right"
+      ng-model="ctrl.panel.nullMapping"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
+  </div>
 
-    <br>
-    <div class="section gf-form-group">
-      <h5 class="section-heading">Key Labels</h5>
-      <div class="gf-form">
-        <label class="gf-form-label width-6">Title Type</label>
-        <div class="gf-form-select-wrapper width-12">
-          <select
-            class="gf-form-input"
-            ng-model="ctrl.panel.titleViewType"
-            ng-options="n for n in ctrl.titleViewTypeOptions"
-            ng-change="ctrl.render()"
-          />
-        </div>
-      </div>
-      <div class="gf-form-inline">
-        <div class="gf-form">
-          <label class="gf-form-label width-6">
-            Alias
-            <tip>
-              You can insert HTML here.
-              Use $__key variable to access the original key
-            </tip>
-          </label>
-          <!-- TODO: better style -->
-          <textarea
-            class="gf-form-input width-19"
-            ng-model="ctrl.panel.alias"
-            ng-change="ctrl.render()"
-            ng-model-onblur
-          />
-        </div>
-      </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Mapping type</label>
+    <select
+      class="gf-form-input width-12"
+      ng-model="ctrl.panel.mappingType"
+      ng-options="type for type in ctrl.mappingTypeOptions"
+      ng-change="ctrl.refresh()"
+    ></select>
+  </div>
+
+  <br/>
+  <h5 class="section-heading">Tooltip</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Tooltip Mode</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.tooltipMode"
+        ng-options="n for n in ctrl.tooltipModeOptions"
+        ng-change="ctrl.render()"
+      ></select>
     </div>
   </div>
 
-  <!--
-    Based ob singlestat editor plugin
-    https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/editor.html
-  -->
-  <!-- TODO: support colors customizing for multibar mode -->
-  <div class="section gf-form-group" ng-if="!ctrl.isMultibar">
-    <h5 class="section-heading">Coloring<h5>
-    <div class="gf-form">
-      <label class="gf-form-label width-8">Type</label>
-      <div class="gf-form-select-wrapper width-11">
-        <select
-          class="gf-form-input"
-          ng-model="ctrl.panel.coloringType"
-          ng-options="n for n in ctrl.coloringTypeOptions"
-          ng-change="ctrl.render()"
-        />
-      </div>
+  <br/>
+  <h5 class="section-heading">Appearance</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Sorting</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.sortingOrder"
+        ng-options="n for n in ctrl.sortingOrderOptions"
+        ng-change="ctrl.render()"
+      ></select>
     </div>
+  </div>
 
+  <br/>
+  <h5 class="section-heading">Value Labels</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Type</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.valueLabelType"
+        ng-options="n for n in ctrl.valueLabelTypeOptions"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Prefix</label>
+    <input
+      type="text" class="gf-form-input width-12"
+      ng-model="ctrl.panel.prefix"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Postfix</label>
+    <input
+      type="text" class="gf-form-input width-12"
+      ng-model="ctrl.panel.postfix"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">
+      Decimals
+      <tip>Override automatic decimal precision</tip>
+    </label>
+    <input
+      type="number"
+      class="gf-form-input width-12"
+      placeholder="auto" data-placement="right"
+      ng-model="ctrl.panel.decimals"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
+  </div>
+
+  <br>
+  <h5 class="section-heading">Key Labels</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Title Type</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.titleViewType"
+        ng-options="n for n in ctrl.titleViewTypeOptions"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+  <div class="gf-form-inline">
     <div class="gf-form">
-      <label class="gf-form-label width-8">Opacity</label>
+      <label class="gf-form-label width-8">
+        Alias
+        <tip>
+          You can insert HTML here.
+          Use $__key variable to access the original key
+        </tip>
+      </label>
+      <!-- TODO: better style -->
+      <textarea
+        class="gf-form-input width-12"
+        ng-model="ctrl.panel.alias"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      ></textarea>
+    </div>
+  </div>
+
+  <br/>
+  <h5 class="section-heading">Coloring</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Opacity</label>
+    <input
+      type="number"
+      min="0"
+      max="1"
+      step="0.1"
+      class="gf-form-input width-12"
+      ng-model="ctrl.panel.opacity"
+      ng-blur="ctrl.render()"
+    />
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-8">Type</label>
+    <div class="gf-form-select-wrapper width-12">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.coloringType"
+        ng-options="n for n in ctrl.coloringTypeOptions"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <div ng-if="ctrl.panel.coloringType == 'thresholds'">
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Thresholds
+        <tip>
+          Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
+        </tip>
+      </label>
       <input
-        type="number"
-        min="0"
-        max="1"
-        step="0.1"
-        class="gf-form-input width-11"
-        ng-model="ctrl.panel.opacity"
+        type="text"
+        class="gf-form-input width-12"
+        ng-model="ctrl.panel.thresholds"
         ng-blur="ctrl.render()"
+        placeholder="50,80"
       />
     </div>
+  </div>
 
-    <div ng-if="ctrl.panel.coloringType == 'thresholds'">
-      <div class="gf-form">
-        <label class="gf-form-label width-8">Thresholds
-          <tip>
-            Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red
-          </tip>
-        </label>
-        <input
-          type="text"
-          class="gf-form-input width-11"
-          ng-model="ctrl.panel.thresholds"
-          ng-blur="ctrl.render()"
-          placeholder="50,80"
-        />
-      </div>
-      <div class="gf-form">
-        <label class="gf-form-label width-6">Colors</label>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" />
-        </span>
-        <span class="gf-form-label">
-            <a ng-click="ctrl.invertColorOrder()"> Invert </a>
-        </span>
-      </div>
+  <div ng-if="ctrl.panel.coloringType == 'thresholds' || ctrl.panel.coloringType == 'pallete'">
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Colors</label>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+        <spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+      <span class="gf-form-label">
+          <a ng-click="ctrl.invertColorOrder()"> Invert </a>
+      </span>
     </div>
+  </div>
 
-    <div ng-if="ctrl.panel.coloringType == 'key mapping'">
-      <div ng-repeat="item in ctrl.panel.colorKeyMappings">
-        <div class="gf-form">
-          <input
-            type="text" class="gf-form-input width-11"
-            ng-model="item.key"
-            ng-change="ctrl.render()" ng-model-onblur
-          />
-          <span class="gf-form-label">
-            <spectrum-picker
-              ng-model="item.color"
-              ng-change="ctrl.render()"
-            />
-          </span>
-          <label class="gf-form-label">
-            <a ng-click="ctrl.removeColorKeyMapping($index)">
-              <i class="fa fa-remove"></i>
-            </a>
-          </label>
-        </div>
-      </div>
-
+  <div ng-if="ctrl.panel.coloringType == 'key mapping'">
+    <div ng-repeat="item in ctrl.panel.colorKeyMappings">
       <div class="gf-form">
-        <label class="gf-form-label width-11">Default
-          <tip>Color for all other keys</tip>
-        </label>
+        <input
+          type="text" class="gf-form-input width-11"
+          ng-model="item.key"
+          ng-change="ctrl.render()" ng-model-onblur
+        />
         <span class="gf-form-label">
           <spectrum-picker
-            ng-model="ctrl.panel.colorsKeyMappingDefault"
+            ng-model="item.color"
             ng-change="ctrl.render()"
           />
         </span>
+        <label class="gf-form-label">
+          <a ng-click="ctrl.removeColorKeyMapping($index)">
+            <i class="fa fa-remove"></i>
+          </a>
+        </label>
       </div>
-      <div class="gf-form">
-        <div class="gf-form-button-row">
-          <button class="btn btn-inverse" ng-click="ctrl.addColorKeyMapping()">
-            <i class="fa fa-plus"></i>
-            Add a key color mapping
-          </button>
-        </div>
-      </div>
-
     </div>
 
+    <div class="gf-form">
+      <label class="gf-form-label width-11">
+        Default
+        <tip>Color for all other keys</tip>
+      </label>
+      <span class="gf-form-label">
+        <spectrum-picker
+          ng-model="ctrl.panel.colorsKeyMappingDefault"
+          ng-change="ctrl.render()"
+        />
+      </span>
+    </div>
+    <div class="gf-form">
+      <div class="gf-form-button-row">
+        <button class="btn btn-inverse" ng-click="ctrl.addColorKeyMapping()">
+          <i class="fa fa-plus"></i>
+          &nbsp;Add a key color mapping
+        </button>
+      </div>
+    </div>
   </div>
-
 </div>
