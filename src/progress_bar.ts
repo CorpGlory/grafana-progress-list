@@ -76,7 +76,7 @@ export class ProgressBar {
   }
 
   get aggregatedProgress(): number {
-    return (_.sum(this.values) / this._maxTotalValue) * 100;
+    return (this.sumOfValues / this._maxTotalValue) * 100;
   }
 
   get totalValue(): number {
@@ -85,7 +85,7 @@ export class ProgressBar {
       case ValueLabelType.ABSOLUTE:
         return this.sumOfValues;
       case ValueLabelType.PERCENTAGE:
-        return (this.sumOfValues / this._maxTotalValue) * 100;
+        return this.aggregatedProgress;
       default:
         throw new Error(`Unknown value label type: ${valueLabelType}`);
     }
