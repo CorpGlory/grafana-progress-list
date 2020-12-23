@@ -1,4 +1,4 @@
-import { ColoringType, PanelConfig, TitleViewOptions } from './panel_config';
+import { ColoringType, PanelConfig, TitleViewOptions, ValueLabelType } from './panel_config';
 import { getFormattedValue } from './value_formatter';
 
 import * as _ from 'lodash';
@@ -38,7 +38,7 @@ export class ProgressBar {
     private _title: string,
     private _keys: string[], // maybe "_names" is better than "_keys"
     private _values: number[],
-    private _maxValue: number
+    private _maxTotalValue: number
   ) {
     if(this._keys.length !== this._values.length) {
       throw new Error('keys amount should be equal to values amount');
@@ -71,17 +71,29 @@ export class ProgressBar {
 
   get percentValues(): number[] {
     return this.values.map(
-      value => Math.floor(value / this.sumOfValues * 100)
+      value => value / this.sumOfValues * 100
     );
   }
 
   get aggregatedProgress(): number {
-    return (_.sum(this.values) / this._maxValue) * 100;
+    return (this.sumOfValues / this._maxTotalValue) * 100;
   }
 
-  get formattedValue(): string {
+  get totalValue(): number {
+    const valueLabelType = this._panelConfig.getValue('valueLabelType');
+    switch(valueLabelType) {
+      case ValueLabelType.ABSOLUTE:
+        return this.sumOfValues;
+      case ValueLabelType.PERCENTAGE:
+        return this.aggregatedProgress;
+      default:
+        throw new Error(`Unknown value label type: ${valueLabelType}`);
+    }
+  }
+
+  get formattedTotalValue(): string {
     return getFormattedValue(
-      this.sumOfValues,
+      this.totalValue,
       this._panelConfig.getValue('prefix'),
       this._panelConfig.getValue('postfix'),
       this._panelConfig.getValue('decimals')

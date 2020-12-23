@@ -42,7 +42,7 @@ class Ctrl extends MetricsPanelCtrl {
 
   private titleViewTypeOptions = _.values(PanelConfig.TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
-  private valueLabelTypeOptions = [ 'absolute', 'percentage' ];
+  private valueLabelTypeOptions = _.values(PanelConfig.ValueLabelType);
   // TODO: change option names or add a tip in editor
   private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(PanelConfig.TooltipMode);
@@ -123,6 +123,30 @@ class Ctrl extends MetricsPanelCtrl {
       this.onHover(this._lastHoverEvent);
     }
     this._panelAlert.active = false;
+  }
+
+  onValueLabelTypeChange(): void {
+    this.updatePostfix();
+    this._onRender();
+  }
+
+  updatePostfix(): void {
+    const valueLabelType = this._panelConfig.getValue('valueLabelType');
+    const postfixValue = this.panel.postfix;
+    switch(valueLabelType) {
+      case PanelConfig.ValueLabelType.ABSOLUTE:
+        if(postfixValue === '%') {
+          this.panel.postfix = '';
+        }
+        break;
+      case PanelConfig.ValueLabelType.PERCENTAGE:
+        if(postfixValue === '') {
+          this.panel.postfix = '%';
+        }
+        break;
+      default:
+        throw new Error(`Unknown value label type: ${valueLabelType}`);
+    }
   }
 
   onHover(event: HoverEvent) {

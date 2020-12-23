@@ -16,6 +16,11 @@ export enum ColoringType {
   KEY_MAPPING = 'key mapping'
 }
 
+export enum ValueLabelType {
+  PERCENTAGE = 'percentage',
+  ABSOLUTE = 'absolute'
+}
+
 export enum TooltipMode {
   NONE = 'none',
   SINGLE = 'single',
@@ -31,7 +36,7 @@ export const DEFAULTS = {
   coloringType: ColoringType.PALLETE,
   titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
-  valueLabelType: 'percentage',
+  valueLabelType: ValueLabelType.ABSOLUTE,
   mappingType: 'datapoint to datapoint',
   alias: '',
   prefix: '',
