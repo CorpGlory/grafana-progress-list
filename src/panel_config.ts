@@ -29,8 +29,7 @@ export enum TooltipMode {
 
 export const DEFAULTS = {
   keyColumn: '',
-  // TODO: skip multiple columns
-  skipColumn: '',
+  skipColumns: [],
   statNameOptionValue: StatType.CURRENT,
   statProgressMaxValue: null,
   coloringType: ColoringType.PALLETE,
@@ -59,6 +58,12 @@ export class PanelConfig {
     // migrations
     if(this.getValue('coloringType') === 'auto') {
       this.setValue('coloringType', ColoringType.PALLETE);
+    }
+
+    const skipColumn = this.getValue('skipColumn');
+    if(skipColumn !== undefined && skipColumn !== '') {
+      this.setValue('skipColumn', undefined);
+      this.setValue('skipColumns', [skipColumn]);
     }
   }
 

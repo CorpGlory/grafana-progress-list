@@ -12,15 +12,25 @@
   </div>
 
   <div class="gf-form">
-    <label class="gf-form-label width-8">Skip column</label>
-    <div class="gf-form-select-wrapper width-12">
+    <label class="gf-form-label width-8">Skip columns</label>
+    <button class="btn btn-inverse width-12" ng-click="ctrl.onAddSkipColumnClick()">
+      + Add column
+    </button>
+  </div>
+  <!-- TODO: maybe use dropdown with checkboxes instead? -->
+  <div class="gf-form" ng-repeat="column in ctrl.panel.skipColumns track by $index">
+    <label class="gf-form-label width-8"></label>
+    <div  class="gf-form-select-wrapper width-12">
       <select
         class="gf-form-input"
-        ng-model="ctrl.panel.skipColumn"
-        ng-options="n for n in ctrl.skipColumns"
+        ng-model="ctrl.panel.skipColumns[$index]"
+        ng-options="n for n in ctrl.columns"
         ng-change="ctrl.render()"
       ></select>
     </div>
+    <button class="btn btn-inverse" ng-click="ctrl.onRemoveSkipColumnClick($index)">
+      <i class="fa fa-trash"></i>
+    </button>
   </div>
 
   <br/>
@@ -30,7 +40,7 @@
     <div class="gf-form-select-wrapper width-12">
       <select
         class="gf-form-input"
-        ng-model="ctrl.panel.statNameOptionValue" 
+        ng-model="ctrl.panel.statNameOptionValue"
         ng-options="n for n in ctrl.statNameOptions"
         ng-change="ctrl.render()"
       ></select>

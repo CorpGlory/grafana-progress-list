@@ -44,6 +44,7 @@ export class ProgressBar {
       throw new Error('keys amount should be equal to values amount');
     }
     this._bars = [];
+    console.log('PB constructor config', this._panelConfig, this._title, this._title)
     for(let i = 0; i < _keys.length; ++i) {
       this._bars.push({
         name: this._keys[i],

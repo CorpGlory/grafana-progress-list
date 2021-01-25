@@ -46,3 +46,7 @@
   margin-bottom: 0px;
   margin-left: 4px;
 }
+
+p.error {
+  color: red;
+}
