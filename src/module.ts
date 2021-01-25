@@ -43,8 +43,6 @@ class Ctrl extends MetricsPanelCtrl {
   private titleViewTypeOptions = _.values(PanelConfig.TitleViewOptions);
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = _.values(PanelConfig.ValueLabelType);
-  // TODO: change option names or add a tip in editor
-  private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(PanelConfig.TooltipMode);
 
   // field for updating tooltip on rendering and storing previous state
@@ -104,7 +102,7 @@ class Ctrl extends MetricsPanelCtrl {
       this.progressBars = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
-      this._panelAlert.message = ERROR_MAPPING;
+      this._panelAlert.message = ERROR_MAPPING + '<br/>' + e;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {
@@ -128,6 +126,15 @@ class Ctrl extends MetricsPanelCtrl {
   onValueLabelTypeChange(): void {
     this.updatePostfix();
     this._onRender();
+  }
+
+  onAddSkipColumnClick(): void {
+    this.panel.skipColumns.push('');
+  }
+
+  onRemoveSkipColumnClick(index: number): void {
+    this.panel.skipColumns.splice(index, 1);
+    this.render();
   }
 
   updatePostfix(): void {
@@ -172,6 +179,8 @@ class Ctrl extends MetricsPanelCtrl {
 
   _onDataReceived(seriesList: any) {
     this._seriesList = seriesList;
+    // we call apply here to update columns list used in the editor
+    this.$scope.$apply();
     this.render();
   }
 
@@ -216,10 +225,6 @@ class Ctrl extends MetricsPanelCtrl {
       return [];
     }
     return this._seriesList[0].columns.map(col => col.text);
-  }
-
-  get skipColumns(): string[] {
-    return ['', ...this.columns];
   }
 
   get isPanelAlert(): boolean {
