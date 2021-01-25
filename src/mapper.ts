@@ -20,7 +20,6 @@ export class Mapper {
 
   mapMetricData(seriesList: any): ProgressBar[] {
     const statType: StatType = this._panelConfig.getValue('statNameOptionValue');
-    const mappingType = this._panelConfig.getValue('mappingType');
     const statProgressType = this._panelConfig.getValue('statProgressType');
     const statProgressMaxValue = this._panelConfig.getValue('statProgressMaxValue');
     const alias = this._panelConfig.getValue('alias');
@@ -30,9 +29,9 @@ export class Mapper {
       return [];
     }
 
-    let kstat: KeyValue[] = [];
-    let currentStat: KeyValue[] = [];
-
+    if(seriesList[0].columns === undefined) {
+      throw new Error('"Time Series" queries are not supported, please make sure to select "Table" and query at least 2 metrics');
+    }
 
     let keys = seriesList[0].columns.map(col => col.text);
 
@@ -43,11 +42,13 @@ export class Mapper {
     }
 
     let skipIndexes: number[] = [keyIndex];
-    const skipColumn = this._panelConfig.getValue('skipColumn');
-    if(skipColumn !== '') {
-      skipIndexes.push(keys.findIndex(key => key === skipColumn));
-    }
-
+    const skipColumns = this._panelConfig.getValue('skipColumns');
+    skipColumns.forEach(column => {
+      const index = keys.findIndex(key => key === column);
+      if(index >= 0) {
+        skipIndexes.push(index);
+      }
+    });
     
     const firstRowMaxes =  seriesList[0].rows.map(
       row => _.sum(

@@ -29,15 +29,13 @@ export enum TooltipMode {
 
 export const DEFAULTS = {
   keyColumn: '',
-  // TODO: skip multiple columns
-  skipColumn: '',
+  skipColumns: [],
   statNameOptionValue: StatType.CURRENT,
   statProgressMaxValue: null,
   coloringType: ColoringType.PALLETE,
   titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
   valueLabelType: ValueLabelType.ABSOLUTE,
-  mappingType: 'datapoint to datapoint',
   alias: '',
   prefix: '',
   postfix: '',
@@ -60,6 +58,12 @@ export class PanelConfig {
     // migrations
     if(this.getValue('coloringType') === 'auto') {
       this.setValue('coloringType', ColoringType.PALLETE);
+    }
+
+    const skipColumn = this.getValue('skipColumn');
+    if(skipColumn !== undefined && skipColumn !== '') {
+      this.setValue('skipColumn', undefined);
+      this.setValue('skipColumns', [skipColumn]);
     }
   }
 
