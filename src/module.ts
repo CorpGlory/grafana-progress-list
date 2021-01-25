@@ -102,7 +102,7 @@ class Ctrl extends MetricsPanelCtrl {
       this.progressBars = this.mapper.mapMetricData(this._seriesList);
     } catch(e) {
       this._panelAlert.active = true;
-      this._panelAlert.message = ERROR_MAPPING + '<br/>' + e;
+      this._panelAlert.message = `${ERROR_MAPPING}<br/><p class="error">${e}</p>`;
       return;
     }
     if(this._panelConfig.getValue('sortingOrder') === 'increasing') {

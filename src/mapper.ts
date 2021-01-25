@@ -30,7 +30,7 @@ export class Mapper {
     }
 
     if(seriesList[0].columns === undefined) {
-      throw new Error('"Time Series" queries are not supported, please make sure to select "Table"');
+      throw new Error('"Time Series" queries are not supported, please make sure to select "Table" and query at least 2 metrics');
     }
 
     let keys = seriesList[0].columns.map(col => col.text);
