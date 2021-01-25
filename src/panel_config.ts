@@ -37,7 +37,6 @@ export const DEFAULTS = {
   titleViewType: TitleViewOptions.SEPARATE_TITLE_LINE,
   sortingOrder: 'none',
   valueLabelType: ValueLabelType.ABSOLUTE,
-  mappingType: 'datapoint to datapoint',
   alias: '',
   prefix: '',
   postfix: '',

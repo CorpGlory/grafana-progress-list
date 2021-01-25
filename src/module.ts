@@ -44,7 +44,6 @@ class Ctrl extends MetricsPanelCtrl {
   private sortingOrderOptions = [ 'none', 'increasing', 'decreasing' ];
   private valueLabelTypeOptions = _.values(PanelConfig.ValueLabelType);
   // TODO: change option names or add a tip in editor
-  private mappingTypeOptions = ['datapoint to datapoint', 'target to datapoint'];
   private tooltipModeOptions = _.values(PanelConfig.TooltipMode);
 
   // field for updating tooltip on rendering and storing previous state

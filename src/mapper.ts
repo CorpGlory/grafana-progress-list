@@ -20,7 +20,6 @@ export class Mapper {
 
   mapMetricData(seriesList: any): ProgressBar[] {
     const statType: StatType = this._panelConfig.getValue('statNameOptionValue');
-    const mappingType = this._panelConfig.getValue('mappingType');
     const statProgressType = this._panelConfig.getValue('statProgressType');
     const statProgressMaxValue = this._panelConfig.getValue('statProgressMaxValue');
     const alias = this._panelConfig.getValue('alias');
@@ -56,6 +55,21 @@ export class Mapper {
     );
     const maxValue = _.max(firstRowMaxes);
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
+
+    // if(statType === StatType.TOTAL && seriesList.length == 1) {
+    //   kstat = this._mapKeysTotal(seriesList);
+    // } else {
+    //   kstat = this._mapNumeric(seriesList, statType, nullMapping);
+    // }
+    // if(alias !== '') {
+    //   console.log('alias kstat', alias, kstat)
+    //   kstat.forEach(k => {
+    //     const scopedVars = {
+    //       __key: { value: k[0] }
+    //     };
+    //     k[0] = this._templateSrv.replace(alias, scopedVars);
+    //   });
+    // }
 
     // TODO: it's wrong, we return a bad type here
     return seriesList[0].rows.map(
