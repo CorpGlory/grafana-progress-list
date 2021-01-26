@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 
 
 type KeyValue = [string, number];
+type RowValue = string | number;
 
 
 export class Mapper {
@@ -28,10 +29,10 @@ export class Mapper {
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
     }
-
-    if(seriesList[0].columns === undefined) {
-      throw new Error('"Time Series" queries are not supported, please make sure to select "Table" and query at least 2 metrics');
-    }
+    console.log('all series list', seriesList);
+    // if(seriesList[0].columns === undefined) {
+    //   throw new Error('"Time Series" queries are not supported, please make sure to select "Table" and query at least 2 metrics');
+    // }
 
     let keys = seriesList[0].columns.map(col => col.text);
 
@@ -49,32 +50,20 @@ export class Mapper {
         skipIndexes.push(index);
       }
     });
-    
-    const firstRowMaxes =  seriesList[0].rows.map(
+
+    const seriesRows = seriesList[0].rows;
+    const firstRowMaxes = seriesRows.map(
       row => _.sum(
         row.filter((value, idx) => !_.includes(skipIndexes, idx))
       )
     );
     const maxValue = _.max(firstRowMaxes);
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
-
-    // if(statType === StatType.TOTAL && seriesList.length == 1) {
-    //   kstat = this._mapKeysTotal(seriesList);
-    // } else {
-    //   kstat = this._mapNumeric(seriesList, statType, nullMapping);
-    // }
-    // if(alias !== '') {
-    //   console.log('alias kstat', alias, kstat)
-    //   kstat.forEach(k => {
-    //     const scopedVars = {
-    //       __key: { value: k[0] }
-    //     };
-    //     k[0] = this._templateSrv.replace(alias, scopedVars);
-    //   });
-    // }
+  
+    console.log('keyIndex', keyIndex, filteredKeys);
 
     // TODO: it's wrong, we return a bad type here
-    return seriesList[0].rows.map(
+    return seriesRows.map(
       row => new ProgressBar(
         this._panelConfig,
         row[keyIndex],
@@ -107,6 +96,34 @@ export class Mapper {
 
     return res;
 
+  }
+
+  private _mapRowsByKey(rows: RowValue[][], keyIndex: number): RowValue[][] {
+    // TODO: throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
+    if(rows.length === 0) {
+      throw new Error('Rows are empty');
+    }
+    const uniqKeys = this._getUniqKeysFromRows(rows, keyIndex);
+    if(uniqKeys.length === 0) {
+      throw new Error('There are no keys in series rows');
+    }
+    uniqKeys.map(key => {
+      const values = this._getRowsValuesForKey(rows, keyIndex, key);
+      // TODO: values -> value due _flatSeries
+    })
+    // TODO: value list => row list update
+    return rows;
+  }
+
+  private _getRowsValuesForKey(rows: RowValue[][], keyIndex: number, key: RowValue): RowValue[] {
+    const filteredRows = rows.filter(row => row[keyIndex] === key);
+    const values = filteredRows.map(row => row[0]);
+    return values;
+  }
+
+  private _getUniqKeysFromRows(rows: RowValue[][], keyIndex: number): RowValue[] {
+    const allKeys = rows.map(row => row[keyIndex]);
+    return _.uniq(allKeys);
   }
 
   _mapNumeric(seriesList, statType: StatType, nullMapping): KeyValue[] {
