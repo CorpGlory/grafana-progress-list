@@ -61,6 +61,7 @@ export class Mapper {
     const maxValue = _.max(firstRowMaxes);
     // filteredKeys -> filteredValueKeys?
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
+    console.log('filteredKeys', filteredKeys)
     const mappedRows = this._mapRowsByKey(seriesRows, keyIndex, statType);
     console.log('mappedRows', mappedRows);
     // console.log('keyIndex', keyIndex, this._mapRowsByKey(seriesRows, keyIndex));
@@ -124,6 +125,7 @@ export class Mapper {
     // get all values for passed title
     const filteredRows = rows.filter(row => row[keyIndex] === key);
     // TODO: why last? add value index
+    // TODO: map null values
     const values = filteredRows.map(row => _.last(row) as number);
     return values;
   }
