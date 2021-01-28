@@ -57,18 +57,21 @@ export class Mapper {
         row.filter((value, idx) => !_.includes(skipIndexes, idx))
       )
     );
+    // TODO: maxValue is wrong for total stat type
     const maxValue = _.max(firstRowMaxes);
+    // filteredKeys -> filteredValueKeys?
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
-  
-    console.log('keyIndex', keyIndex, filteredKeys);
+    const mappedRows = this._mapRowsByKey(seriesRows, keyIndex, statType);
+    console.log('mappedRows', mappedRows);
+    // console.log('keyIndex', keyIndex, this._mapRowsByKey(seriesRows, keyIndex));
 
     // TODO: it's wrong, we return a bad type here
-    return seriesRows.map(
+    return mappedRows.map(
       row => new ProgressBar(
         this._panelConfig,
-        row[keyIndex],
+        row[0], // row[0] for mappedRow
         filteredKeys,
-        row.filter((value, idx) => !_.includes(skipIndexes, idx)),
+        [row[1]], // [row[1]] for mappedRow
         maxValue as number
       )
     );
@@ -98,31 +101,35 @@ export class Mapper {
 
   }
 
-  private _mapRowsByKey(rows: RowValue[][], keyIndex: number): RowValue[][] {
-    // TODO: throw new Error('Expecting timeseries in format (key, value). You can use keys only in total mode');
+  private _mapRowsByKey(rows: RowValue[][], keyIndex: number, statType: StatType): [string, number][] {
+    // map rows to aggregate data by stat type, return list of [key, value]
+    // TODO: throw new Error('Expecting timeseries in format (key, value).');
     if(rows.length === 0) {
       throw new Error('Rows are empty');
     }
+    // mb its better to call uniqTitles?
     const uniqKeys = this._getUniqKeysFromRows(rows, keyIndex);
     if(uniqKeys.length === 0) {
       throw new Error('There are no keys in series rows');
     }
-    uniqKeys.map(key => {
+    const aggregatedRows = uniqKeys.map(key => {
       const values = this._getRowsValuesForKey(rows, keyIndex, key);
-      // TODO: values -> value due _flatSeries
-    })
-    // TODO: value list => row list update
-    return rows;
+      const value = this._aggregateValues(values, statType);
+      return [key, value];
+    });
+    return aggregatedRows as [string, number][];
   }
 
-  private _getRowsValuesForKey(rows: RowValue[][], keyIndex: number, key: RowValue): RowValue[] {
+  private _getRowsValuesForKey(rows: RowValue[][], keyIndex: number, key: RowValue): number[] {
+    // get all values for passed title
     const filteredRows = rows.filter(row => row[keyIndex] === key);
-    const values = filteredRows.map(row => row[0]);
+    // TODO: why last? add value index
+    const values = filteredRows.map(row => _.last(row) as number);
     return values;
   }
 
-  private _getUniqKeysFromRows(rows: RowValue[][], keyIndex: number): RowValue[] {
-    const allKeys = rows.map(row => row[keyIndex]);
+  private _getUniqKeysFromRows(rows: RowValue[][], keyIndex: number): string[] {
+    const allKeys = rows.map(row => row[keyIndex] as string);
     return _.uniq(allKeys);
   }
 
@@ -159,7 +166,7 @@ export class Mapper {
 
     var res: KeyValue[] = [];
     for(let k in kv) {
-      res.push([k, this._flatSeries(kv[k], statType)]);
+      res.push([k, this._aggregateValues(kv[k], statType)]);
     }
 
     return res;
@@ -168,31 +175,25 @@ export class Mapper {
   _mapTargetToDatapoints(seriesList, statType: StatType): KeyValue[] {
     return seriesList.map(serie => [
       serie.target,
-      this._flatSeries(serie.datapoints.map(datapoint => datapoint[0]), statType)
+      this._aggregateValues(serie.datapoints.map(datapoint => datapoint[0]), statType)
     ]);
   }
 
-  _flatSeries(values: number[], statType: StatType): number {
+  _aggregateValues(values: number[], statType: StatType): number {
     if(values.length === 0) {
-      return 0;
+      throw new Error('Got empty values to aggregate');
     }
-
-    if(statType === StatType.TOTAL) {
-      return _.sum(values);
+    switch(statType) {
+      case StatType.TOTAL:
+        return _.sum(values);
+      case StatType.MAX:
+        return _.max(values) as number;
+      case StatType.MIN:
+        return _.min(values) as number;
+      case StatType.CURRENT:
+        return _.last(values) as number;
+      default:
+        throw new Error(`Unknown stat type: ${statType}`);
     }
-
-    if(statType === StatType.MAX) {
-      return _.max(values) as number;
-    }
-
-    if(statType === StatType.MIN) {
-      return _.min(values) as number;
-    }
-
-    if(statType === StatType.CURRENT) {
-      return _.last(values) as number;
-    }
-
-    return 0;
   }
 }
