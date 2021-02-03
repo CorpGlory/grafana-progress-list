@@ -60,6 +60,20 @@
       ></select>
     </div>
   </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">
+      Limit
+      <tip>Number of displayed progress bars should be limited to prevent panel freezing</tip>
+    </label>
+    <input
+      type="number"
+      class="gf-form-input width-12"
+      data-placement="right"
+      ng-model="ctrl.panel.limit"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
+  </div>
 
   <br/>
   <h5 class="section-heading">Value Labels</h5>

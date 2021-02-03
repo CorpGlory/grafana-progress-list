@@ -112,6 +112,8 @@ class Ctrl extends MetricsPanelCtrl {
       this.progressBars = _.sortBy(this.progressBars, i => -i.aggregatedProgress);
     }
 
+    this.progressBars = _.take(this.progressBars, this._panelConfig.getValue('limit'));
+
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
         throw new Error(
