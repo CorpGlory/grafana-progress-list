@@ -14,7 +14,7 @@
           height: {{ progressBar.titleParams.titleHeight }}px;
         "
       >
-        <p class="progress-bar-title">{{ progressBar.title }}</p>
+        <p class="progress-bar-title" ng-bind-html="progressBar.title"></p>
         <p class="progress-bar-value">{{ progressBar.formattedTotalValue }}</p>
       </div>
       <div class="progress-bar-line-row">
