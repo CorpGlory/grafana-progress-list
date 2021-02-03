@@ -60,13 +60,23 @@ export class Mapper {
 
     // TODO: it's wrong, we return a bad type here
     return seriesList[0].rows.map(
-      row => new ProgressBar(
-        this._panelConfig,
-        row[keyIndex],
-        filteredKeys,
-        row.filter((value, idx) => !_.includes(skipIndexes, idx)),
-        maxValue as number
-      )
+      row => {
+        let title = row[keyIndex];
+        if(alias !== '') {
+          const scopedVars = {
+            __key: { value: title }
+          };
+          title = this._templateSrv.replace(alias, scopedVars);
+        }
+
+        return new ProgressBar(
+          this._panelConfig,
+          title,
+          filteredKeys,
+          row.filter((value, idx) => !_.includes(skipIndexes, idx)),
+          maxValue as number
+        )
+      }
     );
 
   }
