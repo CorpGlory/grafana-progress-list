@@ -19,11 +19,7 @@ export class Mapper {
   }
 
   mapMetricData(seriesList: any): ProgressBar[] {
-    const statType: StatType = this._panelConfig.getValue('statNameOptionValue');
-    const statProgressType = this._panelConfig.getValue('statProgressType');
-    const statProgressMaxValue = this._panelConfig.getValue('statProgressMaxValue');
     const alias = this._panelConfig.getValue('alias');
-    const nullMapping = this._panelConfig.getValue('nullMapping');
 
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
@@ -49,24 +45,34 @@ export class Mapper {
         skipIndexes.push(index);
       }
     });
-    
-    const firstRowMaxes =  seriesList[0].rows.map(
+
+    const rowsMaxes =  seriesList[0].rows.map(
       row => _.sum(
         row.filter((value, idx) => !_.includes(skipIndexes, idx))
       )
     );
-    const maxValue = _.max(firstRowMaxes);
-    const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
+    const totalMaxValue = _.max(rowsMaxes);
 
+    const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
     // TODO: it's wrong, we return a bad type here
     return seriesList[0].rows.map(
-      row => new ProgressBar(
-        this._panelConfig,
-        row[keyIndex],
-        filteredKeys,
-        row.filter((value, idx) => !_.includes(skipIndexes, idx)),
-        maxValue as number
-      )
+      row => {
+        let title = row[keyIndex];
+        if(alias !== '') {
+          const scopedVars = {
+            __key: { value: title }
+          };
+          title = this._templateSrv.replace(alias, scopedVars);
+        }
+
+        return new ProgressBar(
+          this._panelConfig,
+          title,
+          filteredKeys,
+          row.filter((value, idx) => !_.includes(skipIndexes, idx)),
+          totalMaxValue as number
+        )
+      }
     );
 
   }

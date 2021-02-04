@@ -112,6 +112,8 @@ class Ctrl extends MetricsPanelCtrl {
       this.progressBars = _.sortBy(this.progressBars, i => -i.aggregatedProgress);
     }
 
+    this.progressBars = _.take(this.progressBars, this._panelConfig.getValue('limit'));
+
     if(this._tooltip.visible) {
       if(this._lastHoverEvent === undefined) {
         throw new Error(
@@ -179,8 +181,6 @@ class Ctrl extends MetricsPanelCtrl {
 
   _onDataReceived(seriesList: any) {
     this._seriesList = seriesList;
-    // we call apply here to update columns list used in the editor
-    this.$scope.$apply();
     this.render();
   }
 

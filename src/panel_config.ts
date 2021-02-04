@@ -46,7 +46,8 @@ export const DEFAULTS = {
   colorKeyMappings: [],
   nullMapping: undefined,
   tooltipMode: TooltipMode.ALL_SERIES,
-  opacity: 0.5
+  opacity: 0.5,
+  limit: 50
 };
 
 

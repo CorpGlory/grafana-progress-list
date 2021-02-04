@@ -12,54 +12,25 @@
   </div>
 
   <div class="gf-form">
-    <label class="gf-form-label width-8">Skip column</label>
-    <div class="gf-form-select-wrapper width-12">
+    <label class="gf-form-label width-8">Skip columns</label>
+    <button class="btn btn-inverse width-12" ng-click="ctrl.onAddSkipColumnClick()">
+      + Add column
+    </button>
+  </div>
+  <!-- TODO: maybe use dropdown with checkboxes instead? -->
+  <div class="gf-form" ng-repeat="column in ctrl.panel.skipColumns track by $index">
+    <label class="gf-form-label width-8"></label>
+    <div  class="gf-form-select-wrapper width-12">
       <select
         class="gf-form-input"
-        ng-model="ctrl.panel.skipColumn"
-        ng-options="n for n in ctrl.skipColumns"
+        ng-model="ctrl.panel.skipColumns[$index]"
+        ng-options="n for n in ctrl.columns"
         ng-change="ctrl.render()"
       ></select>
     </div>
-  </div>
-
-  <br/>
-  <h5 class="section-heading">Mapping</h5>
-  <div class="gf-form">
-    <label class="gf-form-label width-8">Stat</label>
-    <div class="gf-form-select-wrapper width-12">
-      <select
-        class="gf-form-input"
-        ng-model="ctrl.panel.statNameOptionValue" 
-        ng-options="n for n in ctrl.statNameOptions"
-        ng-change="ctrl.render()"
-      ></select>
-    </div>
-  </div>
-
-  <div class="gf-form">
-    <label class="gf-form-label width-8">
-      Null Value
-      <tip>Map NULL values to constant. Default behaviour is to throw error.</tip>
-    </label>
-    <input
-      type="number"
-      class="gf-form-input width-12"
-      placeholder="error" data-placement="right"
-      ng-model="ctrl.panel.nullMapping"
-      ng-change="ctrl.render()"
-      ng-model-onblur
-    />
-  </div>
-
-  <div class="gf-form">
-    <label class="gf-form-label width-8">Mapping type</label>
-    <select
-      class="gf-form-input width-12"
-      ng-model="ctrl.panel.mappingType"
-      ng-options="type for type in ctrl.mappingTypeOptions"
-      ng-change="ctrl.refresh()"
-    ></select>
+    <button class="btn btn-inverse" ng-click="ctrl.onRemoveSkipColumnClick($index)">
+      <i class="fa fa-trash"></i>
+    </button>
   </div>
 
   <br/>
@@ -88,6 +59,20 @@
         ng-change="ctrl.render()"
       ></select>
     </div>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-8">
+      Limit
+      <tip>Number of displayed progress bars should be limited to prevent panel freezing</tip>
+    </label>
+    <input
+      type="number"
+      class="gf-form-input width-12"
+      data-placement="right"
+      ng-model="ctrl.panel.limit"
+      ng-change="ctrl.render()"
+      ng-model-onblur
+    />
   </div>
 
   <br/>
@@ -157,8 +142,7 @@
       <label class="gf-form-label width-8">
         Alias
         <tip>
-          You can insert HTML here.
-          Use $__key variable to access the original key
+          Use $__key variable to access the original title. You can use HTML here.
         </tip>
       </label>
       <!-- TODO: better style -->
