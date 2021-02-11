@@ -27,12 +27,12 @@ Progress list can be thought of as many simple [Singlestat Panels](http://docs.g
 
 - Download Progress List Panel
 ```
-wget https://github.com/CorpGlory/grafana-progress-list/archive/v1.0.7.tar.gz
+wget https://github.com/CorpGlory/grafana-progress-list/archive/v1.0.8.tar.gz
 ```
 
 - Unpack downloaded files
 ```
-tar -zxvf v1.0.7.tar.gz
+tar -zxvf v1.0.8.tar.gz
 ```
 
 - Restart grafana-server
@@ -49,7 +49,7 @@ You can install Progress List Panel to Grafana in Docker passing it as environme
 ```bash
 docker run \
   -p 3000:3000 \
-  -e "GF_INSTALL_PLUGINS=https://github.com/CorpGlory/grafana-progress-list/archive/v1.0.7.zip;corpglory-progresslist-panel" \
+  -e "GF_INSTALL_PLUGINS=https://github.com/CorpGlory/grafana-progress-list/archive/v1.0.8.zip;corpglory-progresslist-panel" \
   grafana/grafana
 ```
 

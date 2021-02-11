@@ -27,8 +27,8 @@
       "name": "Main",
       "path": "assets/screenshot_main.png"
     }],
-    "version": "1.0.7",
-    "updated": "2020-10-19"
+    "version": "1.0.8",
+    "updated": "2021-02-11"
   },
   "dependencies": {
     "grafanaVersion": "4.1.1+",
