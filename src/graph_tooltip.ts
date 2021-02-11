@@ -1,18 +1,15 @@
-import { ProgressItem } from './mapper';
-
 import * as _ from 'lodash';
 
+import { Bar, ProgressBar } from './progress_bar'
+import { TooltipMode } from './panel_config';
 
-export enum TooltipMode {
-  SINGLE = 'single',
-  ALL_SERIES = 'all series'
-};
 
-type Position = {
+export type Position = {
   pageX: number,
   pageY: number
 };
 
+// TODO: check if we need this
 export type Serie = {
   datapoints: [number, number][],
   target: string,
@@ -24,78 +21,66 @@ export class GraphTooltip {
   private $tooltip: JQuery<HTMLElement>;
   private _visible = false;
 
-  constructor(
-    private getSeriesFn: () => Serie[],
-    private items: ProgressItem[],
-    private tooltipMode: TooltipMode
-  ) {
+  constructor() {
     this.$tooltip = $('<div class="graph-tooltip">');
   }
 
-  clear(): void {
-    this._visible = false;
-    this.$tooltip.detach();
-  }
-
-  show(pos: Position, index: number, title?: any, value?: any): void {
+  show(pos: Position, progressBars: ProgressBar[], mode: TooltipMode): void {
+    if(mode == TooltipMode.NONE) {
+      return;
+    }
     this._visible = true;
-    const seriesList = this.getSeriesFn();
-    if (seriesList.length === 0) {
-      return;
-    }
-
-    if(title !== undefined && value !== undefined) {
-      const showTitle = false;
-      this._renderAndShow(this._convertTitleAndValueToHtml(title, value), pos, showTitle);
-      return;
-    }
-
-    let currentValues: string[] = [];
-    if(this.tooltipMode === TooltipMode.ALL_SERIES) {
-      currentValues = _.map(
-        seriesList,
-        (serie: Serie, idx: number) => this._convertSerieToHtml(serie, this.items[idx], index === idx)
-      ).filter(value => value !== undefined);
+    // TODO: use more vue/react approach here
+    // TODO: maybe wrap this rendering logic into classes
+    if(mode == TooltipMode.SINGLE) {
+      let activeItem = _.find(progressBars, item => item.active);
+      var html = `<div class="graph-tooltip-time">Current value</div>`;
+      if(activeItem === undefined) {
+        throw new Error(
+          'Can`t find any active item to show current value in tooltip'
+        );
+      }
+      html += progressBar2Html(activeItem);
+    } else if (mode == TooltipMode.ALL_SERIES) {
+      // TODO: build this string faster
+      var html = progressBars.map(progressBar2Html).join('');
     } else {
-      currentValues = [this._convertSerieToHtml(seriesList[index], this.items[index], true)];
+      throw new Error('unknown tooltip type');
     }
 
-    this._renderAndShow(currentValues.join('\n'), pos);
+    // TODO: move this "20" to a constant
+    // TODO: check how this work when `pos` is close to the page bottom edge
+    (this.$tooltip.html(html) as any).place_tt(pos.pageX + 20, pos.pageY).show();
   }
 
-  destroy(): void {
+  hide(): void {
     this._visible = false;
-    this.$tooltip.remove();
+    this.$tooltip.hide();
   }
 
   get visible(): boolean { return this._visible; }
 
-  private _renderAndShow(innerHtml: string, pos: Position, showTitle = true): void {
-    const title = showTitle ? `<div class="graph-tooltip-time">Current value</div>` : '';
-    // TODO: move this "20" to a constant
-    // TODO: check how this work when `pos` is close to the page bottom edge
-    (this.$tooltip.html(title + innerHtml) as any).place_tt(pos.pageX + 20, pos.pageY);
-  }
+}
 
-  private _convertSerieToHtml(serie: Serie, item: ProgressItem, isBold: boolean): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          ${isBold ? '<b>' : ''} ${serie.alias || serie.target} ${isBold ? '</b>' : ''}
-        </div>
-        <div class="graph-tooltip-value">${item.currentFormattedValue}</div>
-      </div>
-    `;
-  }
+/** VIEW **/
 
-  private _convertTitleAndValueToHtml(title: string, value: number): string {
-    return `
-      <div class="graph-tooltip-list-item">
-        <div class="graph-tooltip-series-name">
-          <b>${title}</b>
-        </div>
-        <div class="graph-tooltip-value">${value}</div>
+function progressBar2Html(progressBar: ProgressBar): string {
+  return `
+    <div class="graph-tooltip-list-item">
+      <div class="graph-tooltip-series-name">
+        ${progressBar.active ? '<b>' : ''}
+        ${progressBar.title}
+        ${progressBar.active ? '</b>' : ''}
       </div>
-    `;
-  }
+      ${progressBarBars2Html(progressBar.bars)}
+    </div>
+  `;
+}
+
+function progressBarBars2Html(bars: Bar[]): string {
+  return bars.map(bar => `
+    <div class="graph-tooltip-value">
+      ${bar.value}
+    </div>
+  `).join('');
 }
