@@ -1,6 +1,6 @@
 {
   "name": "grafana-progress-list-plugin",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Show list of progress items by mapping your data.",
   "main": "src/module.js",
   "scripts": {
