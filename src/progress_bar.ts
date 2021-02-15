@@ -1,4 +1,4 @@
-import { ColoringType, PanelConfig, TitleViewOptions, ValueLabelType } from './panel_config';
+import { ColoringType, PanelConfig, TitleViewOptions, ValueLabelType, DEFAULT_FONT_SIZE } from './panel_config';
 import { getFormattedValue } from './value_formatter';
 
 import * as _ from 'lodash';
@@ -98,6 +98,22 @@ export class ProgressBar {
       this._panelConfig.getValue('postfix'),
       this._panelConfig.getValue('decimals')
     );
+  }
+
+  get valueFontSize(): number {
+    const configSize = this._panelConfig.getValue('valueSize');
+    if(configSize === undefined || configSize === null) {
+      return DEFAULT_FONT_SIZE;
+    }
+    return configSize;
+  }
+
+  get titleFontSize(): number {
+    const configSize = this._panelConfig.getValue('titleSize');
+    if(configSize === undefined || configSize === null) {
+      return DEFAULT_FONT_SIZE;
+    }
+    return configSize;
   }
 
   get colors(): string[] {

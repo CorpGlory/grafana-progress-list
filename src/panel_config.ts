@@ -27,6 +27,8 @@ export enum TooltipMode {
   ALL_SERIES = 'all series'
 };
 
+export const DEFAULT_FONT_SIZE = 14;
+
 export const DEFAULTS = {
   keyColumn: '',
   skipColumns: [],
@@ -39,6 +41,8 @@ export const DEFAULTS = {
   alias: '',
   prefix: '',
   postfix: '',
+  valueSize: DEFAULT_FONT_SIZE,
+  titleSize: DEFAULT_FONT_SIZE,
   thresholds: '10, 30',
   // https://github.com/grafana/grafana/blob/v4.1.1/public/app/plugins/panel/singlestat/module.ts#L57
   colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],

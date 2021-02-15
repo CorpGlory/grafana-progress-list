@@ -20,6 +20,7 @@ export class Mapper {
 
   mapMetricData(seriesList: any): ProgressBar[] {
     const alias = this._panelConfig.getValue('alias');
+    const nullMapping = this._panelConfig.getValue('nullMapping');
 
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
@@ -46,11 +47,10 @@ export class Mapper {
       }
     });
 
-    const rowsMaxes =  seriesList[0].rows.map(
-      row => _.sum(
-        row.filter((value, idx) => !_.includes(skipIndexes, idx))
-      )
-    );
+    const rowsMaxes =  seriesList[0].rows.map(row => {
+      const values = this._rowToValues(row, skipIndexes, nullMapping);
+      return _.sum(values);
+    });
     const totalMaxValue = _.max(rowsMaxes);
 
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
@@ -64,17 +64,35 @@ export class Mapper {
           };
           title = this._templateSrv.replace(alias, scopedVars);
         }
+        const values = this._rowToValues(row, skipIndexes, nullMapping);
 
         return new ProgressBar(
           this._panelConfig,
           title,
           filteredKeys,
-          row.filter((value, idx) => !_.includes(skipIndexes, idx)),
+          values,
           totalMaxValue as number
         )
       }
     );
 
+  }
+
+  private _rowToValues(row: number[], skipIndexes: number[], nullMapping: number | undefined): number[] {
+    const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
+    return this._mapNullValues(values, nullMapping);
+  }
+
+  private _mapNullValues(values: (number | null)[], nullMapping: number | undefined): number[] {
+    return values.map(value => {
+      if(value !== null) {
+        return value;
+      }
+      if(nullMapping === undefined || nullMapping === null) {
+        throw new Error('Got null value. Set null value mapping in Options -> Value Labels -> Null Value');
+      }
+      return nullMapping;
+    });
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
