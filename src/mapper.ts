@@ -48,9 +48,8 @@ export class Mapper {
     });
 
     const rowsMaxes =  seriesList[0].rows.map(row => {
-      const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
-      const mappedValues = this._mapNullValues(values, nullMapping);
-      return _.sum(mappedValues);
+      const values = this._rowToValues(row, skipIndexes, nullMapping);
+      return _.sum(values);
     });
     const totalMaxValue = _.max(rowsMaxes);
 
@@ -65,19 +64,23 @@ export class Mapper {
           };
           title = this._templateSrv.replace(alias, scopedVars);
         }
-        const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
-        const mappedValues = this._mapNullValues(values, nullMapping);
+        const values = this._rowToValues(row, skipIndexes, nullMapping);
 
         return new ProgressBar(
           this._panelConfig,
           title,
           filteredKeys,
-          mappedValues,
+          values,
           totalMaxValue as number
         )
       }
     );
 
+  }
+
+  private _rowToValues(row: number[], skipIndexes: number[], nullMapping: number | undefined): number[] {
+    const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
+    return this._mapNullValues(values, nullMapping);
   }
 
   private _mapNullValues(values: (number | null)[], nullMapping: number | undefined): number[] {
