@@ -47,11 +47,11 @@ export class Mapper {
       }
     });
 
-    const rowsMaxes =  seriesList[0].rows.map(
-      row => _.sum(
-        row.filter((value, idx) => !_.includes(skipIndexes, idx))
-      )
-    );
+    const rowsMaxes =  seriesList[0].rows.map(row => {
+      const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
+      const mappedValues = this._mapNullValues(values, nullMapping);
+      return _.sum(mappedValues);
+    });
     const totalMaxValue = _.max(rowsMaxes);
 
     const filteredKeys = keys.filter((key, idx) => !_.includes(skipIndexes, idx));
@@ -81,17 +81,15 @@ export class Mapper {
   }
 
   private _mapNullValues(values: (number | null)[], nullMapping: number | undefined): number[] {
-    const mappedValues = values.map(value => {
-      if(value == null) {
-        if(nullMapping === undefined || nullMapping === null) {
-          throw new Error('Got null value. Set null value mapping in Options -> Value Labels -> Null Value');
-        }
-        return nullMapping;
-      } else {
-        return value
+    return values.map(value => {
+      if(value !== null) {
+        return value;
       }
+      if(nullMapping === undefined || nullMapping === null) {
+        throw new Error('Got null value. Set null value mapping in Options -> Value Labels -> Null Value');
+      }
+      return nullMapping;
     });
-    return mappedValues;
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
