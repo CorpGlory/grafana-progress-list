@@ -20,6 +20,7 @@ export class Mapper {
 
   mapMetricData(seriesList: any): ProgressBar[] {
     const alias = this._panelConfig.getValue('alias');
+    const nullMapping = this._panelConfig.getValue('nullMapping');
 
     if(seriesList === undefined || seriesList.length == 0) {
       return [];
@@ -64,17 +65,33 @@ export class Mapper {
           };
           title = this._templateSrv.replace(alias, scopedVars);
         }
+        const values = row.filter((value, idx) => !_.includes(skipIndexes, idx));
+        const mappedValues = this._mapNullValues(values, nullMapping);
 
         return new ProgressBar(
           this._panelConfig,
           title,
           filteredKeys,
-          row.filter((value, idx) => !_.includes(skipIndexes, idx)),
+          mappedValues,
           totalMaxValue as number
         )
       }
     );
 
+  }
+
+  private _mapNullValues(values: (number | null)[], nullMapping: number | undefined): number[] {
+    const mappedValues = values.map(value => {
+      if(value == null) {
+        if(nullMapping === undefined || nullMapping === null) {
+          throw new Error('Got null value. Set null value mapping in Options -> Value Labels -> Null Value');
+        }
+        return nullMapping;
+      } else {
+        return value
+      }
+    });
+    return mappedValues;
   }
 
   _mapKeysTotal(seriesList): KeyValue[] {
