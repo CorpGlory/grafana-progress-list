@@ -1,6 +1,6 @@
 # Progress List Panel
 
-<img src="https://github.com/CorpGlory/grafana-progress-list/blob/master/src/assets/screenshot_main.png">
+<img width="1119" alt="Screenshot 2021-02-16 at 18 24 36" src="https://user-images.githubusercontent.com/66464000/108075841-41640500-7084-11eb-9492-6e958d414b82.png">
 
 ## About
 
@@ -8,8 +8,8 @@ A panel showing list of progress-like items in one board. More about [developmen
 
 ## How To Use
 
-1. Create a metric query where result looks like this: `[(time, key, value)]`
-2. Goto "Options" tab and choose aggregation function and other options
+1. Create a metric query where the result looks like this: `[(time, key, value)]`
+2. Go to "Options" tab and choose aggregation function and other options
 
 More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
@@ -60,4 +60,4 @@ docker run \
 * https://github.com/chartwerk/grafana-chartwerk-app -- advanced Grafana plugins from CorpGlory
 
 ## About CorpGlory Inc.
-The project developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides high quality software development, data visualization, Grafana and monitoring consulting.
+The project is developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides software development, data visualization, Grafana and monitoring consulting.
