@@ -4,17 +4,30 @@
 
 ## About
 
-A panel showing list of progress-like items in one board. More about [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
+A panel showing list of progress-like items in one board. 
+
+## Display options 
+* Columns type selection (Key column, Skip Column) 
+* Tooltip selection (all series/single)
+* Value labeling (Prefix, Postfix, Size, Decimals, Null Value)
+* Selection by type (absolute/percentage)  
+* Sorting
+* Limitation 
+* Key labels (Line type (line/inline), size, Alias) 
+* Coloring (Opacity, pallet, thresholds, key determination) 
+
+[Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
+Please visit [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki) to explore more.
+About [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
 ## How To Use
 
-1. Create a metric query where the result looks like this: `[(time, key, value)]`
-2. Go to "Options" tab and choose aggregation function and other options
+1. Create a metric query with: `[(time, key, value)]` result. 
+2. Go to "Options" tab and choose aggregation function and other options.
 
-More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
+For more information, visit the [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
-Progress list will try to aggregate all values by key using chosen aggregate function.
-
+Progress list will try to aggregate all values by key, using chosen aggregate function.
 Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
 
@@ -60,4 +73,4 @@ docker run \
 * https://github.com/chartwerk/grafana-chartwerk-app -- advanced Grafana plugins from CorpGlory
 
 ## About CorpGlory Inc.
-The project is developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides software development, data visualization, Grafana and monitoring consulting.
+The plugin is developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides software development, data visualization, Grafana and monitoring consulting services.
