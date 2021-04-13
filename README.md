@@ -12,6 +12,8 @@ A panel showing list of progress-like items in one board.
 2. Go to "Options" tab and select which column to use as bars title and which columns to skip
 3. Customize Progress List appearance by using other options
 
+For more information, visit the [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
+
 Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
 ## Demo
