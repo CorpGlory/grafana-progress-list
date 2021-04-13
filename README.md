@@ -6,14 +6,17 @@
 
 A panel showing list of progress-like items in one board. More about [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
+## Demo
+
+See the [Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4) 
+
 ## How To Use
 
-1. Create a metric query where the result looks like this: `[(time, key, value)]`
-2. Go to "Options" tab and choose aggregation function and other options
+1. Create a metric query with table format data
+2. Go to "Options" tab and select `key` columns for mapping values.
+3. Customise Progress List by using options.
 
 More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
-
-Progress list will try to aggregate all values by key using chosen aggregate function.
 
 Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
