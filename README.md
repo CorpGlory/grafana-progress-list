@@ -6,6 +6,20 @@
 
 A panel showing list of progress-like items in one board. 
 
+## How To Use
+
+1. Create a metric query with Table data format
+2. Go to "Options" tab and select which column to use as bars title and which columns to skip
+3. Customize Progress List appearance by using other options
+
+For more information, visit the [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
+
+Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
+
+## Demo
+
+[Explore demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
+
 ## Display options 
 * Columns type selection (Key column, Skip Column) 
 * Tooltip selection (all series/single)
@@ -16,19 +30,7 @@ A panel showing list of progress-like items in one board.
 * Key labels (Line type (line/inline), size, Alias) 
 * Coloring (Opacity, pallet, thresholds, key determination) 
 
-[Explore demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
-
 About [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
-
-## How To Use
-
-1. Create a metric query with: `[(time, key, value)]` result. 
-2. Go to "Options" tab and choose aggregation function and other options.
-
-For more information, visit the [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
-
-Progress list will try to aggregate all values by key, using chosen aggregate function.
-Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
 
 ## Installation
