@@ -12,11 +12,11 @@ See the [Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?
 
 ## How To Use
 
-1. Create a metric query with table format data
-2. Go to "Options" tab and select `key` column.
-3. Customize Progress List by using options.
+1. Create a metric query with Table data format
+2. Go to "Options" tab and select which column to use as bars title and which columns to skip
+3. Customize Progress List appearance by using other options
 
-More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
+More info in [**Wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
 Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
 
