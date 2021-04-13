@@ -16,8 +16,10 @@ A panel showing list of progress-like items in one board.
 * Key labels (Line type (line/inline), size, Alias) 
 * Coloring (Opacity, pallet, thresholds, key determination) 
 
-[Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
-Please visit [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki) to explore more.
+[Explore demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
+
+Please visit [**wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki) for more information.
+
 About [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
 ## How To Use
