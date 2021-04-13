@@ -13,8 +13,8 @@ See the [Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?
 ## How To Use
 
 1. Create a metric query with table format data
-2. Go to "Options" tab and select `key` columns for mapping values.
-3. Customise Progress List by using options.
+2. Go to "Options" tab and select `key` column.
+3. Customize Progress List by using options.
 
 More info in [**tutorials**](https://github.com/CorpGlory/grafana-progress-list/wiki)
 
