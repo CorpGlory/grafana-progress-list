@@ -4,11 +4,7 @@
 
 ## About
 
-A panel showing list of progress-like items in one board. More about [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
-
-## Demo
-
-See the [Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4) 
+A panel showing list of progress-like items in one board. 
 
 ## How To Use
 
@@ -16,9 +12,23 @@ See the [Demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?
 2. Go to "Options" tab and select which column to use as bars title and which columns to skip
 3. Customize Progress List appearance by using other options
 
-More info in [**Wiki**](https://github.com/CorpGlory/grafana-progress-list/wiki)
-
 Progress list can be thought of as many simple [Singlestat Panels](http://docs.grafana.org/features/panels/singlestat/). But items are generated from the query, rather than defined manually.
+
+## Demo
+
+[Explore demo](https://grafana.corpglory.com/d/2v8-HypGk/progress-list-01-basic?orgId=4)
+
+## Display options 
+* Columns type selection (Key column, Skip Column) 
+* Tooltip selection (all series/single)
+* Value labeling (Prefix, Postfix, Size, Decimals, Null Value)
+* Selection by type (absolute/percentage)  
+* Sorting
+* Limitation 
+* Key labels (Line type (line/inline), size, Alias) 
+* Coloring (Opacity, pallet, thresholds, key determination) 
+
+About [development of the plugin](https://corpglory.com/s/grafana-progress-list/).
 
 
 ## Installation
@@ -63,4 +73,4 @@ docker run \
 * https://github.com/chartwerk/grafana-chartwerk-app -- advanced Grafana plugins from CorpGlory
 
 ## About CorpGlory Inc.
-The project is developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides software development, data visualization, Grafana and monitoring consulting.
+The plugin is developed by [CorpGlory Inc.](https://corpglory.com/), a company which provides software development, data visualization, Grafana and monitoring consulting services.
