@@ -24,7 +24,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "copy-webpack-plugin": "^5.0.3",
-    "loader-utils": "^1.1.0",
+    "loader-utils": "^1.4.1",
     "ts-loader": "^4.5.0",
     "typescript": "^2.9.2",
     "webpack": "4.7.0",
